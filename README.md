@@ -27,4 +27,5 @@ garden with numerous sensors including tracking temperature, moisture, etc.
 	expo start --ios
 	~~~~
 
-**If there are problems, you might need to 'source ~/.bash_profile' and include 'export PATH=$PATH:~/.npm-global/bin' in your '.bash_profile' file**
+*If there are problems, you might need to 'source ~/.bash_profile' 
+*'export PATH=$PATH:~/.npm-global/bin' in your '.bash_profile' file
