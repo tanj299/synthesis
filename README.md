@@ -27,7 +27,7 @@ garden with numerous sensors including tracking temperature, moisture, etc.
 	expo start --ios
 	~~~~
 
-..* If there are problems, you might need to 
+* If there are problems, you might need to 
 ~~~~
 source ~/.bash_profile' 
 ~~~~
