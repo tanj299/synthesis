@@ -11,9 +11,9 @@ garden with numerous sensors including tracking temperature, moisture, etc.
 # STANLEY BRANCH #
 ## cleaned up with webpack ## 
 ### to do for next time ### 
-add ability to remove plants
-edit plants
-show more information on plants
+add ability to remove plants,
+edit plants,
+show more information on plants,
 
 ### BUGS ### 
 need to refresh every time you add a new plant
