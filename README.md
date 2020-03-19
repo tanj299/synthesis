@@ -29,7 +29,7 @@ garden with numerous sensors including tracking temperature, moisture, etc.
 
 * If there are problems, you might need to 
 ~~~~
-source ~/.bash_profile' 
+source ~/.bash_profile 
 ~~~~
 ~~~~
 export PATH=$PATH:~/.npm-global/bin
