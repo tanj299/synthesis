@@ -1,3 +1,51 @@
+body {
+    margin: 2rem;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 2rem;
+    background-color: lightgreen;
+    border-radius: 20px;
+    padding: 1rem;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+main > a {
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.leftnav {
+    display: flex;
+    flex-direction: flex-start;
+    width: 20%;
+    justify-content: space-around;
+}
+
+.rightnav {
+    display: flex;
+    flex-direction: flex-end;
+    width: 20%;
+    justify-content: space-around;
+}
+
+a:hover {
+    color: dodgerblue;
+}
+
+main > p, h1 {
+    display: flex;
+    justify-content: center;
+    font-size: 3rem;
+}
+
 #plants {
     overflow: auto;
     white-space: nowrap;
@@ -12,8 +60,37 @@
     border: 1px solid black;
     border-radius: 10px;
 }
-a {
+
+div.form {
+    display: block;
+    text-align: center;
+    padding: 1rem;
+}
+
+.loginform > *, a > input {
+    width: 50%;
+    margin: 1rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+}
+
+h3 {
+    display: flex;
+    justify-content: center;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.slidecontainer {
+    padding: 1rem;
+}   
+
+/* a {
     color: red;
     font-weight: bold;
     font-size: 2rem;
-}
+} */

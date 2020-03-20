@@ -13,6 +13,7 @@ class Plants extends Component {
         const getPlants = (await axios.get('/api/plantsdata')).data;
         this.setState({plants: getPlants});
     }
+    
     async componentDidUpdate(prev) {
         if(prev !== this.props) {
             const getPlants = (await axios.get('/api/plantsdata')).data;
@@ -36,7 +37,7 @@ class Plants extends Component {
                                         plants.map(plant => {
                                             return plant.category === category ?
                                                 (
-                                                    <a style={{backgroundImage: `url(${plant.photo})`}} href={`/myuser/plants/${plant.id}`} id="plantnode" key={plant.id}>
+                                                    <a style={{backgroundImage: `url(${plant.photo})`}} href={`/#/user/plants/${plant.id}`} id="plantnode" key={plant.id}>
                                                         <p id="plantname">
                                                             {plant.name}
                                                         </p>
