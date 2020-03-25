@@ -7,3 +7,10 @@ node_modules/
 .venv
 env/
 venv/
+
+# OS
+.DS_Store
+.DS_Store?
+.idea/
+
+.vscode/settings.json

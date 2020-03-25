@@ -61,6 +61,11 @@ plants_schema = PlantSchema(many = True)
 ######################################## routes ########################################
 # format: @app.route('<ENDPOINT>', methods=['<REQUEST_TYPE>'])
 
+# default path
+@app.route('/', methods=['GET'])
+def hello():
+    return jsonify("Hello, you've reached the backend")
+
 # create a plant
 @app.route('/plant', methods=['POST'])
 def add_plant():

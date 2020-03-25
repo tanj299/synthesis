@@ -13,7 +13,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 # engine class connects a pool and dialect together to provide a source of database connectivity
 # instantiate an engine object using `create_engine()`
-engine = create_engine('mysql+pymysql://admin:synthesize0220@synthesis-database.c0a8ellxvhhd.us-east-1.rds.amazonaws.com/autogarden', echo = True)
+engine = create_engine('mysql+pymysql://admin:synthesize0220@synthesis-database.c0a8ellxvhhd.us-east-1.rds.amazonaws.com/autogarden', echo=True)
 connection = engine.connect()
 result = connection.execute('SELECT device_name FROM controller;')
 
