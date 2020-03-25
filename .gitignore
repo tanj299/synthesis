@@ -1,7 +1,7 @@
 # js | node_modules
 node_modules/
 **/node_modules
-
+  
 # python | environments
 .env 
 .venv
@@ -13,4 +13,3 @@ venv/
 .DS_Store?
 .idea/
 
-.vscode/settings.json
