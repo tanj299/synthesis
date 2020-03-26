@@ -10,10 +10,11 @@
 
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
+import rds_config
 
 # engine class connects a pool and dialect together to provide a source of database connectivity
 # instantiate an engine object using `create_engine()`
-engine = create_engine('mysql+pymysql://admin:synthesize0220@synthesis-database.c0a8ellxvhhd.us-east-1.rds.amazonaws.com/autogarden', echo=True)
+engine = create_engine('mysql+pymysql://' + rds_config.db_username + ':' rds_config.db_password + '@' + rds_config.db_host '/' + rds_config.db_name, echo=True)
 connection = engine.connect()
 result = connection.execute('SELECT device_name FROM controller;')
 

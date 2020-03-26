@@ -7,7 +7,9 @@
 # At this point, we are able to perform CRUD operations only
 # Note: python3 does NOT support flask-mysqldb 
 
+from app import app
 from flask import Flask, request, jsonify
+from flaskext.mysql import MySQL
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow # for json object serialization/deserialization
 import os  
