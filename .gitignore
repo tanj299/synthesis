@@ -8,6 +8,10 @@ node_modules/
 env/
 venv/
 
+# expo
+.expo/ 
+expo/
+
 # OS
 .DS_Store
 .DS_Store?

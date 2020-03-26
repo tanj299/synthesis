@@ -1,4 +1,5 @@
 # Synthesis
+## RESTful API 
 ### Synthesis - The Automatic Garden
 ### Authors: Leo Au-Yeung, Stanley Lim, Daniel Mallia, Jayson Tan
 
@@ -9,7 +10,7 @@ heart of the project is a Raspberry Pi Model 3 B+ gathering data on a physical
 garden with numerous sensors including tracking temperature, moisture, etc. 
 
 
-### Set-up using Expo (for Mac OS ONLY)
+### Prerequisites 
 
 1. Install Node.js 
 2. After installing node (version 10.0 >), use npm to install Expo CLI to build react-native apps for iOS 
