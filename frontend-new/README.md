@@ -1,5 +1,8 @@
-to run: npm run start:dev
-# localhost:3000/ #
+# to run: # 
+
+### npm i ###
+### npm run start ###
+### localhost:3000/ ###
 
 ## added: ##
 navbar,
@@ -11,4 +14,3 @@ view more info about plant
 
 ## removed: ##
 add new plant 
-
