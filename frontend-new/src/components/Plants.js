@@ -13,13 +13,6 @@ class Plants extends Component {
         const getPlants = (await axios.get('/api/plantsdata')).data;
         this.setState({plants: getPlants});
     }
-    
-    async componentDidUpdate(prev) {
-        if(prev !== this.props) {
-            const getPlants = (await axios.get('/api/plantsdata')).data;
-            this.setState({plants: getPlants});
-        }
-    }
 
     render() {
         const { plants } = this.state;
@@ -28,9 +21,9 @@ class Plants extends Component {
         return (
             <div id="listofcategories">
                 {
-                    categories.map(category => {
+                    categories.map((category,index) => {
                         return (
-                            <div id="category" key={category}>
+                            <div id="category" className={`div${index}`} key={category}>
                                 <h1>{`${category[0].toUpperCase()}${category.substring(1, category.length)}`}</h1>
                                 <div id="plants">
                                     {

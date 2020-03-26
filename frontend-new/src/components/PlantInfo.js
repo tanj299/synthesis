@@ -19,7 +19,7 @@ class PlantInfo extends Component {
     render() {
         const { data } = this.state;
         return (
-            <main>
+            <main className='plantinfo'>
                 <Link to='/user/plants'>Go back</Link>
                 <h1>More Info</h1>
                 <h3>Category: {data.category}</h3>
