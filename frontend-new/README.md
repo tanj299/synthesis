@@ -10,3 +10,6 @@
 
 ## 3-25 ##
 #### fixed navbar issue, added background. will add more css in the coming days ####
+
+## 3-29 ## 
+#### cleaned up a lot of code, removed background, added the REST api and will add more design in the coming days ####
