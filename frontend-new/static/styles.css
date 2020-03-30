@@ -1,0 +1,60 @@
+body {
+	font-family: verdana;
+}
+
+nav {
+  	display: flex;
+	justify-content: space-around;
+	padding: 1rem;
+	background-color: lightgreen; 
+	border-radius: 10px;
+	align-items: center
+}
+
+a {
+	font-size: 1.5rem;
+	text-decoration: none;
+}
+
+.title {
+	font-size: 3rem;
+	font-weight: bold;
+}
+
+#all-plants {
+	display: flex;
+	justify-content: space-around;
+}	
+
+#plant-card {
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 2rem;
+	width: calc((100% / 3) - 2rem);
+	margin: 2rem;
+}
+
+#plant-card > a {
+	display: flex;
+	justify-content: center;
+}
+
+#cactus-image {
+	background-image: url('images/cactus.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	min-height: 500px;
+}
+
+#cactus-image:hover {
+	background-image: url('images/cactushover.png');
+	background-repeat: no-repeat;
+}
+
+#orchid-image {
+	/* background-image: url('images/orchid.png'); */
+	min-height: 500px;
+	max-height: 500px;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
