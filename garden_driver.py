@@ -12,8 +12,25 @@ import time
 import serial
 
 class Plant():
-	def init(self):
-		# DEFINE PORTS
+	def init(self, name, arduino, light, temp_humid, soil_temp, soil_moisture, 
+			water_level, water_pump, fan, camera, light_thresh, temp_thresh,
+			moisture_thresh):
+		# DEFINE CHARACTERISTICS
+		self.name = name
+		self.arduino = arduino
+		self.light = light
+		self.temp_humid = temp_humid
+		self.soil_temp = soil_temp
+		self.soil_moisture = soil_moisture
+		self.water_level = water_level
+		self.water_pump = water_pump
+		self.fan = fan
+		self.camera = camera
+
+		# DEFINE THRESHOLDS
+        self.light_thresh = light_thresh
+        self.temp_thresh = temp_thresh
+        self.moisture_thresh = moisture_thresh
 
 		# DEFINE FLAGS
 		# Errors
@@ -25,15 +42,17 @@ class Plant():
 		# Status
 		self.pump_on = False
 		self.light_on = False
-		self.light_off = False
+		self.fan_on = False
 
-		# DATA
+		# Set up Arduino connection
+
+# Key Global Structures
+plants = {}
+hardware {}
 
 def main():
 	# Define universal flags
-	error_database = False
-	request_data = False
-	request_picture = False
+	connection_error  = False
 	
 	print("Serial library version: ", serial.__version__)
 
