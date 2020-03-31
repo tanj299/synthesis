@@ -44,15 +44,17 @@ class Plant():
 		self.light_on = False
 		self.fan_on = False
 
-		# Set up Arduino connection
 
-# Key Global Structures
-plants = {}
-hardware {}
+# Key Global Structures 
+plants = {}		# Addresses Plant instances by name
+hardware = {}	# Addresses Arduinos by name
+				# Each Arduino it represented by a dictionary with a single 
+				# connection : serial connection key-value pair
+				# and multiple actuator : [on/off, error, **PlantNames] pairs
 
 def main():
 	# Define universal flags
-	connection_error  = False
+	connection_error = False
 	
 	print("Serial library version: ", serial.__version__)
 
