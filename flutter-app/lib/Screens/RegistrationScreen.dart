@@ -35,8 +35,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             size: 35,
           ),
           SizedBox(height: 10),
-          BoldText("Aight", 30.0, kdarkBlue),
-          NormalText("Let's Head Out", kdarkBlue, 30.0),
+          BoldText("Synthesis", 30.0, Colors.green),
+          NormalText("The Automatic Garden", Colors.lightGreen, 18.0),
+          SizedBox(
+            height: 30,
+          ),
           SizedBox(
             height: 20,
           ),
@@ -65,37 +68,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(
                     height: 20,
                   ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: <Widget>[
+                  //     Container(
+                  //       height: 2,
+                  //       width: 100,
+                  //       color: kdarkBlue,
+                  //     ),
+                  //     NormalText("Or Sign in with", kdarkBlue, 12.5),
+                  //     Container(
+                  //       height: 2,
+                  //       width: 100,
+                  //       color: kdarkBlue,
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  // Icon(
+                  //   FontAwesomeIcons.facebookSquare,
+                  //   color: Colors.blue.shade600,
+                  //   size: 40.0,
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Container(
-                        height: 2,
-                        width: 100,
-                        color: kdarkBlue,
-                      ),
-                      NormalText("Or Sign in with", kdarkBlue, 12.5),
-                      Container(
-                        height: 2,
-                        width: 100,
-                        color: kdarkBlue,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Icon(
-                    FontAwesomeIcons.facebookSquare,
-                    color: Colors.blue.shade600,
-                    size: 40.0,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      NormalText("Have an account ?", kdarkBlue, 12.5),
+                      NormalText("Have an account?", kdarkBlue, 12.5),
                       SizedBox(
                         width: 5,
                       ),
@@ -109,7 +112,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                         child: Padding(
                           padding: EdgeInsets.only(right: 8.0,),
-                          child: BoldText.veryBold("Sign In ?", 12.5, korange,true),
+                          child: BoldText.veryBold("Sign in here", 12.5, Colors.green,true),
                         ),
                       ),
                     ],
