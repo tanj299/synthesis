@@ -48,5 +48,5 @@ Please follow below instructions to set up a Python environment
 
 4.  In your terminal, run the following:
     ~~~~
-    $ python plant.py
+    $ python main.py
     ~~~~

@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-const API = 'http://127.0.0.1:5000/plant';
+const API = 'http://127.0.0.1:5000/plants';
 
-router.get('/plants', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     try {
         const data = (await axios.get(API)).data;
         res.status(201).json(data);

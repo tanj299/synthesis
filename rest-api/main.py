@@ -4,6 +4,7 @@
 # File: main.py
 # Date Begun: 03/25/2020
 # Last Updated: 04/04/2020
+# Main implementation of the REST API
 
 # Flask application 
 
