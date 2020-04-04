@@ -30,7 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: Center(
                 child: Column(children: <Widget>[
           Icon(
-            FontAwesomeIcons.plane,
+            FontAwesomeIcons.seedling,
             color: kdarkBlue,
             size: 35,
           ),

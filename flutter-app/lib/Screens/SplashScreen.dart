@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(FontAwesomeIcons.plane,color: kwhite,size: 70,),
+              Icon(FontAwesomeIcons.seedling,color: kwhite,size: 70,),
               SizedBox(height: 50),
               BoldText("Synthesis",35.0,kdarkBlue),
               TypewriterAnimatedTextKit(
