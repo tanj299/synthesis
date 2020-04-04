@@ -1,6 +1,6 @@
 # Synthesis
 ## RESTful API 
-## Last Updated: 03/26/2020
+## Last Updated: 04/04/2020
 ### Synthesis - The Automatic Garden
 ### Authors: Leo Au-Yeung, Stanley Lim, Daniel Mallia, Jayson Tan
 

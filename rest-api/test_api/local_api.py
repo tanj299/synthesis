@@ -103,7 +103,7 @@ def get_plant(id):
     return plant_schema.jsonify(plant)
 
 # update a plant
-@app.route('/plant/<id>', methods=['PUT'])
+@app.route('/plant/<int:id>', methods=['PUT'])
 def update_plant(id):
     # first fetch the plant
     plant = Plant.query.get(id)
@@ -127,7 +127,7 @@ def update_plant(id):
     return plant_schema.jsonify(plant)
 
 # delete a plant
-@app.route('/plant/<id>', methods=['DELETE'])
+@app.route('/plant/<int:id>', methods=['DELETE'])
 def delete_plant(id):
     plant = Plant.query.get(id)
     db.session.delete(plant)
