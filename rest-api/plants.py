@@ -1,28 +1,25 @@
 #! env/bin/activate
 
 # Authors: Jayson Tan and Daniel Mallia
+# File: plants.py
 # Date Begun: 03/25/2020
+# Last Updated: 04/04/2020
 
 # Implementation of REST API routes via Python Flask and SQLAlchemy 
-# At this point, we are able to perform CRUD operations 
+# Routes for CRUD operations on `plants` table 
 # Use Postman to test routes and endpoints
 # pymysql allows us to query with SQL statements
 # Note: python3 does NOT support flask-mysqldb
 
 import pymysql
-from app import app
-from rds_config import mysql
-from flask import jsonify
-from flask import flash, request
+from extensions import mysql
+from flask import jsonify, Flask, flash, request, Blueprint
 # from werkzeug import generate_password_hash, check_password_hash
 
-# welcome to backend
-@app.route('/')
-def welcome(): 
-    return('Welcome to the backend!')
+plants_api = Blueprint('plants_api', __name__)
 
 # GET all plants from 'plant_info'
-@app.route('/plant', methods=['GET'])
+@plants_api.route('/', methods=['GET'])
 def fetch_all_plants():
     try:
         # connect to MySQL instance
@@ -30,7 +27,7 @@ def fetch_all_plants():
         cur = connect.cursor(pymysql.cursors.DictCursor)
         # pymysql cursors that returns results as a dictionary
         # cursor objects allows users to execute queries per row
-        cur.execute("SELECT * FROM plant_info")
+        cur.execute("SELECT * FROM plants")
 
         # .fetchall() retrieves a JSON object 
         rows = cur.fetchall()
@@ -49,14 +46,14 @@ def fetch_all_plants():
         cur.close()
 
 # GET a plant identified by 'id'
-@app.route('/plant/<id>', methods=['GET'])
+@plants_api.route('/plant/<id>', methods=['GET'])
 def fetch_plant(id):
     try:
         connect = mysql.connect()
         cur = connect.cursor(pymysql.cursors.DictCursor)
 
         # query for a single plant matching 'id', %s is a placeholder of string type
-        cur.execute("SELECT * FROM plant_info WHERE plant_id = %s", id)
+        cur.execute("SELECT * FROM plants WHERE plant_id = %s", id)
         single_plant = cur.fetchone()
         response = jsonify(single_plant)
 
@@ -77,7 +74,7 @@ def fetch_plant(id):
         cur.close()
 
 # HTTP response with 404 error 
-@app.errorhandler(404)
+@plants_api.errorhandler(404)
 def not_found(error=None):
     message = {
         'status': 404,
