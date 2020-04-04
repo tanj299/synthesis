@@ -18,7 +18,7 @@ class WideButton extends StatelessWidget {
       minWidth: 350.0,
       height: 50.0,
       child: RaisedButton(
-          color: korange,
+          color: Colors.green[300],
           shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25)),
           child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),

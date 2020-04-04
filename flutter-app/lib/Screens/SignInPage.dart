@@ -23,7 +23,7 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         elevation: 0.0,
         centerTitle: true,
-        title: NormalText("SignIn", kblack, 20.0),
+        title: NormalText("Login", kblack, 20.0),
         backgroundColor: kwhite,
         iconTheme: IconThemeData(
           color: Colors.black,
@@ -34,13 +34,13 @@ class _SignInPageState extends State<SignInPage> {
           child: Column(
             children: <Widget>[
               Icon(
-                FontAwesomeIcons.plane,
-                color: kdarkBlue,
+                FontAwesomeIcons.seedling,
+                color: Colors.green,
                 size: 35,
               ),
               SizedBox(height: 10),
-              BoldText("Aight", 30.0, kdarkBlue),
-              NormalText("Let's Head Out", kdarkBlue, 30.0),
+              BoldText("Synthesis", 30.0, Colors.green),
+              NormalText("The Automatic Garden", Colors.lightGreen, 18.0),
               SizedBox(
                 height: 30,
               ),
@@ -53,57 +53,57 @@ class _SignInPageState extends State<SignInPage> {
                 child: PasswordForm(),
               ),
               SizedBox(
+                height: 10,
+              ),
+              Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: BoldText.veryBold(
+                        "Forgot your password?", 12.5, kdarkBlue, true),
+                  )),
+              SizedBox(
                 height: 25,
               ),
-              WideButton.bold("SIGN IN", () {
+              WideButton.bold("Sign in", () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return Home();
                 }));
               }, true),
               SizedBox(
-                height: 10,
-              ),
-              Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 8.0),
-                    child: BoldText.veryBold(
-                        "Forgot your Password ?", 12.5, kdarkBlue, true),
-                  )),
-              SizedBox(
                 height: 20,
               ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: <Widget>[
+              //     Container(
+              //       height: 2,
+              //       width: 100,
+              //       color: kdarkBlue,
+              //     ),
+              //     NormalText("Or Sign in with", kdarkBlue, 12.5),
+              //     Container(
+              //       height: 2,
+              //       width: 100,
+              //       color: kdarkBlue,
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // Icon(
+              //   FontAwesomeIcons.facebookSquare,
+              //   color: Colors.blue.shade600,
+              //   size: 40.0,
+              // ),
+              // SizedBox(
+              //   height: 65,
+              // ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Container(
-                    height: 2,
-                    width: 100,
-                    color: kdarkBlue,
-                  ),
-                  NormalText("Or Sign in with", kdarkBlue, 12.5),
-                  Container(
-                    height: 2,
-                    width: 100,
-                    color: kdarkBlue,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Icon(
-                FontAwesomeIcons.facebookSquare,
-                color: Colors.blue.shade600,
-                size: 40.0,
-              ),
-              SizedBox(
-                height: 65,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  NormalText("Don't have an account ?", kdarkBlue, 12.5),
+                  NormalText("Don't have an account?", kdarkBlue, 12.5),
                   SizedBox(
                     width: 5,
                   ),
@@ -120,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
                         right: 8.0,
                       ),
                       child:
-                          BoldText.veryBold("Register ?", 12.5, korange, true),
+                          BoldText.veryBold("Register here", 12.5, Colors.green, true),
                     ),
                   ),
                 ],

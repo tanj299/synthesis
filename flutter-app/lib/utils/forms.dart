@@ -43,7 +43,7 @@ class _FormsState extends State<PasswordForm> {
                   ),
             iconSize: 20,
           ),
-          hintText: "password",
+          hintText: "Password",
           hintStyle: TextStyle(fontFamily: "nunito",
               fontWeight: FontWeight.w500, color: kgreyDark, fontSize: 15.5),
           contentPadding:
