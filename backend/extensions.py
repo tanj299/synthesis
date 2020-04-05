@@ -1,6 +1,6 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan and Daniel Mallia
+# Authors: Jayson Tan 
 # File: extensions.py
 # Date Begun: 03/25/2020
 # Last Updated: 04/02/2020

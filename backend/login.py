@@ -1,6 +1,6 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan and Daniel Mallia
+# Authors: Jayson Tan
 # File: login.py
 # Date Begun: 04/02/2020
 # Last Updated: 04/02/2020

@@ -1,6 +1,6 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan and Daniel Mallia
+# Authors: Jayson Tan 
 # File: main.py
 # Date Begun: 03/25/2020
 # Last Updated: 04/04/2020

@@ -1,6 +1,6 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan and Daniel Mallia
+# Authors: Jayson Tan 
 # Date Begun: 03/23/2020
 
 # Implementation of REST APIs 
