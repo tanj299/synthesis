@@ -43,6 +43,11 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
+// Define data pin, create necessary objects, and create a 
+// DeviceAddress - an uint_8 array of length 8. An address
+// (or ID) of such a device is 64 bits - 8 2-bit hexademical
+// values (hence the uint_8, with values 0-255, array of 
+// length 8.)
 const int sensorsPin = 7;
 OneWire oneWire(sensorsPin);
 DallasTemperature sensors(&oneWire);
@@ -51,30 +56,40 @@ DeviceAddress arr;
 void setup() {
   Serial.begin(9600);
   sensors.begin();
+
+  // Check device count - should print 1 for a single sensor
+  // DEC - specifies decimal output for Serial.print()
   Serial.print(sensors.getDeviceCount(), DEC);
-  if(sensors.isParasitePowerMode()) Serial.println("ON");
+  
+  // if(sensors.isParasitePowerMode()) Serial.println("ON");
+
+  // Fetch and print address for the sensor
   if(!sensors.getAddress(arr, 0)) Serial.println("Unable to find address for Device 0");  
   Serial.print("Device 0 Address: ");
   printAddress(arr);
   Serial.println();
+
+  // Set sensor resolution to 10 bits
   sensors.setResolution(arr, 10);
 
 }
 
-
 void loop() {
+  // Fetch and print temperature
   sensors.requestTemperaturesByAddress(arr);
   float temperature = sensors.getTempF(arr);
+  
   Serial.print("Temperature in F: ");
   Serial.println(temperature);
-
-  delay(1000);
   
-
+  delay(1000);
 }
 
+// Basic function for printing the address, borrowed from
+// the Adafruit sample sketch.
 void printAddress(DeviceAddress addr) {
   for(uint8_t i = 0; i < 8; i++) {
+    // Pad for single digit hex
     if(addr[i] < 16) Serial.print("0");
     Serial.print(addr[i], HEX);
   }
