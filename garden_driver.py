@@ -44,14 +44,19 @@ class Plant():
 		self.pump_on = False
 		self.light_on = False
 		self.fan_on = False
+		self.last_watered = None
 
 
 # Key Global Structures 
 plants = {}		# Addresses Plant instances by name
-hardware = {}	# Addresses Arduinos by name
-				# Each Arduino it represented by a dictionary with a single 
+hardware_actuators = {}	# Addresses Arduinos by port name
+				# Each Arduino is represented by a dictionary with a single 
 				# connection : serial connection key-value pair
 				# and multiple actuator : [on/off, error, **PlantNames] pairs
+hardware_sensors = {} # Addresses Arduinos by port name
+				# Each Arduino is represented by a dictionary with a single
+				# connection : serial connection key-value pair
+				# and multiple sensor : [reading, **PlantNames] pairs
 
 # Function to print greeting screen, request login information and authorize 
 # (acquire API access token)
@@ -76,6 +81,8 @@ def greet_and_login():
 
 	return token
 
+def parse_configuration():
+	pass
 
 def main():
 	# Define universal flags
