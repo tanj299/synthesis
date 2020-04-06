@@ -1,0 +1,69 @@
+# Authors: Daniel Mallia and Jayson Tan
+# Date Begun: 3/27/2020
+
+# Legend: 
+- pk = primary key
+- fk = foreign key
+- ck = composite key 
+
+### ADD
+
+# users
+attributes: 
+    - user_email(pk) varchar(40)
+    - user_name varchar(40) 
+    - user_password varchar(4)
+
+# user_to_plants
+attributes:
+    - user_email:plant_name varchar(40)
+    - plant_id int
+
+# configuration_table <- initial config 
+attributes: 
+    - user, plant_id [composite key]
+    - arduino varchar(20)
+    - light int 
+    - temp_humid int 
+    - soil_temp int
+    - soil_moisture int 
+    - water_level int 
+    - water_pump int 
+    - fan int 
+    - camera int 
+
+# logging_table
+attributes:
+    - user, plant_id(ck)
+    - entry int, auto_increment
+    - light int
+    - temp int
+    - humid int 
+    - soil_temp int 
+    - soil_moisture int
+    - water_level int 
+
+# actuator
+attributes:
+    - device_id int 
+    - request bool 
+    - on_off bool 
+    - error bool 
+
+# plant_to_actuator (bridge table)
+attributes:
+    - plant_id int 
+    - device_id int 
+
+
+### MODIFY
+# user_to_plants 'username' -> user_email
+
+# plant_info
+attributes:
+    - user, plant_id(ck)
+    - name varchar(40)
+    - species varchar(64) 
+    - uri String
+    - curr_photo int 
+
