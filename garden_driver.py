@@ -64,6 +64,7 @@ def greet_and_login():
 			'Tan\nHunter College, Spring 2020\n\n', sep ='')
 
 	# Check library versions:
+	print("Python version: ", sys.version)
 	print("Serial library version: ", serial.__version__, "\n\n")
 
 	# Request login information
