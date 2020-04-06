@@ -28,9 +28,9 @@ class Plant():
 		self.camera = camera
 
 		# DEFINE THRESHOLDS
-        self.light_thresh = light_thresh
-        self.temp_thresh = temp_thresh
-        self.moisture_thresh = moisture_thresh
+		self.light_thresh = light_thresh
+		self.temp_thresh = temp_thresh
+		self.moisture_thresh = moisture_thresh
 
 		# DEFINE FLAGS
 		# Errors
@@ -77,4 +77,4 @@ def main():
 		# 		etc.
 
 if __name__ == '__main__':
-    main()
+	main()
