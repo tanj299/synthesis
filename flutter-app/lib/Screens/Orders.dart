@@ -27,24 +27,24 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kwhite,
-        title: BoldText("My Orders", 25, kblack),
+        title: BoldText("About Us", 25, kblack),
         centerTitle: true,
         elevation: 0.0,
       ),
       body: Scaffold(
         backgroundColor: kwhite,
-        appBar: TabBar(
-          labelColor: kdarkBlue,
-          labelStyle:
-              TextStyle(fontFamily: "nunito", fontWeight: FontWeight.bold),
-          controller: tabController,
-          indicatorColor: kdarkBlue,
-          tabs: <Widget>[
-            Tab(text: "Flights"),
-            Tab(text: "Hotels"),
-            Tab(text: "Deliveries"),
-          ],
-        ),
+        // appBar: TabBar(
+        //   labelColor: kdarkBlue,
+        //   labelStyle:
+        //       TextStyle(fontFamily: "nunito", fontWeight: FontWeight.bold),
+        //   controller: tabController,
+        //   indicatorColor: kdarkBlue,
+        //   tabs: <Widget>[
+        //     Tab(text: "Flights"),
+        //     Tab(text: "Hotels"),
+        //     Tab(text: "Deliveries"),
+        //   ],
+        // ),
         body: TabBarView(
           children: <Widget>[
             Icon(Icons.person),

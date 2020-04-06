@@ -25,111 +25,108 @@ class _DashboardState extends State<Dashboard> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ImageContainer(),
+            // ImageContainer(),
 
             Padding(
               padding: const EdgeInsets.only(left:16.0,right: 16.0,bottom: 16.0),
 
               child: Column(children: <Widget>[
+                SizedBox(
+                  height: 40,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
                   child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Daily Offers", 20.0, kblack)),
+                      alignment: Alignment.center,
+                      child: BoldText("Synthesis", 20.0, kblack)),
                 ),
                 Container(
                   width: 330,
-                  height: 150,
+                  height: 800,
                   child: ListView(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     children: <Widget>[
-                      buildContainer(),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      buildContainer(),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      buildContainer(),
+                      buildContainer('Peralta', 'Orchid', 'johnsmith@gmail.com', 'Wed, 01 Apr 2020 23:35:02 GMT'),
+                      buildContainer('Marianne', 'Lily', 'janesmith@gmail.com', 'Wed, 01 Apr 2020 23:36:28 GMT'),
+                      buildContainer('Bobby', 'Orchid', 'bobbylee@gmail.com', 'Sun, 05 Apr 2020 15:25:16 GMT'),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      BoldText("Recommended for you", 20.0, kblack),
-                      SizedBox(
-                        width: 60,
-                      ),
-                      BoldText("More", 15.0, korange),
-                      Icon(
-                        Icons.navigate_next,
-                        color: korange,
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 400,
-                  height: 200,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      RecommendationImage("assets/sheraton.jpg", "Sheraton", "Oran"),
-                      RecommendationImage("assets/Meridien.jpg", "Meridien", "Oran"),
-                      RecommendationImage("assets/ibis.jpg", "Ibis", "Oran"),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only( top: 10,bottom: 16.0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Best Rated Places", 20.0, kblack)),
-                ),
-                 Container(
-                    width: 400,
-                    height: 250,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        BestRatedImage(
-                            "assets/sheraton.jpg", "Sheraton", "Oran", 4.5),
-                        BestRatedImage(
-                            "assets/Meridien.jpg", "Meridien", "Oran", 4.8),
-                        BestRatedImage("assets/ibis.jpg", "Ibis", "Oran", 3.1),
-                      ],
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 20),
+                //   child: Row(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: <Widget>[
+                //       BoldText("Recommended for you", 20.0, kblack),
+                //       SizedBox(
+                //         width: 60,
+                //       ),
+                //       BoldText("More", 15.0, korange),
+                //       Icon(
+                //         Icons.navigate_next,
+                //         color: korange,
+                //       )
+                //     ],
+                //   ),
+                // ),
+                // Container(
+                //   width: 400,
+                //   height: 200,
+                //   child: ListView(
+                //     scrollDirection: Axis.horizontal,
+                //     children: <Widget>[
+                //       RecommendationImage("assets/sheraton.jpg", "Sheraton", "Oran"),
+                //       RecommendationImage("assets/Meridien.jpg", "Meridien", "Oran"),
+                //       RecommendationImage("assets/ibis.jpg", "Ibis", "Oran"),
+                //     ],
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only( top: 10,bottom: 16.0),
+                //   child: Align(
+                //       alignment: Alignment.centerLeft,
+                //       child: BoldText("Best Rated Places", 20.0, kblack)),
+                // ),
+                //  Container(
+                //     width: 400,
+                //     height: 250,
+                //     child: ListView(
+                //       scrollDirection: Axis.horizontal,
+                //       children: <Widget>[
+                //         BestRatedImage(
+                //             "assets/sheraton.jpg", "Sheraton", "Oran", 4.5),
+                //         BestRatedImage(
+                //             "assets/Meridien.jpg", "Meridien", "Oran", 4.8),
+                //         BestRatedImage("assets/ibis.jpg", "Ibis", "Oran", 3.1),
+                //       ],
 
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10,bottom: 16.0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Awesome Cities", 20.0, kblack)),
-                ),
-                Row(
-                  children: <Widget>[
-                    CitiesImage("assets/alger.jpg","ALGIERS"),
-                    SizedBox(width: 28,),
-                    CitiesImage("assets/tlemcen.jpg","TLEMCEN"),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 10,bottom: 16.0),
+                //   child: Align(
+                //       alignment: Alignment.centerLeft,
+                //       child: BoldText("Awesome Cities", 20.0, kblack)),
+                // ),
+                // Row(
+                //   children: <Widget>[
+                //     CitiesImage("assets/alger.jpg","ALGIERS"),
+                //     SizedBox(width: 28,),
+                //     CitiesImage("assets/tlemcen.jpg","TLEMCEN"),
 
-                  ],
-                ),
-                SizedBox(height: 28,),
-                  Row(
-                    children: <Widget>[
-                      CitiesImage("assets/adrar.jpg","ADRAR"),
-                      SizedBox(width: 28,),
+                //   ],
+                // ),
+                // SizedBox(height: 28,),
+                //   Row(
+                //     children: <Widget>[
+                //       CitiesImage("assets/adrar.jpg","ADRAR"),
+                //       SizedBox(width: 28,),
 
-                      CitiesImage("assets/bedjaia.jpg","BEDJAIA"),
+                //       CitiesImage("assets/bedjaia.jpg","BEDJAIA"),
 
-                    ],
+                //     ],
 
-                ),
+                // ),
 
               ]),
             ),
@@ -141,7 +138,7 @@ class _DashboardState extends State<Dashboard> {
 
 
 
-  Widget buildContainer() {
+  Widget buildContainer(name, species, email, date) {
     return GestureDetector(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -150,7 +147,7 @@ class _DashboardState extends State<Dashboard> {
       },
       child: Container(
         width: 320,
-        height: 50,
+        height: 200,
         child: Container(
             width: 300,
             height: 150,
@@ -161,16 +158,22 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
                   child: ClipRRect(
                       borderRadius: new BorderRadius.only(
                           topLeft: Radius.circular(15),
                           bottomLeft: Radius.circular(15)),
-                      child: Image.asset(
-                        "assets/hotel.jpg",
-                        fit: BoxFit.fitHeight,
-                      )),
+                      // child: Image.asset(
+                      //   "assets/hotel.jpg",
+                      //   fit: BoxFit.fitHeight,
+                      // )
+                      child: Icon(
+                          Icons.local_florist,
+                          color: kgreyDark,
+                          size: 60.0,
+                        ),
+                      ),
                 ),
                 SizedBox(
                   width: 10.0,
@@ -179,67 +182,69 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    BoldText("Plaza", 20.5, kblack),
+                    BoldText(name, 20.5, kblack),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        BoldText("5 Stars", 15.0, korangelite),
                         Icon(
-                          Icons.location_on,
+                          Icons.local_florist,
                           color: kgreyDark,
                           size: 15.0,
                         ),
-                        NormalText("Oran", kgreyDark, 15.0)
+                        SizedBox(
+                          width: 10,
+                        ),
+                        BoldText("Species: " + species, 15.0, Colors.green),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          width: 50.0,
-                          decoration: BoxDecoration(
-                            color: korange,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.star,
-                                color: kwhite,
-                                size: 15.0,
-                              ),
-                              BoldText("4.5", 15.0, kwhite)
-                            ],
-                          ),
+                        Icon(
+                          Icons.email,
+                          color: kgreyDark,
+                          size: 15.0,
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        NormalText("(1024 Reviews)", kgreyDark, 11.0),
+                        NormalText(email, kgreyDark, 11.0),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.perm_identity,
+                          color: kgreyDark,
+                          size: 15.0,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        NormalText(date, kgreyDark, 11.0),
                       ],
                     ),
                     SizedBox(
                       height: 30,
                     ),
-                    BoldText("Book& Save 30% !", 14.0, Colors.red),
                     SizedBox(height: 14),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 90,
-                        ),
-                        BoldText("More", 12.0, kblack),
-                        Icon(
-                          Icons.navigate_next,
-                          size: 15.0,
-                        ),
-                      ],
-                    )
+                    // Row(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    //   children: <Widget>[
+                    //     SizedBox(
+                    //       width: 90,
+                    //     ),
+                    //     BoldText("More", 12.0, kblack),
+                    //     Icon(
+                    //       Icons.navigate_next,
+                    //       size: 15.0,
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 )
               ],

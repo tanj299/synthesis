@@ -48,36 +48,36 @@ class _HomeState extends State<Home> {
           backgroundColor: kwhite,
           items: [
             BottomNavyBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(Icons.local_florist),
               activeColor: kdarkBlue,
               inactiveColor: kgreyDark,
               title: Text(
-                "Home",
+                "My Plants",
                 style: TextStyle(fontFamily: "nunito"),
               ),
             ),
             BottomNavyBarItem(
-              icon: Icon(Icons.line_style),
+              icon: Icon(Icons.assignment),
               title: Text(
-                "Orders",
-                style: TextStyle(fontFamily: "nunito"),
-              ),
-              inactiveColor: kgreyDark,
-              activeColor: kdarkBlue,
-            ),
-            BottomNavyBarItem(
-              icon: Icon(Icons.notifications),
-              title: Text(
-                "Notifications",
+                "About Us",
                 style: TextStyle(fontFamily: "nunito"),
               ),
               inactiveColor: kgreyDark,
               activeColor: kdarkBlue,
             ),
+            // BottomNavyBarItem(
+            //   icon: Icon(Icons.notifications),
+            //   title: Text(
+            //     "Notifications",
+            //     style: TextStyle(fontFamily: "nunito"),
+            //   ),
+            //   inactiveColor: kgreyDark,
+            //   activeColor: kdarkBlue,
+            // ),
             BottomNavyBarItem(
-              icon: Icon(Icons.person),
+              icon: Icon(Icons.exit_to_app),
               title: Text(
-                "Profile",
+                "Sign Out",
                 style: TextStyle(fontFamily: "nunito"),
               ),
               inactiveColor: kgreyDark,
@@ -96,8 +96,9 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Dashboard(),
             Orders(),
-            Notifications(),
-            Profile(),
+            Orders(),
+            // Notifications(),
+            // Profile(),
           ],
         ),
       ),
