@@ -71,6 +71,7 @@ def greet_and_login():
 	password = input('Enter your account password: ')
 
 	# Authorize 
+	token = ''
 
 	return token
 
@@ -79,7 +80,10 @@ def main():
 	# Define universal flags
 	connection_error = False
 
+	minute_tracker = time.time()
+	hour_tracker = time.time()
 	# Primary Loop:
+	while(True):
 		# 1. Read the database control table
 		# 		If error in read, set errorDatabase, and e-mail user
 		# 		Else set command flags (Raspberry Pi)
@@ -92,6 +96,12 @@ def main():
 		# 		If greater than 60 seconds - collect value (may want to poll 
 		# 			now, get value on next loop)
 		# 		If greater than 60 minutes - write average to database
+		if(time.time() - minute_tracker >= 60):
+			minute_tracker = time.time()
+
+		if(time.time() - hour_tracker >= 3600):
+			hour_tracker = time.time()
+		
 		# 4. Process automated aspects:
 		# 		Water if low moisture
 		# 		Light if low light (and not night time)
