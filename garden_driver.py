@@ -8,8 +8,9 @@
 # garden_driver for this reason as well as because it acts as a software 
 # driver, communicating with the actual hardware components.
 
-import time
+import sys, time
 import serial
+import requests
 
 class Plant():
 	def init(self, name, arduino, light, temp_humid, soil_temp, soil_moisture, 
@@ -52,11 +53,31 @@ hardware = {}	# Addresses Arduinos by name
 				# connection : serial connection key-value pair
 				# and multiple actuator : [on/off, error, **PlantNames] pairs
 
+# Function to print greeting screen, request login information and authorize 
+# (acquire API access token)
+def greet_and_login():
+	# Greeting screen
+	line = ('*' * 80) + '\n'
+	blank = ' ' * 30
+	print(line, line, '\n', blank, 'Welcome to SYNTHESIS', blank, '\n\n', line,
+		line, 'Created by Leo Au-Yeung, Stanley Lim, Daniel Mallia and Jayson',
+			'Tan\nHunter College, Spring 2020\n\n', sep ='')
+
+	# Check library versions:
+	print("Serial library version: ", serial.__version__, "\n\n")
+
+	# Request login information
+	email = input('Enter your account email: ')
+	password = input('Enter your account password: ')
+
+	# Authorize 
+
+	return token
+
+
 def main():
 	# Define universal flags
 	connection_error = False
-	
-	print("Serial library version: ", serial.__version__)
 
 	# Primary Loop:
 		# 1. Read the database control table
