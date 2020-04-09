@@ -19,57 +19,92 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-// Testing http and Future class 
-class Album {
-  final int userId;
-  final int id;
-  final String title;
+// PlantsList - parses list of json of plant data list
+class PlantsList {
+  final List<Plant> plants;
 
-  Album({this.userId, this.id, this.title});
+  PlantsList({
+    this.plants,
+  });
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
+  factory PlantsList.fromJson(List<dynamic> parsedJson) {
+    List<Plant> plants = new List<Plant>();
+    plants = parsedJson.map(
+      (plantJson) => Plant.fromJson(plantJson)
+    ).toList();
+
+    return new PlantsList(plants: plants);
+  }
+}
+
+// Plant - parses individual json of plant map (dict)
+class Plant {
+  // setting variables
+  final int currPhoto;
+  final String dateCreated;
+  final int plantId;
+  final String plantName;
+  final String species;
+  final String uri;
+  final String userEmail;
+
+  // constructor
+  Plant(
+      {this.currPhoto,
+      this.dateCreated,
+      this.plantId,
+      this.plantName,
+      this.species,
+      this.uri,
+      this.userEmail});
+
+  factory Plant.fromJson(Map<String, dynamic> json) {
+    return Plant(
+      currPhoto: json['curr_photo'],
+      dateCreated: json['date_created'],
+      plantId: json['plant_id'],
+      plantName: json['plant_name'],
+      species: json['species'],
+      uri: json['uri'],
+      userEmail: json['user_email'],
     );
   }
 }
 
-Future<Album> fetchAlbum() async {
-  final response = await http.get('https://jsonplaceholder.typicode.com/albums/1');
+// fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
+Future<PlantsList> fetchPlantsList() async {
+  final response = await http.get('http://localhost:5000/plants/');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
+    return PlantsList.fromJson(jsonDecode(response.body));
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load plant');
   }
 }
 
 class _DashboardState extends State<Dashboard> {
-  Future<Album> futureAlbum;
+  Future<PlantsList> futurePlantsList;
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    futurePlantsList = fetchPlantsList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             // ImageContainer(),
 
             Padding(
-              padding: const EdgeInsets.only(left:16.0,right: 16.0,bottom: 16.0),
-
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
               child: Column(children: <Widget>[
                 SizedBox(
                   height: 40,
@@ -80,34 +115,38 @@ class _DashboardState extends State<Dashboard> {
                       alignment: Alignment.center,
                       child: BoldText("Synthesis", 20.0, kblack)),
                 ),
-                // Testing FutureBuilder class
-                FutureBuilder<Album>(
-                  future: futureAlbum,
+                // FutureBuilder - used to fetch data
+                FutureBuilder<PlantsList>(
+                  future: futurePlantsList,
                   builder: (context, snapshot) {
+                    // data good
                     if (snapshot.hasData) {
-                      return Text(snapshot.data.title);
-                    } else if (snapshot.hasError) {
+                      print(snapshot.data.plants.length); // returns length of plants array
+                      return Text(snapshot.data.plants[0].plantName);
+                    }
+                    // error
+                    else if (snapshot.hasError) {
                       return Text("${snapshot.error}");
                     }
-
                     // By default, show a loading spinner.
                     return CircularProgressIndicator();
                   },
                 ),
-                // END Testing FutureBuilder class
                 Container(
                   width: 330,
                   height: 800,
                   child: ListView(
                     scrollDirection: Axis.vertical,
                     children: <Widget>[
-                      buildContainer('Peralta', 'Orchid', 'johnsmith@gmail.com', 'Wed, 01 Apr 2020 23:35:02 GMT'),
-                      buildContainer('Marianne', 'Lily', 'janesmith@gmail.com', 'Wed, 01 Apr 2020 23:36:28 GMT'),
-                      buildContainer('Bobby', 'Orchid', 'bobbylee@gmail.com', 'Sun, 05 Apr 2020 15:25:16 GMT'),
+                      buildContainer('Peralta', 'Orchid', 'johnsmith@gmail.com',
+                          'Wed, 01 Apr 2020 23:35:02 GMT'),
+                      buildContainer('Marianne', 'Lily', 'janesmith@gmail.com',
+                          'Wed, 01 Apr 2020 23:36:28 GMT'),
+                      buildContainer('Bobby', 'Orchid', 'bobbylee@gmail.com',
+                          'Sun, 05 Apr 2020 15:25:16 GMT'),
                     ],
                   ),
                 ),
-
               ]),
             ),
           ],
@@ -116,11 +155,9 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-
-
   Widget buildContainer(name, species, email, date) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return OverViewPage();
         }));
@@ -141,15 +178,15 @@ class _DashboardState extends State<Dashboard> {
                   width: 100,
                   height: 100,
                   child: ClipRRect(
-                      borderRadius: new BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Icon(
-                          Icons.local_florist,
-                          color: kgreyDark,
-                          size: 60.0,
-                        ),
-                      ),
+                    borderRadius: new BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                    child: Icon(
+                      Icons.local_florist,
+                      color: kgreyDark,
+                      size: 60.0,
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 10.0,
