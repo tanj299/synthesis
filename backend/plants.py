@@ -5,7 +5,7 @@
 # Date Begun: 03/25/2020
 # Last Updated: 04/04/2020
 
-# Implementation of REST API routes via Python Flask and SQLAlchemy 
+# Implementation of REST API routes via Python Flask and pymysql
 # Routes for CRUD operations on `plants` table 
 # Use Postman to test routes and endpoints
 # pymysql allows us to query with SQL statements
@@ -15,10 +15,15 @@
 import pymysql
 import time
 from extensions import mysql
-from flask import jsonify, Flask, flash, request, Blueprint
+from flask import jsonify, Flask, request, Blueprint
 # from werkzeug import generate_password_hash, check_password_hash
 
 plants_api = Blueprint('plants_api', __name__)
+
+# Index route for 'plants'
+@plants_api.route('/')
+def plant_index():
+    return ('Welcome to plants!')
 
 # POST request
 # @POST: create a plant with id autoincremented in the database
@@ -71,7 +76,7 @@ def add_plant():
 
 # GET request
 # @GET: fetch all plants from 'plants' table
-@plants_api.route('/', methods=['GET'])
+@plants_api.route('/all', methods=['GET'])
 def fetch_all_plants():
     try:
         # connect to MySQL instance
@@ -100,7 +105,7 @@ def fetch_all_plants():
 
 
 # GET, DELETE requests
-# a plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
+# A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
 # @GET: return a plant's information matching the ide from the database
 # @DELETE: remove plant matching the id from the database
 @plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE', 'PUT'])
@@ -184,7 +189,6 @@ def not_found(error=None):
     response = jsonify(message)
     response.status_code = 404
     return response
-
 
 if __name__ == "__main__":
     app.run(debug=True)
