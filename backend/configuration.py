@@ -11,7 +11,7 @@
 
 import pymysql
 import time 
-from extensions import pymysql
+from extensions import mysql
 from flask import Flask, request, jsonify, Blueprint
 
 config_api = Blueprint('config_api', __name__)
@@ -20,5 +20,34 @@ config_api = Blueprint('config_api', __name__)
 def index():
     return('Welcome to config!')
 
-if __name__ == ('main'):
+# GET request
+# @GET: fetch user config from 'configuration' table 
+@config_api.route('/<string:user_name>', methods=['GET'])
+def fetch_config(user_name): 
+    try:
+        connection = mysql.connect();
+        cursor = connection.cursor(pymysql.cursors.DictCursor) 
+        
+        # fetch config match user_name
+        cursor.execute("SELECT * FROM configuration WHERE user_name = %s", user_name)
+
+        user = cursor.fetchone()
+        response = jsonify(user)
+        print(response)
+
+        # if user_name not found 
+        if user == None:
+            print('Could not find username', user)
+            response.status_code = 404
+        else: 
+            response.status_code = 200
+        
+        return response
+    except:
+        print('Could not fetch user', user)
+    finally: 
+        connection.close()
+        cursor.close()
+
+if __name__ == ("__main__"):
     app.run(debug=True)

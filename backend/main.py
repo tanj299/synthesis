@@ -11,6 +11,7 @@
 from flask import Flask
 from extensions import mysql
 from plants import plants_api
+from configuration import config_api
 
 # Flask application
 app = Flask(__name__)
@@ -25,11 +26,15 @@ mysql.init_app(app)
 # Register Blueprint with the application for response 
 # Here we utilize Blueprint to modularize our code 
 app.register_blueprint(plants_api, url_prefix = "/plants")
+app.register_blueprint(config_api, url_prefix = "/config")
 
 # Index route; test backend
 @app.route('/')
 def index():
     return('Welcome to the backend!')
 
+# __name__ == current file running directly, which IS "__main__"
+# If main.py is imported to another file, then it is NOT "__main__" 
+# __name__ will be set to the file that the other file is named
 if __name__ == "__main__":
     app.run()

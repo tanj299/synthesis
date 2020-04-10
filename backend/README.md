@@ -48,9 +48,10 @@ Please follow below instructions to set up a Python environment
 
 4.  In your terminal, set your Flask environment variable to `main.py`; run the following:
     ~~~~
-    $ export FLASK_APP = main.py
+    $ export FLASK_APP=main.py
     $ flask run 
     ~~~~
+    **Note: There is NO whitespace between `FLASK_APP=<file_name>`**
 
     Alternatively, you can run the Flask app directly:
     ~~~~
