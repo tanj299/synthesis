@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 class PlantInfo extends Component {
     constructor() {
@@ -11,7 +10,7 @@ class PlantInfo extends Component {
     }
 
     async componentDidMount() {
-        const id = this.props.match.params.id;
+        const id = this.props.plant.plant_id;
         const plant = (await axios.get(`/api/plants/${id}`)).data;
         this.setState({ plant: plant });
     }
@@ -19,12 +18,27 @@ class PlantInfo extends Component {
     render() {
         const { plant } = this.state;
         return (
-            <div>
-                <Link to='/user/plants'>Back to plants</Link>
-                <h1>{plant.plant_id}</h1>
-                <h1>{plant.humidity_level}</h1>
-                <h1>{plant.light_intensity}</h1>
-                <h1>{plant.moisture_level}</h1>
+            <div id='more-information'>
+                <div id='plant-left'>
+                    <h1>{plant.plant_name}</h1>
+                    <div id='plant-img'>
+                        <p>No image yet</p>
+                    </div>
+                </div>
+                <div id='remove'>
+                    <button>Delete Plant</button>
+                </div>
+                <div id='plant-controls'>
+                    <button>Water</button>
+                    <br/>
+                    <button>Fan</button>
+                    <br/>
+                    <button>Camera</button>
+                    <br/>
+                    <button>Water threshold</button><input type='number' />
+                    <br/>
+                    <button>Light threshold</button><input type='number' />
+                </div>
             </div>
         );
     }
