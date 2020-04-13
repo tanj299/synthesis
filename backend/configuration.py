@@ -5,7 +5,6 @@
 # Date Begun: 03/25/2020
 # Last Updated: 04/10/2020
 
-
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for configuring the initial Raspberry Pi 
 
@@ -22,14 +21,16 @@ def index():
 
 # GET request
 # @GET: fetch user config from 'configuration' table 
-@config_api.route('/<string:user_name>', methods=['GET'])
-def fetch_config(user_name): 
+# Requires a backslash at the end to query with an email
+# Ex: janesmith@gmail.com OR janesmith%40gmail.com
+@config_api.route('/<string:user_email>/', methods=['GET'])
+def fetch_config(user_email): 
     try:
         connection = mysql.connect();
         cursor = connection.cursor(pymysql.cursors.DictCursor) 
-        
-        # fetch config match user_name
-        cursor.execute("SELECT * FROM configuration WHERE user_name = %s", user_name)
+
+        # fetch config match user_email
+        cursor.execute("SELECT * FROM configuration WHERE user_email = %s", user_email)
 
         user = cursor.fetchone()
         response = jsonify(user)
