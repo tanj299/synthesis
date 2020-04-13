@@ -9,7 +9,7 @@
  *          below links.)
  *          
  *          Please note that in the course of looking up the 
- *          needed OneWire and DallasTempetature libraries, I 
+ *          needed OneWire and DallasTemperature libraries, I 
  *          found that Adafruit had expanded on the original 
  *          libraries, and so I opted to use their versions 
  *          instead. Thus the below uses the following Adafruit 
