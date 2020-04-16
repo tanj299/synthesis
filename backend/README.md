@@ -53,6 +53,15 @@ Please follow below instructions to set up a Python environment
     ~~~~
     **Note: There is NO whitespace between `FLASK_APP=<file_name>`**
 
+    If you want to be lazy and not have to run `export FLASK_APP=main.py` every time, create a `.env` file and add the following:
+    ~~~~
+    #.env file
+    FLASK_APP=main
+    FLASK_ENV=development
+    ~~~~
+
+    Now you can just use `flask run` and it will use `main.py` as the Flask app
+
     Alternatively, you can run the Flask app directly:
     ~~~~
     $ python main.py
