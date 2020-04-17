@@ -3,7 +3,7 @@
 # Authors: Jayson Tan 
 # File: configuration.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/10/2020
+# Last Updated: 04/16/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for configuring the initial Raspberry Pi 
