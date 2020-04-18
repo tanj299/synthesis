@@ -2,26 +2,6 @@ body {
 	font-family: 'Baloo Thambi 2', cursive;
 	margin: 0;
 }
-
-nav {
-  	display: flex;
-	justify-content: space-around;
-	padding: 1rem;
-	background-color: lightgreen; 
-	border-radius: 10px;
-	align-items: center
-}
-
-a {
-	font-size: 1.5rem;
-	text-decoration: none;
-}
-
-.title {
-	font-size: 3rem;
-	font-weight: bold;
-}
-
 #all-plants {
 	display: flex;
 	justify-content: space-around;
@@ -98,4 +78,17 @@ a {
 #remove {
 	margin-top: 50%;
 	margin-left: 10%;
+}
+
+.back:hover {
+	opacity: 60%;
+	transition: 0.2s;
+}
+
+.form {
+	
+}
+
+.form > form > input {
+	width: 50%;
 }

@@ -5,6 +5,12 @@ module.exports = {
   module: {
     rules: [
       {
+          test: /\.(png|svg|jpg|gif)$/,
+          use: [
+            'file-loader',
+          ],
+        },
+      {
         test:/\.js$/,
         exclude: /node_modules/,
         use: {
@@ -13,6 +19,10 @@ module.exports = {
             presets: ['@babel/preset-react']
           }
         }
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       }
     ]
   }
