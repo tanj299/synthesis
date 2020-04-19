@@ -86,9 +86,61 @@ body {
 }
 
 .form {
-	
+	float: right;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	padding: 0rem 5rem;
+	background-color: white;
+
 }
 
 .form > form > input {
-	width: 50%;
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 1rem;
+	padding: 1rem;
+	margin: 1rem;
+	border-radius: 10px;
+	border: 1px solid black;
+}
+
+.form > form > input[type='submit'] {
+	border: 0;
+	background-color: lightgreen;
+}
+
+.close {
+	display: none;
+}
+
+.backbutton {
+	margin: 2rem;
+}
+
+.loginpage {
+	display: flex;
+	justify-content: space-between;
+}
+
+.loginh1 {
+	display: flex;
+	justify-content: center;
+}
+
+nav.loginregisternav {
+	display: flex;
+	justify-content: center;
+}
+
+nav.loginregisternav > a {
+	display: flex;
+	justify-content: center;
+	border: 1px solid black;
+	padding: 1rem;
+	width: 10%;
+}
+
+.highlight, .hlhover:hover {
+	background-color: lightgreen;
 }

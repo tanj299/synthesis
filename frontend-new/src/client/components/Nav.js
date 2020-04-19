@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import '../style/home.css';
 
@@ -16,7 +15,7 @@ class Nav extends Component {
         const { history } = this.props;
 
         return (
-            <div>
+            <div className='homepagediv'>
                 <nav className='text-focus-in'>
                     <div className="buttons">
                         <div>
