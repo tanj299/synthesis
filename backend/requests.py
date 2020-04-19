@@ -2,11 +2,11 @@
 
 # Authors: Jayson Tan
 # File: requests.py
-# Date Begun: 03/25/2020
-# Last Updated: 04/16/2020
+# Date Begun: 04/19/2020
+# Last Updated: 04/19/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
-# Routes for configuring the initial Raspberry Pi
+# Routes for making requests to the Raspberry Pi
 
 import time
 import pymysql
