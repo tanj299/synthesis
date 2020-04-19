@@ -16,6 +16,7 @@ from flask_login import LoginManager
 from plants import plants_api
 from configuration import config_api
 from login import login_api
+from requests import requests_api
 
 # Flask application
 app = Flask(__name__)
@@ -32,6 +33,7 @@ mysql.init_app(app)
 app.register_blueprint(plants_api, url_prefix = "/plants")
 app.register_blueprint(config_api, url_prefix = "/config")
 app.register_blueprint(login_api, url_prefix = "/login")
+app.register_blueprint(requests_api, url_prefix = "/requests")
 
 # Index route; test backend
 @app.route('/')
