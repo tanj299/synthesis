@@ -1,12 +1,12 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan 
+# Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
 # Last Updated: 04/04/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
-# Routes for CRUD operations on `plants` table 
+# Routes for CRUD operations on `plants` table
 # Use Postman to test routes and endpoints
 # pymysql allows us to query with SQL statements
 # Note: python3 does NOT support flask-mysqldb
@@ -21,6 +21,9 @@ from flask import jsonify, Flask, request, Blueprint
 plants_api = Blueprint('plants_api', __name__)
 
 # Index route for 'plants'
+# route() is a decorator which takes the function plant_index() as an argument
+# For instance, this function translates to:
+# plant_index() = plants_api.route('/', plant_index, <OPTIONS> )
 @plants_api.route('/')
 def plant_index():
     return ('Welcome to plants!')
@@ -34,7 +37,7 @@ def add_plant():
 
     # request.json sends a JSON body attached to the request, check with POSTMAN
     # POSTMAN requirements: HEADERS: Key: Content-Type, Value: application/json
-    # sample body: 
+    # sample body:
     '''
     {
         "user_email": "bobbylee@gmail.com",
@@ -129,9 +132,9 @@ def fetch_plant(id):
             # else, plant_id is found, return response object
             else:
                 response.status_code = 200
-                
+
             return response
-        except: 
+        except:
             print('Could not fetch a plant with id')
         finally:
             connection.close()
@@ -148,7 +151,7 @@ def fetch_plant(id):
         finally:
             connection.close()
             cursor.close()
-    else: 
+    else:
         return "Nothing"
 
 # PUT request
@@ -179,7 +182,7 @@ def update_plant(id):
         connection.close()
         cursor.close()
 
-# HTTP response with 404 error 
+# HTTP response with 404 error
 @plants_api.errorhandler(404)
 def not_found(error=None):
     message = {
@@ -192,5 +195,5 @@ def not_found(error=None):
 
 if __name__ == "__main__":
     app.run(debug=True)
-else: 
+else:
     print("Run main.py instead!")
