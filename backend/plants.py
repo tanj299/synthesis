@@ -111,7 +111,7 @@ def fetch_all_plants():
 # A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
 # @GET: return a plant's information matching the 'id' from the database
 # @DELETE: remove plant matching the id from the database
-@plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE', 'PUT'])
+@plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE'])
 def fetch_plant(id):
     if request.method == 'GET':
         try:
@@ -196,4 +196,4 @@ def not_found(error=None):
 if __name__ == "__main__":
     app.run(debug=True)
 else:
-    print("Run main.py instead!")
+    print("Execute `flask run` instead")
