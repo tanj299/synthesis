@@ -1,1 +1,20 @@
+# js | node_modules
+node_modules/
+**/node_modules
+  
+# python | environments
+.env 
+.venv
+env/
+venv/
+__pycache__
+
+# expo
+.expo/ 
+expo/
+
+# OS
 .DS_Store
+.DS_Store?
+.idea/
+
