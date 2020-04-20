@@ -72,6 +72,11 @@ flutter:
     - assets/tlemcen.jpg
     - assets/adrar.jpg
     - assets/plazamap.png
+    - assets/bgimg_dashboard.jpg
+    - assets/bgimg_overview.jpg
+    - assets/bgimg_splash.jpg
+    - assets/lily.jpg
+    - assets/orchid.jpg
 
   fonts:
     - family: nunito

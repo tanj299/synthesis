@@ -19,14 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.green,
-        body:Center(
+        // backgroundColor: Colors.green,
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/bgimg_splash.jpg"),
+                  fit: BoxFit.cover)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(FontAwesomeIcons.seedling,color: kwhite,size: 70,),
               SizedBox(height: 50),
-              BoldText("Synthesis",35.0,kdarkBlue),
+              BoldText("Synthesis",35.0,Colors.green.shade800),
               TypewriterAnimatedTextKit(
                 text: ["The Automatic Garden"],
                 textStyle: TextStyle(fontSize: 30.0,color: kwhite,fontFamily: "nunito"),

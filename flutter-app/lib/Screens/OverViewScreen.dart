@@ -1,361 +1,158 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lets_head_out/utils/Buttons.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
+import 'package:http/http.dart' as http;
 
 class OverViewPage extends StatefulWidget {
+  final int plantId;
+  OverViewPage({Key key, @required this.plantId}) : super(key: key);
+
   @override
   _OverViewPageState createState() => _OverViewPageState();
+}
+
+// Plant - parses individual json of plant map (dict)
+class Plant {
+  // setting variables
+  final int currPhoto;
+  final String dateCreated;
+  final int plantId;
+  final String plantName;
+  final String species;
+  final String uri;
+  final String userEmail;
+
+  // constructor
+  Plant(
+      {this.currPhoto,
+      this.dateCreated,
+      this.plantId,
+      this.plantName,
+      this.species,
+      this.uri,
+      this.userEmail});
+
+  factory Plant.fromJson(Map<String, dynamic> json) {
+    return Plant(
+      currPhoto: json['curr_photo'],
+      dateCreated: json['date_created'],
+      plantId: json['plant_id'],
+      plantName: json['plant_name'],
+      species: json['species'],
+      uri: json['uri'],
+      userEmail: json['user_email'],
+    );
+  }
+}
+
+// fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
+Future<Plant> fetchPlantInfo(id) async {
+  final response = await http.get('http://localhost:5000/plants/plant/${id}');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Plant.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load plant');
+  }
 }
 
 class _OverViewPageState extends State<OverViewPage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kwhite,
-      body: Stack(
-        children: <Widget>[
-          // USE THIS TO MAKE A NICE FLOWER BGIMG ON TOP
-          Positioned(
-            top: 50,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Icon(
-                Icons.local_florist,
-                color: kgreyDark,
-                size: 60.0,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 200.0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 400,
-                child: Scaffold(
-                  appBar: TabBar(
-                    labelColor: kdarkBlue,
-                    labelStyle: TextStyle(
-                        fontFamily: "nunito", fontWeight: FontWeight.bold),
-                    controller: tabController,
-                    indicatorColor: kdarkBlue,
-                    tabs: <Widget>[
-                      Tab(text: "Overview"),
-                      Tab(text: "Test"),
-                      Tab(text: "Test"),
-                    ],
-                  ),
-                  body: Stack(
-                    children: <Widget>[
-                      BoldText("Plant details", 20, kblack)
-                    ],
-                  )
-                //   backgroundColor: kwhite,
-                //   body: Stack(
-                //     children: <Widget>[
-                //       TabBarView(
-                //         children: <Widget>[
-                //           Padding(
-                //             padding: const EdgeInsets.all(16.0),
-                //             child: Column(
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: <Widget>[
-                //                 BoldText("Plaza", 20.0, kblack),
-                //                 Row(
-                //                   children: <Widget>[
-                //                     BoldText("4.5 Stars", 12.0, korange),
-                //                     SizedBox(
-                //                       width: 16.0,
-                //                     ),
-                //                     Icon(
-                //                       Icons.location_on,
-                //                       color: kgreyDark,
-                //                       size: 15.0,
-                //                     ),
-                //                     NormalText("Oran", kgreyDark, 15.0),
-                //                   ],
-                //                 ),
-                //                 SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 NormalText(
-                //                     "9995 da per night", kgreyDark, 16.0),
-                //                 SizedBox(
-                //                   height: 10.0,
-                //                 ),
-                //                 Container(
-                //                   height: 2,
-                //                   color: kgreyFill,
-                //                 ),
-                //                 SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 Row(
-                //                   mainAxisAlignment:
-                //                       MainAxisAlignment.spaceBetween,
-                //                   children: <Widget>[
-                //                     BoldText("About this hotel", 20.0, kblack),
-                //                     BoldText("More", 16, kdarkBlue)
-                //                   ],
-                //                 ),
-                //                 SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 NormalText(
-                //                     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea. ",
-                //                     kblack,
-                //                     12.0),
-                //                 SizedBox(
-                //                   height: 10.0,
-                //                 ),
-                //                 Container(
-                //                   height: 2,
-                //                   color: kgreyFill,
-                //                 ),
-                //                 SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 Row(
-                //                   mainAxisAlignment:
-                //                       MainAxisAlignment.spaceBetween,
-                //                   children: <Widget>[
-                //                     BoldText("equipments", 20.0, kblack),
-                //                     BoldText("More", 16, kdarkBlue),
-                //                   ],
-                //                 ),
-                //                 SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 Row(
-                //                   mainAxisAlignment:
-                //                       MainAxisAlignment.spaceBetween,
-                //                   children: <Widget>[
-                //                     equipmentsItem(Icons.wifi, "Wi-Fi"),
-                //                     equipmentsItem(
-                //                         Icons.local_parking, "Parking"),
-                //                     equipmentsItem(Icons.pool, "Pool"),
-                //                     equipmentsItem(
-                //                         Icons.restaurant, "Restaurant"),
-                //                   ],
-                //                 )
-                //               ],
-                //             ),
-                //           ),
-                //           Padding(
-                //             padding: const EdgeInsets.all(16.0),
-                //             child: Container(
-                //               child: Column(
-                //                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                 children: <Widget>[
-                //                   BoldText("Location", 20.0, kblack),
-                //                   ClipRRect(
-                //                     borderRadius: BorderRadius.circular(20.0),
-                //                     child: Image.asset(
-                //                       "assets/plazamap.png",
-                //                       fit: BoxFit.fill,
-                //                       height:
-                //                           MediaQuery.of(context).size.width -
-                //                               90,
-                //                       width: MediaQuery.of(context).size.width,
-                //                     ),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //           Container(
-                //             child: Padding(
-                //               padding: const EdgeInsets.all(16.0),
-                //               child: SingleChildScrollView(
-                //                 child: Column(
-                //                   crossAxisAlignment: CrossAxisAlignment.start,
-                //                   children: <Widget>[
-                //                     Row(
-                //                       mainAxisAlignment:
-                //                           MainAxisAlignment.spaceBetween,
-                //                       children: <Widget>[
-                //                         BoldText("Reviews", 20.0, kblack),
-                //                         BoldText("See all", 16, kdarkBlue),
-                //                       ],
-                //                     ),
-                //                     SizedBox(
-                //                       height: 10,
-                //                     ),
-                //                     Row(
-                //                       children: <Widget>[
-                //                         Container(
-                //                           width: 50.0,
-                //                           decoration: BoxDecoration(
-                //                             color: korange,
-                //                             borderRadius:
-                //                                 BorderRadius.circular(10.0),
-                //                           ),
-                //                           child: Row(
-                //                             mainAxisAlignment:
-                //                                 MainAxisAlignment.center,
-                //                             crossAxisAlignment:
-                //                                 CrossAxisAlignment.center,
-                //                             children: <Widget>[
-                //                               Icon(
-                //                                 Icons.star,
-                //                                 color: kwhite,
-                //                                 size: 15.0,
-                //                               ),
-                //                               BoldText("4.5", 15.0, kwhite),
-                //                             ],
-                //                           ),
-                //                         ),
-                //                         SizedBox(
-                //                           width: 10,
-                //                         ),
-                //                         NormalText(
-                //                             "(420 reviews)", kgreyDark, 14),
-                //                       ],
-                //                     ),
-                //                     SizedBox(
-                //                       height: 16,
-                //                     ),
-                //                     reviewProfile(
-                //                         "Hichem", "5.0", "05,Mar,2020"),
-                //                     reviewProfile(
-                //                         "Walid", "3.5", "17,feb,2020"),
-                //                     reviewProfile(
-                //                         "kratos", "4.0", "10,jan,2020"),
-                //                   ],
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ],
-                //         controller: tabController,
-                //       ),
-                //     ],
-                //   ),
-
-                  /*Stack(
-                    children: <Widget>[
-                      Image.asset("assets/hotel.jpg"),
-
-
-
-
-
-                    ],
-
-                  ),*/
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-              top: 580,
-              left: 25,
-              child: Align(
-                      alignment: Alignment.centerRight,
-                      child: WideButton("Water Plant", () {})))
-              // child: WideButton(
-              //   "Water Plant",
-              //   () {},
-              // )),
-        ],
-      ),
-    );
-  }
-
-  Widget reviewProfile(String name, String review, String date) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Container(
-              width: 24,
-              height: 24,
-              child: CircleAvatar(
-                backgroundColor: kgreyDark,
-                child: Icon(
-                  Icons.person,
-                  size: 12,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            BoldText(name, 16, kblack)
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              width: 50.0,
-              decoration: BoxDecoration(
-                color: korange,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.star,
-                    color: kwhite,
-                    size: 15.0,
-                  ),
-                  BoldText(review, 15.0, kwhite),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            NormalText(date, kgreyDark, 12.0)
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        NormalText(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
-            kblack,
-            12.0),
-        SizedBox(
-          height: 10,
-        ),
-      ],
-    );
-  }
-
-  Column equipmentsItem(IconData icon, String text) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Icon(
-          icon,
-          color: kdarkBlue,
-        ),
-        NormalText(text, kdarkBlue, 12)
-      ],
-    );
-  }
+  Future<Plant> futurePlant;
 
   @override
   void initState() {
     super.initState();
-    tabController = new TabController(length: 3, vsync: this);
+    tabController = new TabController(length: 1, vsync: this);
+    futurePlant = fetchPlantInfo(widget.plantId);
   }
 
   @override
   void dispose() {
     super.dispose();
     tabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // backgroundColor: kwhite,
+      body: Stack(children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/bgimg_overview.jpg"),
+                  fit: BoxFit.cover)),
+          child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              body: FutureBuilder<Plant>(
+                  future: futurePlant,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return SingleChildScrollView(
+                          // child: Center(
+                              child: Align(
+                                  // alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        "assets/orchid.jpg",
+                                        height: 200.0,
+                                        width: 200,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      SizedBox(height: 20),
+                                      BoldText(
+                                          "Name: " + snapshot.data.plantName,
+                                          20,
+                                          kblack),
+                                      SizedBox(height: 20),
+                                      BoldText(
+                                          "Species: " + snapshot.data.species,
+                                          20,
+                                          kblack),
+                                      SizedBox(height: 20),
+                                      BoldText(
+                                          "Email: " + snapshot.data.userEmail,
+                                          20,
+                                          kblack),
+                                      SizedBox(height: 20),
+                                      BoldText(
+                                          "Date created: " +
+                                              snapshot.data.dateCreated,
+                                          20,
+                                          kblack),
+                                      SizedBox(height: 300),
+                                      WideButton("Water Plant", () {})
+                                    ],
+                                  )
+                                  )
+                                  // )
+                                  );
+                    }
+                    // error
+                    else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    // By default, show a loading spinner.
+                    return CircularProgressIndicator();
+                  })
+          ),
+        )
+      ]
+      )
+    );
   }
 }

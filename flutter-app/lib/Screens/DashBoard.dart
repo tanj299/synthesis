@@ -29,9 +29,7 @@ class PlantsList {
 
   factory PlantsList.fromJson(List<dynamic> parsedJson) {
     List<Plant> plants = new List<Plant>();
-    plants = parsedJson.map(
-      (plantJson) => Plant.fromJson(plantJson)
-    ).toList();
+    plants = parsedJson.map((plantJson) => Plant.fromJson(plantJson)).toList();
 
     return new PlantsList(plants: plants);
   }
@@ -73,7 +71,7 @@ class Plant {
 
 // fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
 Future<PlantsList> fetchPlantsList() async {
-  final response = await http.get('http://localhost:5000/plants/');
+  final response = await http.get('http://localhost:5000/plants/all');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -82,7 +80,7 @@ Future<PlantsList> fetchPlantsList() async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load plant');
+    throw Exception('Failed to load plants list');
   }
 }
 
@@ -101,19 +99,16 @@ class _DashboardState extends State<Dashboard> {
         child: Column(
           children: <Widget>[
             // ImageContainer(),
-
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+            Center(
               child: Column(children: <Widget>[
                 SizedBox(
-                  height: 40,
+                  height: 50,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: Align(
                       alignment: Alignment.center,
-                      child: BoldText("Synthesis", 20.0, kblack)),
+                      child: BoldText("My Plants", 20.0, kblack)),
                 ),
                 // FutureBuilder - used to fetch data
                 FutureBuilder<PlantsList>(
@@ -121,8 +116,38 @@ class _DashboardState extends State<Dashboard> {
                   builder: (context, snapshot) {
                     // data good
                     if (snapshot.hasData) {
-                      print(snapshot.data.plants.length); // returns length of plants array
-                      return Text(snapshot.data.plants[0].plantName);
+                      int numPlants = snapshot.data.plants.length; // returns length of plants array
+                      List<Widget> plantsRender = new List<Widget>(); // creates new List<Widget> to add plants to for render
+                      for (var i = 0; i < numPlants; i++) {
+                        // print(i);
+                        plantsRender.add(buildContainer(
+                            snapshot.data.plants[i].plantId,
+                            snapshot.data.plants[i].plantName,
+                            snapshot.data.plants[i].species,
+                            snapshot.data.plants[i].userEmail,
+                            snapshot.data.plants[i].dateCreated)
+                        );
+                        plantsRender.add(SizedBox(
+                          height: 20.0,
+                        ));
+                      }
+                      // render
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                            image: new DecorationImage(
+                              image: new AssetImage("assets/bgimg_dashboard.jpg"),
+                              fit: BoxFit.cover
+                            ),
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(15.0)
+                        ),
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          children: plantsRender,
+                        ),
+                      );
                     }
                     // error
                     else if (snapshot.hasError) {
@@ -132,21 +157,6 @@ class _DashboardState extends State<Dashboard> {
                     return CircularProgressIndicator();
                   },
                 ),
-                Container(
-                  width: 330,
-                  height: 800,
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: <Widget>[
-                      buildContainer('Peralta', 'Orchid', 'johnsmith@gmail.com',
-                          'Wed, 01 Apr 2020 23:35:02 GMT'),
-                      buildContainer('Marianne', 'Lily', 'janesmith@gmail.com',
-                          'Wed, 01 Apr 2020 23:36:28 GMT'),
-                      buildContainer('Bobby', 'Orchid', 'bobbylee@gmail.com',
-                          'Sun, 05 Apr 2020 15:25:16 GMT'),
-                    ],
-                  ),
-                ),
               ]),
             ),
           ],
@@ -155,22 +165,24 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget buildContainer(name, species, email, date) {
+  Widget buildContainer(id, name, species, email, date) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return OverViewPage();
+          return OverViewPage(plantId: id);
         }));
       },
       child: Container(
-        width: 320,
-        height: 200,
+        width: 250,
+        height: 100,
         child: Container(
-            width: 300,
-            height: 150,
+            width: 250,
+            height: 100,
             decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(15.0)),
+                borderRadius: BorderRadius.circular(15.0),
+                border: Border.all(width: 2.0, color: Colors.black),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -181,10 +193,10 @@ class _DashboardState extends State<Dashboard> {
                     borderRadius: new BorderRadius.only(
                         topLeft: Radius.circular(15),
                         bottomLeft: Radius.circular(15)),
-                    child: Icon(
-                      Icons.local_florist,
-                      color: kgreyDark,
-                      size: 60.0,
+                    child: Image.asset(
+                      "assets/orchid.jpg",
+                      // height: 120.0,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
@@ -240,10 +252,10 @@ class _DashboardState extends State<Dashboard> {
                         NormalText(date, kgreyDark, 11.0),
                       ],
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(height: 14),
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
+                    // SizedBox(height: 14),
                   ],
                 )
               ],
