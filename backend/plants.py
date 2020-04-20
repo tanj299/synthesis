@@ -1,12 +1,12 @@
 #! env/bin/activate
 
-# Authors: Jayson Tan 
+# Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
 # Last Updated: 04/04/2020
 
-# Implementation of REST API routes via Python Flask and SQLAlchemy 
-# Routes for CRUD operations on `plants` table 
+# Implementation of REST API routes via Python Flask and pymysql
+# Routes for CRUD operations on `plants` table
 # Use Postman to test routes and endpoints
 # pymysql allows us to query with SQL statements
 # Note: python3 does NOT support flask-mysqldb
@@ -15,21 +15,35 @@
 import pymysql
 import time
 from extensions import mysql
-from flask import jsonify, Flask, flash, request, Blueprint
+from flask import jsonify, Flask, request, Blueprint
 # from werkzeug import generate_password_hash, check_password_hash
 
 plants_api = Blueprint('plants_api', __name__)
+
+# Index route for 'plants'
+# route() is a decorator which takes the function plant_index() as an argument
+# For instance, this function translates to:
+# plant_index() = plants_api.route('/', plant_index, <OPTIONS> )
+@plants_api.route('/')
+def plant_index():
+    return ('Welcome to plants!')
 
 # POST request
 # @POST: create a plant with id autoincremented in the database
 @plants_api.route('/insert', methods=['POST'])
 def add_plant():
-    # grab current time in mysql datetime format
+    # Grab current time in mysql datetime format
     now = time.strftime('%Y-%m-%d %H:%M:%S')
 
     # request.json sends a JSON body attached to the request, check with POSTMAN
+    user_email = request.json['user_email']
+    plant_name = request.json['plant_name']
+    species = request.json['species']
+    uri = request.json['uri']
+    currPhoto = request.json['curr_photo']
+
     # POSTMAN requirements: HEADERS: Key: Content-Type, Value: application/json
-    # sample body: 
+    # Sample body:
     '''
     {
         "user_email": "bobbylee@gmail.com",
@@ -40,12 +54,6 @@ def add_plant():
     }
     '''
 
-    user_email = request.json['user_email']
-    plant_name = request.json['plant_name']
-    species = request.json['species']
-    uri = request.json['uri']
-    currPhoto = request.json['curr_photo']
-
     # INSERT query and fields to insert
     sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, date_created) VALUES (%s, %s, %s, %s, %s, %s)"
     recordTuple = (user_email, plant_name, species, uri, currPhoto, now)
@@ -55,10 +63,10 @@ def add_plant():
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-        # insert a plant into `plants` table
+        # Insert a plant into `plants` table
         cursor.execute(sqlQuery, recordTuple)
 
-        # commit changes to database so new record persists
+        # Commit changes to database so new record persists
         connection.commit()
         return jsonify("OK")
 
@@ -71,62 +79,62 @@ def add_plant():
 
 # GET request
 # @GET: fetch all plants from 'plants' table
-@plants_api.route('/', methods=['GET'])
+@plants_api.route('/all', methods=['GET'])
 def fetch_all_plants():
     try:
-        # connect to MySQL instance
+        # Connect to MySQL instance
         connection = mysql.connect()
 
         # pymysql cursors that returns results as a dictionary
-        # cursor objects allows users to execute queries per row
+        # Cursor objects allows users to execute queries per row
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM plants")
 
         # .fetchall() retrieves a JSON object
         rows = cursor.fetchall()
 
-        # creates a response with the JSON representation
+        # Creates a response with the JSON representation
         response = jsonify(rows)
         response.status_code = 200
 
-        # return response as a JSON object
+        # Return response as a JSON object
         return response
     except:
         print('An exception occurred')
     finally:
-        # close the MySQL instance and cursor object when done
+        # Close the MySQL instance and cursor object when done
         connection.close()
         cursor.close()
 
 
 # GET, DELETE requests
-# a plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
-# @GET: return a plant's information matching the ide from the database
+# A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
+# @GET: return a plant's information matching the 'id' from the database
 # @DELETE: remove plant matching the id from the database
-@plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE', 'PUT'])
+@plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE'])
 def fetch_plant(id):
     if request.method == 'GET':
         try:
             connection = mysql.connect()
             cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-            # query for a single plant matching 'id', %s is a placeholder of string type
+            # Query for a single plant matching 'id', %s is a placeholder of string type
             cursor.execute("SELECT * FROM plants WHERE plant_id = %s", id)
             single_plant = cursor.fetchone()
             response = jsonify(single_plant)
             print(response)
 
-            # if plant_id is not found, error 404
+            # If plant_id is not found, error 404
             if single_plant == None:
                 print('Could not fetch plant with id', id)
                 response.status_code = 404
 
-            # else, plant_id is found, return response object
+            # Else, plant_id is found, return response object
             else:
                 response.status_code = 200
-                
+
             return response
-        except: 
+        except:
             print('Could not fetch a plant with id')
         finally:
             connection.close()
@@ -143,7 +151,7 @@ def fetch_plant(id):
         finally:
             connection.close()
             cursor.close()
-    else: 
+    else:
         return "Nothing"
 
 # PUT request
@@ -174,7 +182,7 @@ def update_plant(id):
         connection.close()
         cursor.close()
 
-# HTTP response with 404 error 
+# HTTP response with 404 error
 @plants_api.errorhandler(404)
 def not_found(error=None):
     message = {
@@ -185,6 +193,7 @@ def not_found(error=None):
     response.status_code = 404
     return response
 
-
 if __name__ == "__main__":
     app.run(debug=True)
+else:
+    print("Execute `flask run` instead")

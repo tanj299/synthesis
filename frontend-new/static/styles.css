@@ -1,5 +1,6 @@
 body {
-	font-family: verdana;
+	font-family: 'Baloo Thambi 2', cursive;
+	margin: 0;
 }
 
 nav {
@@ -24,37 +25,77 @@ a {
 #all-plants {
 	display: flex;
 	justify-content: space-around;
+	height: 100vh;
+	background-image: url('images/bg.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	white-space: nowrap;
 }	
 
 #plant-card {
-	border: 1px solid black;
-	border-radius: 10px;
 	padding: 2rem;
 	width: calc((100% / 3) - 2rem);
-	margin: 2rem;
+	margin: 5% 2rem;
 }
 
-#plant-card > a {
+#plant-card > a, #plant-card > div > * {
 	display: flex;
 	justify-content: center;
 }
 
-#cactus-image {
-	background-image: url('images/cactus.png');
-	background-size: contain;
+#lily-image {
+	background-image: url('images/lily.png');
+	height: 70%;
 	background-repeat: no-repeat;
-	min-height: 500px;
+	background-size: contain;
 }
 
-#cactus-image:hover {
-	background-image: url('images/cactushover.png');
+#lily-image:hover {
+	background-image: url('images/lily_hover.png');
+	height: 70%;
 	background-repeat: no-repeat;
+	background-size: contain;
 }
 
 #orchid-image {
-	/* background-image: url('images/orchid.png'); */
-	min-height: 500px;
-	max-height: 500px;
+	background-image: url('images/orchid.png');
+	height: 70%;
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: contain;
+}
+
+#orchid-image:hover {
+	background-image: url('images/orchid_hover.png');
+	height: 70%;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#more-information {
+	display: flex;
+	justify-content: space-around;
+}
+
+#plant-left > h1{
+	display: flex;
+	justify-content: center;
+}
+
+#plant-img {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+	height: 200px;
+	width: 200px;
+}
+
+#plant-controls {
+	margin-top: 20%;
+	margin-left: 10%;
+}
+
+#remove {
+	margin-top: 50%;
+	margin-left: 10%;
 }
