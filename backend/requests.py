@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: requests.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/19/2020
+# Last Updated: 04/20/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for making requests to the Raspberry Pi
@@ -77,6 +77,9 @@ def post_latest():
     recordTuple = (plant_id, arduino, pin, make_request, on_off, error, now)
     # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
     
+    data = {"plant_id": plant_id,
+            "timestamp":}
+
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)

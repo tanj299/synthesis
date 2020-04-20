@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/04/2020
+# Last Updated: 04/20/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for CRUD operations on `plants` table
@@ -186,7 +186,7 @@ def update_plant(id):
                 "species": species,
                 "uri": uri,
                 "curr_photo": curr_photo,
-                "date_created": ""
+                "date_created": date_created
                 }
 
         connection = mysql.connect()

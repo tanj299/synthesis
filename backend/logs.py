@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: logs.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/19/2020
+# Last Updated: 04/20/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for logging information to the database from Raspberry Pi
