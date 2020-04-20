@@ -174,8 +174,16 @@ def fetch_plant(id):
 # @PUT: update a plant's information matching the id from the database
 @plants_api.route('/update/<int:id>', methods=['PUT'])
 def update_plant(id):
-    
     try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+        # Query table by the `id` 
+        # Return singleRecord and access the JSON data via dictionary pattern likeso in date_created
+        cursor.execute("SELECT * FROM plants where plant_id=%s", id)
+        singleRecord = cursor.fetchone()
+        date_created = singleRecord["date_created"]
+
         user_email = request.json['user_email']
         plant_name = request.json['plant_name']
         species = request.json['species']
@@ -190,8 +198,7 @@ def update_plant(id):
                 "date_created": date_created
                 }
 
-        connection = mysql.connect()
-        cursor = connection.cursor(pymysql.cursors.DictCursor)
+        
         recordTuple = (user_email, plant_name, species, uri, curr_photo, id)
         sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s WHERE plant_id=%s"
         # DL: dummy = ('bloop@yahoo.com', 'caroline', 'sunflower', 'http://notasample.com', 8, id)
