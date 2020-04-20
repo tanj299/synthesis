@@ -21,9 +21,9 @@ class Plants extends Component {
         const { plants } = this.state;
         const { history } = this.props;
         return (
-            <div>
-                <BackButton history={history} />
+            <div className='plants-page'>
                 <div id='all-plants'>
+                <BackButton history={history} />
                     {
                         plants.map(plant => <PlantCard key={ plant.plant_id } plant={ plant } /> )
                     }

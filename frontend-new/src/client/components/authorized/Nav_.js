@@ -15,7 +15,7 @@ class Nav_ extends Component {
         const { history, logout } = this.props;
 
         return (
-            <div>
+            <div className='homepagediv'>
                 <nav className='text-focus-in'>
                     <div className="buttons">
                         <div>

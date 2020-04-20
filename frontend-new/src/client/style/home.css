@@ -12,7 +12,7 @@ body {
 }
 
 div.buttons > div {
-        margin: 2rem;
+	margin: 2rem;
 }
 
 div.buttons > div > a {
@@ -31,29 +31,34 @@ div.buttons > div > a {
 }
 
 
-a:hover span {
+a:hover span, .button:hover span {
   padding-right: 25px;
 }
 
-a:hover span:after {
+a:hover span:after, .button:hover span:after {
   opacity: 1;
   right: 0;
 }
 
-a span {
+a span, .button span {
   cursor: pointer;
   display: inline-block;
   position: relative;
   transition: 0.5s;
 }
 
-a span:after {
+a span:after, .button span:after {
   content: '\00bb';
   position: absolute;
   opacity: 0;
   top: 0;
   right: -20px;
   transition: 0.5s;
+}
+
+div.buttons {
+	max-width: 30%;
+	min-width: 30%;
 }
 
 h1.title {

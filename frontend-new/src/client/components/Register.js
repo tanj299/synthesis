@@ -7,9 +7,9 @@ class Register extends Component {
     constructor() {
         super();
         this.state = {
-            username: 'test',
-            password: 'test',
-            email: 'test@gmail.com',
+            username: '',
+            password: '',
+            email: '',
             closed: false
         };
     }
@@ -36,10 +36,10 @@ class Register extends Component {
                         >
                         <LoginRegisterNav history={history} close={close} />
                         <h1 className='loginh1'>Register</h1>
-                        <input type='text' value={username} onChange={ ev => this.setState({ username: ev.target.value }) } />
-                        <input type='email' value={email} onChange={ ev => this.setState({ email: ev.target.value }) } />
-                        <input type='password' value={password} onChange={ ev => this.setState({ password: ev.target.value }) } />
-                        <input type='submit' value='Register' />
+                        <input type='text' placeholder='Username' value={username} onChange={ ev => this.setState({ username: ev.target.value }) } />
+                        <input type='email' placeholder='Email' value={email} onChange={ ev => this.setState({ email: ev.target.value }) } />
+                        <input type='password' placeholder='Password' value={password} onChange={ ev => this.setState({ password: ev.target.value }) } />
+                        <button className='button'><span>Register</span></button>
                     </form>
                 </div>
             </div>

@@ -35,9 +35,9 @@ class Login extends Component {
                         >
                         <LoginRegisterNav history={history} close={close}/>
                         <h1 className='loginh1'>Login</h1>
-                        <input type='text' value={username} onChange={ ev => this.setState({ username: ev.target.value }) } />
-                        <input type='password' value={password} onChange={ ev => this.setState({ password: ev.target.value }) } />
-                        <input type='submit' value='Login' />
+                        <input type='text' placeholder='Username' value={username} onChange={ ev => this.setState({ username: ev.target.value }) } />
+                        <input type='password' placeholder='Password' value={password} onChange={ ev => this.setState({ password: ev.target.value }) } />
+                        <button className='button'><span>Login</span></button>
                     </form>
                 </div>
             </div>
