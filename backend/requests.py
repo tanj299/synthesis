@@ -20,7 +20,7 @@ request
 def index():
     return('Welcome to requests!')
 
-# query to select the latest request from a user:
+# Query to select the latest request from a user:
 # select t1.* from requests t1 where t1.timestamp = (select max(t2.timestamp) from requests t2 where t2.plant_id=t1.plant_id) having plant_id = 2
 @requests_api.route('/<int:id>', methods=['GET'])
 def get_latest(id):
@@ -78,7 +78,13 @@ def post_latest():
     # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
     
     data = {"plant_id": plant_id,
-            "timestamp":}
+            "timestamp": now,
+            "arduino": arduino,
+            "pin": pin,
+            "make_request": make_request,
+            "on_off": on_off,
+            "error": error
+            }
 
     try:
         connection = mysql.connect()
@@ -90,7 +96,7 @@ def post_latest():
 
         # Commit record to database so new record persists
         connection.commit()
-        return jsonify("OK")
+        return jsonify(data)
     except:
         print('Could not POST a new request')
         return('Request failed: ensure that the plant exists and the plant_id matches with the `plants` table')

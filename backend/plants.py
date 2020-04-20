@@ -174,6 +174,7 @@ def fetch_plant(id):
 # @PUT: update a plant's information matching the id from the database
 @plants_api.route('/update/<int:id>', methods=['PUT'])
 def update_plant(id):
+    
     try:
         user_email = request.json['user_email']
         plant_name = request.json['plant_name']
