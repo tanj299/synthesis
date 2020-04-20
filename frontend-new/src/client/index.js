@@ -5,6 +5,8 @@ import { HashRouter, Route, Redirect } from 'react-router-dom';
 //components 
 import Nav from './components/Nav';
 import Login from './components/Login';
+import Register from './components/Register';
+import About from './components/About';
 
 //authorized
 import Plants from './components/authorized/Plants';
@@ -18,9 +20,7 @@ class App extends Component{
 			authorized: false
 		};
 	}
-	componentDidMount(){
 
-	}
 	render(){
 		const { authorized } = this.state;
 		const login = () => {
@@ -31,15 +31,17 @@ class App extends Component{
         };
 		return (
 		<HashRouter>
-			<Route path='/' render={ () => authorized ? <Nav_ logout={ logout } /> : <Nav /> } />
-			<Route exact path='/login' render={ () => <Login login={ login } /> } />
+			<Route exact path='/' render={ props => authorized ? <Nav_ logout={ logout } {...props} /> : <Nav {...props} /> } />
+			<Route exact path='/login' render={ props => <Login login={login} {...props} /> } />
+			<Route exact path='/about' render={ props => <About {...props} /> } />
+			<Route exact path='/register' render={ props => <Register {...props } /> } /> 
             <Route render={ () => authorized ?
                                                 ( <main>
                                                     <Redirect to='/user/plants' />
-													<Route exact path='/user/plants' render={ () => <Plants /> } />
+													<Route exact path='/user/plants' render={ props => <Plants {...props} /> } />
                                                   </main>
                                                 )
-                                                : <Redirect to='/login' /> 
+                                                : ''
                                                 } />
 			<Route exact path='/user/plants/:id' render={ props => authorized ? 
 																		  ( <main>
