@@ -15,7 +15,7 @@
 import pymysql
 import time
 from extensions import mysql
-from flask import jsonify, Flask, request, Blueprint
+from flask import jsonify, Flask, request, Blueprint, json
 # from werkzeug import generate_password_hash, check_password_hash
 
 plants_api = Blueprint('plants_api', __name__)
@@ -57,8 +57,17 @@ def add_plant():
     # INSERT query and fields to insert
     sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, date_created) VALUES (%s, %s, %s, %s, %s, %s)"
     recordTuple = (user_email, plant_name, species, uri, currPhoto, now)
-    # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
 
+    # To properly return the JSON data, we put the data into a Python dictionary
+    # Then, jsonify() will work properly
+    data = {
+            "user_email": user_email,
+            "plant_name": plant_name, 
+            "species": species,
+            "uri": uri,
+            "currPhoto": currPhoto,
+            "date_created": now
+            }    
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
@@ -68,7 +77,9 @@ def add_plant():
 
         # Commit changes to database so new record persists
         connection.commit()
-        return jsonify("OK")
+
+        # Return json data after POST request
+        return jsonify(data)
 
     except:
         print('Could not add a plant')
@@ -122,7 +133,7 @@ def fetch_plant(id):
             cursor.execute("SELECT * FROM plants WHERE plant_id = %s", id)
             single_plant = cursor.fetchone()
             response = jsonify(single_plant)
-            print(response)
+            # print (single_plant)
 
             # If plant_id is not found, error 404
             if single_plant == None:
@@ -132,6 +143,11 @@ def fetch_plant(id):
             # Else, plant_id is found, return response object
             else:
                 response.status_code = 200
+
+            # Test to assert that response returned it JSON format
+            assert response.content_type == 'application/json'
+            data = json.loads(response.get_data(as_text=True))
+            assert data['plant_id'] == 2
 
             return response
         except:
@@ -165,6 +181,14 @@ def update_plant(id):
         uri = request.json['uri']
         curr_photo = request.json['curr_photo']
 
+        data = {"user_email": user_email,
+                "plant_name": plant_name,
+                "species": species,
+                "uri": uri,
+                "curr_photo": curr_photo,
+                "date_created": ""
+                }
+
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         recordTuple = (user_email, plant_name, species, uri, curr_photo, id)
@@ -174,10 +198,11 @@ def update_plant(id):
 
         cursor.execute(sqlQuery, recordTuple)
         connection.commit()
-        response = jsonify('Plant updated successfully!')
+        response = jsonify('Plant updated succesfully!', data)
         return response
+
     except:
-        return jsonify('Not found')
+        return ('Not found')
     finally:
         connection.close()
         cursor.close()

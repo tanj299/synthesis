@@ -17,6 +17,7 @@ from plants import plants_api
 from configuration import config_api
 from login import login_api
 from requests import requests_api
+from logs import logs_api
 
 # Flask application
 app = Flask(__name__)
@@ -34,6 +35,7 @@ app.register_blueprint(plants_api, url_prefix = "/plants")
 app.register_blueprint(config_api, url_prefix = "/config")
 app.register_blueprint(login_api, url_prefix = "/login")
 app.register_blueprint(requests_api, url_prefix = "/requests")
+app.register_blueprint(logs_api, url_prefix = "/logs")
 
 # Index route; test backend
 @app.route('/')
