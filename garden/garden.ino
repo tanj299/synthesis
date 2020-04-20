@@ -19,11 +19,24 @@ const int water_lvl_sensor = 6;
 int plant1_pins[] = {A0, A2, 2, 4};
 int plant2_pins[] = {A1, A3, 3, 5};
 
+// Function to retrieve the moisture level as an integer
+// percentage 0 - 100 %.
+// Note: max and min are stored constants reflecting the 
+// observed values with the sensor.
+int get_moisture_level(int pin) {
+  float max = 1.71;
+  float min = 0.90;
+  int sensorVal = analogRead(pin);
+  float voltage = (sensorVal/1024.0) * 3.0;
+  return round(100*( 1 - ((voltage - min) / (max - min))));
+}
+
 void plant_report(int pins[]) {
   int temp = round((1.8 * th_sensor.readTemperature()) + 32);
   delay(50);
   int humid = round(th_sensor.readHumidity());
   delay(50);
+  int moisture = get_moisture_level(pins[1]);
   Serial.print(temp); Serial.print(","); Serial.print(humid);
   Serial.println(",");
 }
