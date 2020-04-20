@@ -8,13 +8,24 @@
 
 #include "Adafruit_Si7021.h"
 
+// Define sensors
+// Single Temperature and Humidity Sensor
 Adafruit_Si7021 th_sensor = Adafruit_Si7021();
-int plant1_pins[] = {A0, A2, 2, 6};
-int plant2_pins[] = {A1, A3, 3, 7};
+// Single Water Level Sensor
+const int water_lvl_sensor = 6;
+// Sensor arrays 
+// Light (Analog) / Soil Moisture (Analog) 
+// Light (Digital) / Soil Temperature (Digital)
+int plant1_pins[] = {A0, A2, 2, 4};
+int plant2_pins[] = {A1, A3, 3, 5};
 
 void plant_report(int pins[]) {
-  Serial.println(((1.8 * th_sensor.readTemperature()) + 32), 2);
-  delay(2000);
+  int temp = round((1.8 * th_sensor.readTemperature()) + 32);
+  delay(50);
+  int humid = round(th_sensor.readHumidity());
+  delay(50);
+  Serial.print(temp); Serial.print(","); Serial.print(humid);
+  Serial.println(",");
 }
 
 void setup() {
