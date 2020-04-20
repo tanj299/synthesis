@@ -57,6 +57,7 @@ class _FormsState extends State<PasswordForm> {
             borderSide: BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(15.0),
           )),
+          initialValue: "synthesize0220",
     );
   }
 }
@@ -95,6 +96,7 @@ class NormalForm extends StatelessWidget {
             borderSide: BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(15.0),
           )),
+          initialValue: "admin",
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +10,7 @@ import 'package:lets_head_out/utils/RecommendationImage.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
 import 'package:lets_head_out/utils/imageContainer.dart';
+import 'package:http/http.dart' as http;
 
 import 'OverViewScreen.dart';
 
@@ -16,121 +19,144 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
+// PlantsList - parses list of json of plant data list
+class PlantsList {
+  final List<Plant> plants;
+
+  PlantsList({
+    this.plants,
+  });
+
+  factory PlantsList.fromJson(List<dynamic> parsedJson) {
+    List<Plant> plants = new List<Plant>();
+    plants = parsedJson.map((plantJson) => Plant.fromJson(plantJson)).toList();
+
+    return new PlantsList(plants: plants);
+  }
+}
+
+// Plant - parses individual json of plant map (dict)
+class Plant {
+  // setting variables
+  final int currPhoto;
+  final String dateCreated;
+  final int plantId;
+  final String plantName;
+  final String species;
+  final String uri;
+  final String userEmail;
+
+  // constructor
+  Plant(
+      {this.currPhoto,
+      this.dateCreated,
+      this.plantId,
+      this.plantName,
+      this.species,
+      this.uri,
+      this.userEmail});
+
+  factory Plant.fromJson(Map<String, dynamic> json) {
+    return Plant(
+      currPhoto: json['curr_photo'],
+      dateCreated: json['date_created'],
+      plantId: json['plant_id'],
+      plantName: json['plant_name'],
+      species: json['species'],
+      uri: json['uri'],
+      userEmail: json['user_email'],
+    );
+  }
+}
+
+// fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
+Future<PlantsList> fetchPlantsList() async {
+  final response = await http.get('http://localhost:5000/plants/all');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return PlantsList.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load plants list');
+  }
+}
+
 class _DashboardState extends State<Dashboard> {
+  Future<PlantsList> futurePlantsList;
+  @override
+  void initState() {
+    super.initState();
+    futurePlantsList = fetchPlantsList();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            ImageContainer(),
-
-            Padding(
-              padding: const EdgeInsets.only(left:16.0,right: 16.0,bottom: 16.0),
-
+            // ImageContainer(),
+            Center(
               child: Column(children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Daily Offers", 20.0, kblack)),
+                      alignment: Alignment.center,
+                      child: BoldText("My Plants", 20.0, kblack)),
                 ),
-                Container(
-                  width: 330,
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      buildContainer(),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      buildContainer(),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      buildContainer(),
-                    ],
-                  ),
+                // FutureBuilder - used to fetch data
+                FutureBuilder<PlantsList>(
+                  future: futurePlantsList,
+                  builder: (context, snapshot) {
+                    // data good
+                    if (snapshot.hasData) {
+                      int numPlants = snapshot.data.plants.length; // returns length of plants array
+                      List<Widget> plantsRender = new List<Widget>(); // creates new List<Widget> to add plants to for render
+                      for (var i = 0; i < numPlants; i++) {
+                        // print(i);
+                        plantsRender.add(buildContainer(
+                            snapshot.data.plants[i].plantId,
+                            snapshot.data.plants[i].plantName,
+                            snapshot.data.plants[i].species,
+                            snapshot.data.plants[i].userEmail,
+                            snapshot.data.plants[i].dateCreated)
+                        );
+                        plantsRender.add(SizedBox(
+                          height: 20.0,
+                        ));
+                      }
+                      // render
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                            image: new DecorationImage(
+                              image: new AssetImage("assets/bgimg_dashboard.jpg"),
+                              fit: BoxFit.cover
+                            ),
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(15.0)
+                        ),
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          children: plantsRender,
+                        ),
+                      );
+                    }
+                    // error
+                    else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    // By default, show a loading spinner.
+                    return CircularProgressIndicator();
+                  },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      BoldText("Recommended for you", 20.0, kblack),
-                      SizedBox(
-                        width: 60,
-                      ),
-                      BoldText("More", 15.0, korange),
-                      Icon(
-                        Icons.navigate_next,
-                        color: korange,
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 400,
-                  height: 200,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      RecommendationImage("assets/sheraton.jpg", "Sheraton", "Oran"),
-                      RecommendationImage("assets/Meridien.jpg", "Meridien", "Oran"),
-                      RecommendationImage("assets/ibis.jpg", "Ibis", "Oran"),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only( top: 10,bottom: 16.0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Best Rated Places", 20.0, kblack)),
-                ),
-                 Container(
-                    width: 400,
-                    height: 250,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: <Widget>[
-                        BestRatedImage(
-                            "assets/sheraton.jpg", "Sheraton", "Oran", 4.5),
-                        BestRatedImage(
-                            "assets/Meridien.jpg", "Meridien", "Oran", 4.8),
-                        BestRatedImage("assets/ibis.jpg", "Ibis", "Oran", 3.1),
-                      ],
-
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10,bottom: 16.0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldText("Awesome Cities", 20.0, kblack)),
-                ),
-                Row(
-                  children: <Widget>[
-                    CitiesImage("assets/alger.jpg","ALGIERS"),
-                    SizedBox(width: 28,),
-                    CitiesImage("assets/tlemcen.jpg","TLEMCEN"),
-
-                  ],
-                ),
-                SizedBox(height: 28,),
-                  Row(
-                    children: <Widget>[
-                      CitiesImage("assets/adrar.jpg","ADRAR"),
-                      SizedBox(width: 28,),
-
-                      CitiesImage("assets/bedjaia.jpg","BEDJAIA"),
-
-                    ],
-
-                ),
-
               ]),
             ),
           ],
@@ -139,38 +165,40 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-
-
-  Widget buildContainer() {
+  Widget buildContainer(id, name, species, email, date) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return OverViewPage();
+          return OverViewPage(plantId: id);
         }));
       },
       child: Container(
-        width: 320,
-        height: 50,
+        width: 250,
+        height: 100,
         child: Container(
-            width: 300,
-            height: 150,
+            width: 250,
+            height: 100,
             decoration: BoxDecoration(
                 color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(15.0)),
+                borderRadius: BorderRadius.circular(15.0),
+                border: Border.all(width: 2.0, color: Colors.black),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 100,
+                  height: 100,
                   child: ClipRRect(
-                      borderRadius: new BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15)),
-                      child: Image.asset(
-                        "assets/hotel.jpg",
-                        fit: BoxFit.fitHeight,
-                      )),
+                    borderRadius: new BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)),
+                    child: Image.asset(
+                      "assets/orchid.jpg",
+                      // height: 120.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 10.0,
@@ -179,83 +207,60 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    BoldText("Plaza", 20.5, kblack),
+                    BoldText(name, 20.5, kblack),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        BoldText("5 Stars", 15.0, korangelite),
                         Icon(
-                          Icons.location_on,
+                          Icons.local_florist,
                           color: kgreyDark,
                           size: 15.0,
                         ),
-                        NormalText("Oran", kgreyDark, 15.0)
+                        SizedBox(
+                          width: 10,
+                        ),
+                        BoldText("Species: " + species, 15.0, Colors.green),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          width: 50.0,
-                          decoration: BoxDecoration(
-                            color: korange,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.star,
-                                color: kwhite,
-                                size: 15.0,
-                              ),
-                              BoldText("4.5", 15.0, kwhite)
-                            ],
-                          ),
+                        Icon(
+                          Icons.email,
+                          color: kgreyDark,
+                          size: 15.0,
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        NormalText("(1024 Reviews)", kgreyDark, 11.0),
+                        NormalText(email, kgreyDark, 11.0),
                       ],
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    BoldText("Book& Save 30% !", 14.0, Colors.red),
-                    SizedBox(height: 14),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          width: 90,
-                        ),
-                        BoldText("More", 12.0, kblack),
                         Icon(
-                          Icons.navigate_next,
+                          Icons.perm_identity,
+                          color: kgreyDark,
                           size: 15.0,
                         ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        NormalText(date, kgreyDark, 11.0),
                       ],
-                    )
+                    ),
+                    // SizedBox(
+                    //   height: 30,
+                    // ),
+                    // SizedBox(height: 14),
                   ],
                 )
               ],
             )),
       ),
-    );
-  }
-
-  Row imagesRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        SquaredIcon(Icons.airplanemode_active, "Flights"),
-        SquaredIcon(FontAwesomeIcons.hotel, "Hotels"),
-        SquaredIcon(Icons.directions_car, "Cars"),
-      ],
     );
   }
 }
