@@ -7,6 +7,8 @@
  */
 
 #include "Adafruit_Si7021.h"
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 // Define sensors
 // Single Temperature and Humidity Sensor
@@ -15,11 +17,20 @@ Adafruit_Si7021 th_sensor = Adafruit_Si7021();
 // Single Water Level Sensor
 const int water_lvl_sensor = 6;
 
+// Set up OneWire objects
+const int plant1_soil_temp_pin = 4;
+const int plant2_soil_temp_pin = 5;
+OneWire oneWire1(plant1_soil_temp_pin);
+DallasTemperature plant1_soil_temp(&oneWire1);
+DeviceAddress plant1_arr;
+OneWire oneWire2(plant2_soil_temp_pin);
+DallasTemperature plant2_soil_temp(&oneWire2);
+DeviceAddress plant2_arr;
+
 // Sensor arrays 
 // Light (Analog) / Soil Moisture (Analog) 
-// Light (Digital) / Soil Temperature (Digital)
-int plant1_pins[] = {A0, A2, 2, 4};
-int plant2_pins[] = {A1, A3, 3, 5};
+int plant1_pins[] = {A0, A2};
+int plant2_pins[] = {A1, A3};
 
 // Define sensor constants
 const float max_light = 4.80;
@@ -50,7 +61,7 @@ int get_moisture_level(int pin) {
 // Function for returning a "plant status report" over Serial.
 // @param pins An array containing the pins for the plant of
 //             interest, in the sensor ordering described above.
-void plant_report(int pins[]) {
+void plant_report(int pins[], DallasTemperature& sensor, DeviceAddress arr) {
   // Fetch temperature and humidity from the single Si7021 sensor
   int temp = round((1.8 * th_sensor.readTemperature()) + 32);
   delay(100);
@@ -65,10 +76,24 @@ void plant_report(int pins[]) {
   int moisture = get_moisture_level(pins[1]);
   delay(100);
 
+  // Fetch soil temperature
+  sensor.requestTemperaturesByAddress(arr);
+  int soil_temp = round(sensor.getTempF(arr));
+
   // Transmit over Serial as a comma-delimited sequence
   Serial.print(temp); Serial.print(","); Serial.print(humid);
   Serial.print(","); Serial.print(light); Serial.print(",");
-  Serial.print(moisture); Serial.println(",");
+  Serial.print(moisture); Serial.print(","); Serial.println(soil_temp);
+}
+
+int setup_soil_temp(DallasTemperature& sensor, DeviceAddress arr) {
+  sensor.begin();
+  if(!sensor.getAddress(arr, 0)) {
+    return 1;
+  } else {
+    sensor.setResolution(arr, 10);
+    return 0;
+  }
 }
 
 void setup() {
@@ -90,14 +115,20 @@ void loop() {
     char rec = Serial.read(); // Read command
     switch(rec) {
       case '1': // Report on plant 1
-        plant_report(plant1_pins); 
+        plant_report(plant1_pins, plant1_soil_temp, plant1_arr); 
         break;
       case '2': // Report on plant 2
-        plant_report(plant2_pins); 
+        plant_report(plant2_pins, plant2_soil_temp, plant2_arr); 
         break;
       case '3': // Check water level - return 0 if OK, else 1
         Serial.println(digitalRead(water_lvl_sensor));
         delay(100);
+        break;
+      case '4': // Set up plant 1 soil temperature sensor
+        Serial.println(setup_soil_temp(plant1_soil_temp, plant1_arr));
+        break;
+      case '5': // Set up plant 2 soil temperature sensor
+        Serial.println(setup_soil_temp(plant2_soil_temp, plant2_arr));
         break;
     }
   }
