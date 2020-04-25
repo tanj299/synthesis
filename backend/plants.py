@@ -29,7 +29,7 @@ def plant_index():
     return ('Welcome to plants!')
 
 # POST request
-# @POST: create a plant with id autoincremented in the database
+# @POST: Create a plant with id autoincremented in the database
 @plants_api.route('/insert', methods=['POST'])
 def add_plant():
     # Grab current time in mysql datetime format
@@ -120,8 +120,8 @@ def fetch_all_plants():
 
 # GET, DELETE requests
 # A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
-# @GET: return a plant's information matching the 'id' from the database
-# @DELETE: remove plant matching the id from the database
+# @GET: Return a plant's information matching the 'id' from the database
+# @DELETE: Remove plant matching the id from the database
 @plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE'])
 def fetch_plant(id):
     if request.method == 'GET':
@@ -171,7 +171,7 @@ def fetch_plant(id):
         return "Nothing"
 
 # PUT request
-# @PUT: update a plant's information matching the id from the database
+# @PUT: Update a plant's information matching the id from the database
 @plants_api.route('/update/<int:id>', methods=['PUT'])
 def update_plant(id):
     try:

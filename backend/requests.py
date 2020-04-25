@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: requests.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/20/2020
+# Last Updated: 04/25/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for making requests to the Raspberry Pi
@@ -20,8 +20,8 @@ request
 def index():
     return('Welcome to requests!')
 
-# Query to select the latest request from a user:
-# select t1.* from requests t1 where t1.timestamp = (select max(t2.timestamp) from requests t2 where t2.plant_id=t1.plant_id) having plant_id = 2
+# GET request
+# @GET: Fetch latest request submitted from a user
 @requests_api.route('/<int:id>', methods=['GET'])
 def get_latest(id):
     try: 
@@ -42,7 +42,8 @@ def get_latest(id):
         connection.close()
         cursor.close()
 
-
+# POST request
+# @POST: Create a request to affect the sensors 
 @requests_api.route('/insert', methods=['POST'])
 def post_latest():
 

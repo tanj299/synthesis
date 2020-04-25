@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: logs.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/20/2020
+# Last Updated: 04/25/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for logging information to the database from Raspberry Pi
@@ -19,4 +19,10 @@ logs_api = Blueprint('logs_api', __name__)
 def index():
     return('Welcome to logs!')
 
-# @logs_api.route('/fetch')
+# Fetch all logs
+@logs_api.route('/fetch')
+def fetch_logs
+
+# Fetch latest log of user 
+
+# POST a log from user
