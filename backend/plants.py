@@ -42,7 +42,12 @@ def add_plant():
     uri = request.json['uri']
     currPhoto = request.json['curr_photo']
 
-    # POSTMAN requirements: HEADERS: Key: Content-Type, Value: application/json
+    # POSTMAN requirements:
+    '''
+    HEADERS: Key: Content-Type, Value: application/json
+    BODY: raw
+    '''
+
     # Sample body:
     '''
     {
@@ -98,10 +103,12 @@ def fetch_all_plants():
 
         # pymysql cursors that returns results as a dictionary
         # Cursor objects allows users to execute queries per row
+        # Result is stored in the cursor object 
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM plants")
 
-        # .fetchall() retrieves a JSON object
+        # .fetchall() retrieves a JSON object from the cursor object
+        # Can also use `list(cursor)`, but .fetchall() returns a list OR an empty tuple if list is empty
         rows = cursor.fetchall()
 
         # Creates a response with the JSON representation
@@ -207,6 +214,8 @@ def update_plant(id):
         cursor.execute(sqlQuery, recordTuple)
         connection.commit()
         response = jsonify('Plant updated succesfully!', data)
+        response.status_code = 200
+
         return response
 
     except:

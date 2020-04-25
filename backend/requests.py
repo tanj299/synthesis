@@ -35,9 +35,11 @@ def get_latest(id):
         # cursor.execute("SELECT * FROM requests WHERE plant_id = %s", id)
         single_request = cursor.fetchone()
         response = jsonify(single_request)
+        response.status_code = 200
         return response 
     except:
         print('Could not FETCH request id')
+        return('Could not FETCH request id')
     finally: 
         connection.close()
         cursor.close()
@@ -58,9 +60,14 @@ def post_latest():
     on_off = request.json['on_off']
     error = request.json['error']
 
-    # POSTMAN requirements: HEADERS: Key: Content-Type, Value: application/json
-    # Note: "timestamp" field should be an empty string since backend Python will take care of datetime 
+    # POSTMAN requirements:
+    '''
+    HEADERS: Key: Content-Type, Value: application/json
+    BODY: raw
+    '''
+
     # Sample body:
+    # Note: "timestamp" field should be an empty string since backend Python will take care of datetime
     '''
     {
         "plant_id": 5, 
@@ -104,6 +111,18 @@ def post_latest():
     finally:
         connection.close()
         cursor.close()
+
+
+# HTTP response with 404 error
+@requests_api.errorhandler(404)
+def not_found(error=None):
+    message = {
+        'status': 404,
+        'message': 'Not Found: ' + request.url,
+    }
+    response = jsonify(message)
+    response.status_code = 404
+    return response
 
 
 if __name__ == "__main__":
