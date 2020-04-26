@@ -12,6 +12,7 @@
 # Note: python3 does NOT support flask-mysqldb
 # DL: Delete Later, used for testing, remove during production
 
+
 import pymysql
 import time
 from extensions import mysql

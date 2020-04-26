@@ -8,6 +8,7 @@
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for making requests to the Raspberry Pi
 
+
 import time
 import pymysql
 from extensions import mysql

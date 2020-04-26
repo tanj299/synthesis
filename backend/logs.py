@@ -8,16 +8,18 @@
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for logging information to the database from Raspberry Pi
 
+
 import time
 import pymysql
 from extensions import mysql
-from flask import jsonify, Flask, request, Blueprint
+from flask import jsonify, Flask, request, Blueprint, redirect
 
 logs_api = Blueprint('logs_api', __name__)
 
 @logs_api.route('/')
 def index():
     return('Welcome to logs!')
+    # return redirect('http://www.google.com', code=302)
 
 # GET request
 # @GET: Fetch all logs
