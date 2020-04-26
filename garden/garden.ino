@@ -38,6 +38,10 @@ const float min_light = 0.01;
 const float max_moisture = 1.71;
 const float min_moisture = 0.90;
 
+// Define relay control pins
+const int light_ctrl = 8;
+const int pump_ctrl = 10;
+
 // Function to retrieve the light level as an integer
 // percentage 0 - 100%
 // Note: max and min are stored constants reflecting the 
@@ -107,6 +111,12 @@ void setup() {
       break;
     }
   }
+
+  // Set outputs and keep light and pump off unless requested
+  pinMode(light_ctrl, OUTPUT);
+  pinMode(pump_ctrl, OUTPUT);
+  digitalWrite(light_ctrl, HIGH);
+  digitalWrite(pump_ctrl, HIGH);
 }
 
 void loop() {
@@ -129,6 +139,20 @@ void loop() {
         break;
       case '5': // Set up plant 2 soil temperature sensor
         Serial.println(setup_soil_temp(plant2_soil_temp, plant2_arr));
+        break;
+      case '6': // Turn on light
+        digitalWrite(light_ctrl, LOW);
+        break;
+      case '7': // Turn off light
+        digitalWrite(light_ctrl, HIGH);
+        break;
+      case '8': // Turn on pump
+        digitalWrite(pump_ctrl, LOW);
+        delay(100);
+        break;
+      case '9': // Turn off pump
+        digitalWrite(pump_ctrl, HIGH);
+        delay(100);
         break;
     }
   }
