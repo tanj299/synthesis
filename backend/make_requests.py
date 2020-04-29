@@ -45,6 +45,9 @@ def get_latest(id):
         connection.close()
         cursor.close()
 
+# GET request 
+# @GET: Fetch all records from a user after a sent timestamp
+
 # POST request
 # @POST: Create a request to affect the sensors 
 @requests_api.route('/insert', methods=['POST'])
@@ -58,8 +61,6 @@ def post_latest():
     arduino = request.json['arduino']
     pin = request.json['pin']
     make_request = request.json['make_request']
-    on_off = request.json['on_off']
-    error = request.json['error']
 
     # POSTMAN requirements:
     '''
@@ -76,14 +77,12 @@ def post_latest():
         "arduino": "16",
         "pin": "8", 
         "make_request":1,
-        "on_off":1,
-        "error":1
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO requests(plant_id, arduino, pin, make_request, on_off, error, timestamp) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    recordTuple = (plant_id, arduino, pin, make_request, on_off, error, now)
+    sqlQuery = "INSERT INTO requests(plant_id, arduino, pin, make_request, on_off, error, timestamp) VALUES (%s, %s, %s, %s, %s)"
+    recordTuple = (plant_id, arduino, pin, make_request, now)
     # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
     
     data = {"plant_id": plant_id,
@@ -91,8 +90,6 @@ def post_latest():
             "arduino": arduino,
             "pin": pin,
             "make_request": make_request,
-            "on_off": on_off,
-            "error": error
             }
 
     try:
