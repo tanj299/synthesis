@@ -21,7 +21,7 @@ from extensions import mysql
 from plants import plants_api
 from configuration import config_api
 from login import login_api
-from requests import requests_api
+from make_requests import requests_api
 from logs import logs_api
 
 # Flask application

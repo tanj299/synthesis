@@ -153,9 +153,9 @@ def fetch_plant(id):
                 response.status_code = 200
 
             # Test to assert that response returned it JSON format
-            assert response.content_type == 'application/json'
-            data = json.loads(response.get_data(as_text=True))
-            assert data['plant_id'] == 2
+            # assert response.content_type == 'application/json'
+            # data = json.loads(response.get_data(as_text=True))
+            # assert data['plant_id'] == 2
 
             return response
         except:
