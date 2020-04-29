@@ -33,7 +33,8 @@ def index():
 def login():
     msg = 'Oops, cannot login' 
 
-    # Check if 'username' and 'password' POST requehttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encrypthttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encryptsts exist in the client-side form
+    # Check if 'username' and 'password' POST request exist in the client-side form
+    # https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encrypthttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encryptsts 
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         new_user.id = request.form['id']
         new_user.username = request.form['username']
@@ -85,7 +86,7 @@ def login():
         # If account exists in our `users` table in our database 
         if account: 
             # Create session for the user so user can access other routes
-            session['loggedin'] = True 
+            session['is_logged_in'] = True 
             session['id'] = account['id']
             session['username'] = account['username']
 
