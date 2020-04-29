@@ -45,6 +45,9 @@ def get_latest(id):
         connection.close()
         cursor.close()
 
+# GET all requests 
+# @GET: Fetch latest request submitted from a user based on the last given timestamp 
+
 # POST request
 # @POST: Create a request to affect the sensors 
 @requests_api.route('/insert', methods=['POST'])
@@ -112,7 +115,6 @@ def post_latest():
     finally:
         connection.close()
         cursor.close()
-
 
 # HTTP response with 404 error
 @requests_api.errorhandler(404)
