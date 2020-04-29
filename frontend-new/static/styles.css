@@ -1,0 +1,191 @@
+body {
+	font-family: 'Baloo Thambi 2', cursive;
+	margin: 0;
+}
+#all-plants {
+	display: flex;
+	justify-content: space-around;
+	height: 100vh;
+	width: 100vw;
+	background-image: url('images/bg.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	white-space: nowrap;
+	padding: 0;
+	margin: 0;
+}	
+
+.plants-page {
+	display: flex;
+	justify-content: center;
+}
+
+#plant-card {
+	padding: 10rem 2rem 2rem 2rem;
+	width: calc((100% / 5) - 3rem);
+	margin: 5% 2rem;
+}
+
+#plant-card > a, #plant-card > div > * {
+	display: flex;
+	justify-content: center;
+}
+
+#lily-image {
+	background-image: url('images/lily.png');
+	height: 70%;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#lily-image:hover {
+	background-image: url('images/lily_hover.png');
+	height: 70%;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#orchid-image {
+	background-image: url('images/orchid.png');
+	height: 70%;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#orchid-image:hover {
+	background-image: url('images/orchid_hover.png');
+	height: 70%;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#more-information {
+	display: flex;
+	justify-content: space-around;
+}
+
+#plant-left > h1{
+	display: flex;
+	justify-content: center;
+}
+
+#plant-info {
+	font-size: 0.7rem;
+}
+
+#plant-img {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid black;
+	height: 200px;
+	width: 200px;
+}
+
+#plant-controls {
+	margin-top: 20%;
+	margin-left: 10%;
+}
+
+#remove {
+	margin-top: 50%;
+	margin-left: 10%;
+}
+
+.back:hover {
+	opacity: 60%;
+	transition: 0.2s;
+}
+
+.form {
+	float: right;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	padding: 0rem 5rem;
+	background-color: white;
+	max-width: 30%;
+}
+
+.form > form > input, .form > form > button {
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 1rem;
+	padding: 1rem;
+	margin: 1rem;
+	border-radius: 10px;
+	border: 1px solid black;
+}
+
+.form > form > button {
+	background-color: lightgreen;
+}
+
+.form > form > button:hover {
+	background-color: limegreen;
+}
+
+.button span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+  }
+  
+  .button span:after {
+	content: '\00bb';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -20px;
+	transition: 0.5s;
+  }
+  
+  .button:hover span {
+	padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+	opacity: 1;
+	right: 0;
+  }
+
+.close {
+	display: none;
+}
+
+.backbutton {
+	margin: 2rem;
+	z-index: 3;
+}
+
+.loginpage {
+	display: flex;
+	justify-content: space-between;
+}
+
+.loginh1 {
+	display: flex;
+	justify-content: center;
+}
+
+nav.loginregisternav {
+	display: flex;
+	justify-content: center;
+}
+
+nav.loginregisternav > a {
+	display: flex;
+	justify-content: center;
+	border: 1px solid black;
+	padding: 1rem;
+	width: 10%;
+}
+
+.hlhover {
+	font-family: arial;
+}	
+
+.highlight, .hlhover:hover {
+	background-color: lightgreen;
+}

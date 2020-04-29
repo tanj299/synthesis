@@ -1,6 +1,8 @@
 # Synthesis
+## Statement
+## Last Updated: 03/26/2020
 ### Synthesis - The Automatic Garden
-### Authors: Leo Au-Yeung, Daniel Mallia, Jayson Tan
+### Authors: Leo Au-Yeung, Stanley Lim, Daniel Mallia, Jayson Tan
 
 This repository contains the code developed by the above authors in the 
 Spring 2020 CSCI Capstone course under Professor Maryash at Hunter College, for 

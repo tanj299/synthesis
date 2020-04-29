@@ -1,4 +1,5 @@
-### cleaned up with webpack ###
+# to run: # 
 
-to run: npm run start:dev
-localhost:3000/
+### npm i ###
+### npm run start ###
+### localhost:3000/ ###
