@@ -46,7 +46,8 @@ def get_latest(id):
         cursor.close()
 
 # GET all requests 
-# @GET: Fetch latest request submitted from a user based on the last given timestamp 
+# @GET: Fetch latest request submitted from a user
+# User will pass timestamp as well 
 
 # POST request
 # @POST: Create a request to affect the sensors 
