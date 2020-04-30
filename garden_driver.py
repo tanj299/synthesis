@@ -13,50 +13,38 @@ import serial
 import requests
 
 class Plant():
-	def init(self, name, arduino, light, temp_humid, soil_temp, soil_moisture, 
-			water_level, water_pump, fan, camera, light_thresh, temp_thresh,
-			moisture_thresh):
-		# DEFINE CHARACTERISTICS
+	def __init__(self, name, id, arduino, position):
 		self.name = name
-		self.arduino = arduino
-		self.light = light
-		self.temp_humid = temp_humid
-		self.soil_temp = soil_temp
-		self.soil_moisture = soil_moisture
-		self.water_level = water_level
-		self.water_pump = water_pump
-		self.fan = fan
-		self.camera = camera
+		self.id = id
+		
+		if(arduino in arduinos):
+			self.arduino = arduinos[arduino]
+		else:
+			arduinos[arduino] = serial.Serial(arduino, timeout=10)
+			self.arduino = arduinos[arduino]
 
-		# DEFINE THRESHOLDS
-		self.light_thresh = light_thresh
-		self.temp_thresh = temp_thresh
-		self.moisture_thresh = moisture_thresh
+		self.position = position
 
-		# DEFINE FLAGS
-		# Errors
-		self.error_water_tank = False
-		self.error_light = False
-		self.error_fan = False
-		self.error_pump = False
+		# Initialize soil temp sensor
+		if(self.position == '1'):
+			self.arduino.write(b'4')
+		else:
+			self.arduino.write(b'5')
 
-		# Status
-		self.pump_on = False
-		self.light_on = False
-		self.fan_on = False
-		self.last_watered = None
+	def water(self):
+		self.arduino.write(b'8')
+		time.sleep(5)
+		self.arduino.write(b'9')
+
+	def get_info(self):
+		self.arduino.write(self.position.encode(encoding="ascii"))
+		data = self.arduino.readline()
+		return data
 
 
 # Key Global Structures 
-plants = {}		# Addresses Plant instances by name
-hardware_actuators = {}	# Addresses Arduinos by port name
-				# Each Arduino is represented by a dictionary with a single 
-				# connection : serial connection key-value pair
-				# and multiple actuator : [on/off, error, **PlantNames] pairs
-hardware_sensors = {} # Addresses Arduinos by port name
-				# Each Arduino is represented by a dictionary with a single
-				# connection : serial connection key-value pair
-				# and multiple sensor : [reading, **PlantNames] pairs
+plants = {}		# Addresses Plant instances by plant ID (integer)
+arduinos = {}	# Address arduinos (Serial objects) by port name (string)
 
 # Function to print greeting screen, request login information and authorize 
 # (acquire API access token)
@@ -88,6 +76,9 @@ def main():
 	# Define universal flags
 	connection_error = False
 
+	# TEST ADD SINGLE PLANT
+	plants[1] = Plant("Bob", 1, "/dev/ttyACM0", '1')
+	
 	minute_tracker = time.time()
 	hour_tracker = time.time()
 	# Primary Loop:
@@ -100,6 +91,15 @@ def main():
 		# 		If lightNow - turn on light
 		# 		Etc. (Including checks that these were met - lightNow yields 
 		# 			actual light on and such)
+
+		# TEST READ SINGLE INSTRUCTION
+		for plant in plants:
+			r = requests.get("http://127.0.0.1:5000/requests/" + str(plant))
+			
+			if(r.json()['make_request'] == 1):
+				plants[plant].water()
+
+
 		# 3. Data logging:
 		# 		If greater than 60 seconds - collect value (may want to poll 
 		# 			now, get value on next loop)
@@ -114,6 +114,8 @@ def main():
 		# 		Water if low moisture
 		# 		Light if low light (and not night time)
 		# 		etc.
+
+		time.sleep(10)
 
 if __name__ == '__main__':
 	main()
