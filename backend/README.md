@@ -83,6 +83,17 @@ the purpose of running an automated garden with a web interface.
     Congratulations, your Flask backend is now running! Go to your favorite browser and go to 
     `localhost:5000` (or `http://127.0.0.1:5000/`) and you will be greeted with `Welcome to the backend!`
 
+### Notes
+
+GET Request: The `time` argument must be converted from a string to a formatted time string to be queried
+Datetime object format: '2020-04-30 04:10:38'
+Formatted to: '2020-04-30+04%3A10%3A38'
+For all colons (:) in string, it must be replaced with: %3A 
+For all whitespace in string, it must be replaced with: +
+Above is a custom Python function, def convert_time_format(date), which takes in a datetime object 
+And returns an appropriate string for querying; however, this must be done on client-side
+        
+
 ### Routes Supported
 Routes are modularized using Flask's Blueprint object<br/> 
 You can find the registered blueprint objects in `main.py` for the `url_prefix`, but they are also listed here for your convenience. <br/>
@@ -97,8 +108,6 @@ Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 Format:<br/>
 `REQUEST_METHOD` | `ROUTE_DECORATOR`: Description
 <br/><br/>
-**Currently, these are the routes that are supported:**<br/><br/>
-
 
 **Plants | `plants.py`**<br/>
 `url_prefix`: `/plants`
@@ -129,8 +138,8 @@ Format:<br/>
 `url_prefix`: `/requests`
 <br/>
 `POST`      | `/insert`: Add a request to the database<br/>
-`GET`       | `/<int:id>`: Fetch the latest request made by a user<br/>
-
+`GET`       | `/<int:id>`: Fetch the latest request made by a user with plant_id<br/>
+`GET`       | `/all/<int:id>/<string:time>`: Fetch the latest requests made by a user with plant_id after given timestamp; PLEASE SEE ABOVE FOR FORMATTING DATE TIME IN **NOTES**<br/>
 
 
 
