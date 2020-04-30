@@ -16,6 +16,12 @@ from flask import jsonify, Flask, request, Blueprint
 
 requests_api = Blueprint('requests_api', __name__)
 
+def convert_time_format(date):
+    date_parse = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    date_converted = datetime.strftime(dateT, "%Y-%m-%d+%H%%3A%M%%3A%S")
+    print(date_converted)
+    return date_converted
+
 @requests_api.route('/')
 def index():
     return('Welcome to requests!')
@@ -115,8 +121,21 @@ def get_latest(id):
 @requests_api.route('/all/<int:id>/<string:time>', methods=['GET'])
 def get_latest_time(id, time):
     try:
+
+        # POSTMAN requirements:
+        '''
+        GET Request: The `time` argument must be converted from a string to a formatted time string to be queried
+        Datetime object format: '2020-04-30 04:10:38'
+        Formatted to: '2020-04-30+04%3A10%3A38'
+        For all colons (:) in string, it must be replaced with: %3A 
+        For all whitespace in string, it must be replaced with: +
+        Above is a custom Python function, def convert_time_format(date), which takes in a datetime object 
+        And returns an appropriate string for querying; however, this must be done on client-side
+        '''
+
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
+        
         cursor.execute("SELECT * FROM requests WHERE plant_id = %s AND timestamp >= %s", (id, time))
         rows = cursor.fetchall()
         response = jsonify(rows)
