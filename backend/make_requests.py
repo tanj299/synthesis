@@ -1,7 +1,7 @@
 #! env/bin/activate
 
 # Authors: Jayson Tan
-# File: requests.py
+# File: make_requests.py
 # Date Begun: 04/19/2020
 # Last Updated: 04/25/2020
 
@@ -26,7 +26,7 @@ def index():
 @requests_api.route('/insert', methods=['POST'])
 def post_latest():
 
-    # grab current time in mysql datetime format
+    # Grab current time in mysql datetime format
     now = time.strftime('%Y-%m-%d %H:%M:%S')
 
     plant_id = request.json['plant_id']
@@ -54,7 +54,7 @@ def post_latest():
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO requests(plant_id, arduino, pin, make_request, on_off, error, timestamp) VALUES (%s, %s, %s, %s, %s)"
+    sqlQuery = "INSERT INTO requests(plant_id, arduino, pin, make_request, timestamp) VALUES (%s, %s, %s, %s, %s)"
     recordTuple = (plant_id, arduino, pin, make_request, now)
     # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
 
@@ -109,6 +109,17 @@ def get_latest(id):
 
 # GET request 
 # @GET: Fetch all records from a user after a sent timestamp
+@requests_api.route('/all/<int:id>', methods=['GET'])
+def get_all_latest(id):
+    try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+        
+    except:
+    finally:
+        connection.close()
+        cursor.close()
+
 
 
 # HTTP response with 404 error
