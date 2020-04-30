@@ -81,7 +81,7 @@ the purpose of running an automated garden with a web interface.
     * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
     ```
     Congratulations, your Flask backend is now running! Go to your favorite browser and go to 
-    `localhost:5000` (or `http://http://127.0.0.1:5000/`) and you will be greeted with `Welcome to the backend!`
+    `localhost:5000` (or `http://127.0.0.1:5000/`) and you will be greeted with `Welcome to the backend!`
 
 ### Routes Supported
 Routes are modularized using Flask's Blueprint object<br/> 
