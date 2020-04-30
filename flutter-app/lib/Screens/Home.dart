@@ -56,15 +56,15 @@ class _HomeState extends State<Home> {
                 style: TextStyle(fontFamily: "nunito"),
               ),
             ),
-            BottomNavyBarItem(
-              icon: Icon(Icons.assignment),
-              title: Text(
-                "About Us",
-                style: TextStyle(fontFamily: "nunito"),
-              ),
-              inactiveColor: kgreyDark,
-              activeColor: kdarkBlue,
-            ),
+            // BottomNavyBarItem(
+            //   icon: Icon(Icons.assignment),
+            //   title: Text(
+            //     "About Us",
+            //     style: TextStyle(fontFamily: "nunito"),
+            //   ),
+            //   inactiveColor: kgreyDark,
+            //   activeColor: kdarkBlue,
+            // ),
             // BottomNavyBarItem(
             //   icon: Icon(Icons.notifications),
             //   title: Text(
@@ -82,6 +82,7 @@ class _HomeState extends State<Home> {
               ),
               inactiveColor: kgreyDark,
               activeColor: kdarkBlue,
+              
             )
           ],
           onItemSelected: (index) {
@@ -92,10 +93,14 @@ class _HomeState extends State<Home> {
           controller: _pageController,
           onPageChanged: (index) {
             setState(() => _cIndex = index);
+            // if _cIndex on Sign out, pop navigation -> return to signin
+            if(_cIndex == 1) {
+              Navigator.pop(context);
+            }
           },
           children: <Widget>[
             Dashboard(),
-            Orders(),
+            // Orders(),
             Orders(),
             // Notifications(),
             // Profile(),

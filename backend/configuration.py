@@ -3,10 +3,12 @@
 # Authors: Jayson Tan 
 # File: configuration.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/16/2020
+# Last Updated: 04/25/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for configuring the initial Raspberry Pi 
+# The only visible route should be a GET request since it's the initial setup 
+# Any initial file that wants to be posted will require a route to be added later
 
 import pymysql
 import time 
@@ -20,7 +22,7 @@ def index():
     return('Welcome to config!')
 
 # GET request
-# @GET: fetch user config from 'configuration' table 
+# @GET: Fetch user config from 'configuration' table 
 # Requires a backslash at the end to query with an email
 # Ex: janesmith@gmail.com OR janesmith%40gmail.com
 @config_api.route('/<string:user_email>/', methods=['GET'])

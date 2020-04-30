@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/04/2020
+# Last Updated: 04/20/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for CRUD operations on `plants` table
@@ -12,10 +12,11 @@
 # Note: python3 does NOT support flask-mysqldb
 # DL: Delete Later, used for testing, remove during production
 
+
 import pymysql
 import time
 from extensions import mysql
-from flask import jsonify, Flask, request, Blueprint
+from flask import jsonify, Flask, request, Blueprint, json
 # from werkzeug import generate_password_hash, check_password_hash
 
 plants_api = Blueprint('plants_api', __name__)
@@ -29,7 +30,7 @@ def plant_index():
     return ('Welcome to plants!')
 
 # POST request
-# @POST: create a plant with id autoincremented in the database
+# @POST: Create a plant with id autoincremented in the database
 @plants_api.route('/insert', methods=['POST'])
 def add_plant():
     # Grab current time in mysql datetime format
@@ -42,7 +43,12 @@ def add_plant():
     uri = request.json['uri']
     currPhoto = request.json['curr_photo']
 
-    # POSTMAN requirements: HEADERS: Key: Content-Type, Value: application/json
+    # POSTMAN requirements:
+    '''
+    HEADERS: Key: Content-Type, Value: application/json
+    BODY: raw
+    '''
+
     # Sample body:
     '''
     {
@@ -57,8 +63,17 @@ def add_plant():
     # INSERT query and fields to insert
     sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, date_created) VALUES (%s, %s, %s, %s, %s, %s)"
     recordTuple = (user_email, plant_name, species, uri, currPhoto, now)
-    # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
 
+    # To properly return the JSON data, we put the data into a Python dictionary
+    # Then, jsonify() will work properly
+    data = {
+            "user_email": user_email,
+            "plant_name": plant_name, 
+            "species": species,
+            "uri": uri,
+            "currPhoto": currPhoto,
+            "date_created": now
+            }    
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
@@ -68,7 +83,9 @@ def add_plant():
 
         # Commit changes to database so new record persists
         connection.commit()
-        return jsonify("OK")
+
+        # Return json data after POST request
+        return jsonify(data)
 
     except:
         print('Could not add a plant')
@@ -87,10 +104,12 @@ def fetch_all_plants():
 
         # pymysql cursors that returns results as a dictionary
         # Cursor objects allows users to execute queries per row
+        # Result is stored in the cursor object 
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM plants")
 
-        # .fetchall() retrieves a JSON object
+        # .fetchall() retrieves a JSON object from the cursor object
+        # Can also use `list(cursor)`, but .fetchall() returns a list OR an empty tuple if list is empty
         rows = cursor.fetchall()
 
         # Creates a response with the JSON representation
@@ -109,8 +128,8 @@ def fetch_all_plants():
 
 # GET, DELETE requests
 # A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
-# @GET: return a plant's information matching the 'id' from the database
-# @DELETE: remove plant matching the id from the database
+# @GET: Return a plant's information matching the 'id' from the database
+# @DELETE: Remove plant matching the id from the database
 @plants_api.route('/plant/<int:id>', methods=['GET', 'DELETE'])
 def fetch_plant(id):
     if request.method == 'GET':
@@ -122,7 +141,7 @@ def fetch_plant(id):
             cursor.execute("SELECT * FROM plants WHERE plant_id = %s", id)
             single_plant = cursor.fetchone()
             response = jsonify(single_plant)
-            print(response)
+            # print (single_plant)
 
             # If plant_id is not found, error 404
             if single_plant == None:
@@ -132,6 +151,11 @@ def fetch_plant(id):
             # Else, plant_id is found, return response object
             else:
                 response.status_code = 200
+
+            # Test to assert that response returned it JSON format
+            # assert response.content_type == 'application/json'
+            # data = json.loads(response.get_data(as_text=True))
+            # assert data['plant_id'] == 2
 
             return response
         except:
@@ -155,18 +179,34 @@ def fetch_plant(id):
         return "Nothing"
 
 # PUT request
-# @PUT: update a plant's information matching the id from the database
+# @PUT: Update a plant's information matching the id from the database
 @plants_api.route('/update/<int:id>', methods=['PUT'])
 def update_plant(id):
     try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+        # Query table by the `id` 
+        # Return singleRecord and access the JSON data via dictionary pattern likeso in date_created
+        cursor.execute("SELECT * FROM plants where plant_id=%s", id)
+        singleRecord = cursor.fetchone()
+        date_created = singleRecord["date_created"]
+
         user_email = request.json['user_email']
         plant_name = request.json['plant_name']
         species = request.json['species']
         uri = request.json['uri']
         curr_photo = request.json['curr_photo']
 
-        connection = mysql.connect()
-        cursor = connection.cursor(pymysql.cursors.DictCursor)
+        data = {"user_email": user_email,
+                "plant_name": plant_name,
+                "species": species,
+                "uri": uri,
+                "curr_photo": curr_photo,
+                "date_created": date_created
+                }
+
+        
         recordTuple = (user_email, plant_name, species, uri, curr_photo, id)
         sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s WHERE plant_id=%s"
         # DL: dummy = ('bloop@yahoo.com', 'caroline', 'sunflower', 'http://notasample.com', 8, id)
@@ -174,10 +214,13 @@ def update_plant(id):
 
         cursor.execute(sqlQuery, recordTuple)
         connection.commit()
-        response = jsonify('Plant updated successfully!')
+        response = jsonify('Plant updated succesfully!', data)
+        response.status_code = 200
+
         return response
+
     except:
-        return jsonify('Not found')
+        return ('Not found')
     finally:
         connection.close()
         cursor.close()
