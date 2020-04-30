@@ -126,6 +126,7 @@ class _OverViewPageState extends State<OverViewPage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
   Future<Plant> futurePlant;
+  Future<PlantRequest> waterPlant;
 
   @override
   void initState() {
@@ -185,10 +186,28 @@ class _OverViewPageState extends State<OverViewPage>
                         BoldText("Date created: " + snapshot.data.dateCreated,
                             20, kblack),
                         SizedBox(height: 300),
-                        WideButton("Water Plant", () {
-                          makeRequest(
-                              widget.plantId.toString(), "", "16", "8", "5");
-                        })
+                        (waterPlant == null)
+                            ? WideButton("Water Plant", () {
+                                setState(() {
+                                  waterPlant = makeRequest(
+                                      widget.plantId.toString(),
+                                      "",
+                                      "16",
+                                      "8",
+                                      "5");
+                                });
+                              })
+                            : FutureBuilder<PlantRequest>(
+                                future: waterPlant,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text("Plant successfully watered!", style: TextStyle(backgroundColor: Colors.green, fontSize: 30));
+                                  } else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}", style: TextStyle(backgroundColor: Colors.red, fontSize: 30));
+                                  }
+                                  return CircularProgressIndicator();
+                                },
+                              ),
                       ],
                     ))
                         // )
@@ -196,7 +215,7 @@ class _OverViewPageState extends State<OverViewPage>
                   }
                   // error
                   else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
+                    return Text("${snapshot.error}", style: TextStyle(backgroundColor: Colors.red, fontSize: 30));
                   }
                   // By default, show a loading spinner.
                   return CircularProgressIndicator();
