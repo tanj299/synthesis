@@ -85,45 +85,46 @@ the purpose of running an automated garden with a web interface.
 
 ### Routes Supported
 Routes are modularized using Flask's Blueprint object. 
-You can find the registered blueprint objects in `main.py` for the `url_prefix`, but they are also listed here for your convenience. \
-Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`\
+You can find the registered blueprint objects in `main.py` for the `url_prefix`, but they are also listed here for your convenience. <br/>
+Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 
 Example route using `plants` prefix, `/plants`, to fetch all plants:
-
-`localhost:5000/plants/all`\
-
-Currently, these are the routes that are supported:\ 
-Format:\ 
+<br/>
+`localhost:5000/plants/all`
+<br/>
+Currently, these are the routes that are supported:<br/> 
+Format:<br/>
 `REQUEST_METHOD` | `ROUTE_DECORATOR`: Description
+<br/><br/>
 
-**Plants | `plants.py`**\ 
-`url_prefix`: `/plants`\
-
+**Plants | `plants.py`\** 
+`url_prefix`: `/plants`
+<br/>
 `POST`      | `/insert`: Add a plant to the database\  
 `GET`       | `/all`: Fetch all plants\
 `GET`       | `/plant/<int:id>`: Fetch a single plant via their ID number\
 `DELETE`    | `/plant/<int:id>`: Remove a single plant via their ID number\
 `PUT`       | `/update/<int:id>`: Update a plant's information via their ID number\ 
+<br/><br/>
 
-
-**Logs | `logs.py`**\
-`url_prefix`: `/logs`\
-
+**Logs | `logs.py`\**
+`url_prefix`: `/logs`
+<br/>
 `GET`       | `/all`: Fetch all logs\
 `GET`       | `<int:id>`: Fetch a single plant's log via their ID number\
 `POST`      | `/insert`: Add a log entry to the database\
-
+<br/><br/>
 
 **Configuration | `configuration.py`**\
 **NOTE: Email requires the forward slash at the end of the decorator**\
 `url_prefix`: `/config`\
-
+<br>
 `GET`       | `/<string:user_email>/`: Fetch the user's configuration for initial setup\
+<br/><br/>
 
-
-**Requests | `make_requests.py`**\
-`url_prefix`: `/requests`\
-
+**Requests | `make_requests.py`\**
+`url_prefix`: `/requests`
+<br/>
 `POST`      | `/insert`: Add a request to the database\
 `GET`       | `/<int:id>`: Fetch the latest request made by a user\
 
