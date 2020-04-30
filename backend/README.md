@@ -137,7 +137,7 @@ Format:<br/>
 **Requests | `make_requests.py`**<br/>
 `url_prefix`: `/requests`
 <br/>
-`POST`      | `/insert`: Add a request to the database<br/>
+`POST`      | `/insert`: Add a request to the database with a valid category, including 'water', 'light', or 'picture'<br/>
 `GET`       | `/<int:id>`: Fetch the latest request made by a user with plant_id<br/>
 `GET`       | `/all/<int:id>/<string:time>`: Fetch the latest requests made by a user with plant_id after given timestamp; PLEASE SEE ABOVE FOR FORMATTING DATE TIME IN **NOTES**<br/>
 
