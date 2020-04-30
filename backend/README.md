@@ -88,17 +88,19 @@ Routes are modularized using Flask's Blueprint object<br/>
 You can find the registered blueprint objects in `main.py` for the `url_prefix`, but they are also listed here for your convenience. <br/>
 Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 
-Example route using `plants` prefix, `/plants`, to fetch all plants:
+**Example route using `plants` prefix, `/plants`, to fetch all plants:**
+<br/>
 <br/>
 `localhost:5000/plants/all`
 <br/>
-Currently, these are the routes that are supported:<br/> 
+<br/> 
 Format:<br/>
 `REQUEST_METHOD` | `ROUTE_DECORATOR`: Description
 <br/><br/>
+**Currently, these are the routes that are supported:**<br/><br/>
+
 
 **Plants | `plants.py`**<br/>
-<br/> 
 `url_prefix`: `/plants`
 <br/>
 `POST`      | `/insert`: Add a plant to the database<br/>  
@@ -106,7 +108,7 @@ Format:<br/>
 `GET`       | `/plant/<int:id>`: Fetch a single plant via their ID number<br/>
 `DELETE`    | `/plant/<int:id>`: Remove a single plant via their ID number<br/>
 `PUT`       | `/update/<int:id>`: Update a plant's information via their ID number<br/>
-<br/><br/>
+<br/>
 
 **Logs | `logs.py`**<br/>
 `url_prefix`: `/logs`
@@ -114,14 +116,14 @@ Format:<br/>
 `GET`       | `/all`: Fetch all logs<br/>
 `GET`       | `<int:id>`: Fetch a single plant's log via their ID number<br/>
 `POST`      | `/insert`: Add a log entry to the database<br/>
-<br/><br/>
+<br/>
 
 **Configuration | `configuration.py`**<br/>
 **NOTE: Email requires the forward slash at the end of the decorator**<br/>
 `url_prefix`: `/config`
 <br>
 `GET`       | `/<string:user_email>/`: Fetch the user's configuration for initial setup<br/>
-<br/><br/>
+<br/>
 
 **Requests | `make_requests.py`**<br/>
 `url_prefix`: `/requests`
