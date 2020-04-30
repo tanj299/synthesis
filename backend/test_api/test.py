@@ -5,6 +5,9 @@ from datetime import datetime
 # r = requests.get('http://localhost:5000/requests/1')
 # print(r.text)
 
+##########################################
+# Date format conversion test 
+##########################################
 
 def convertTimeFormat(date):
     dateT = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")

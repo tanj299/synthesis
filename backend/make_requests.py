@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: make_requests.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/25/2020
+# Last Updated: 04/30/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for making requests to the Raspberry Pi
@@ -16,33 +16,34 @@ from flask import jsonify, Flask, request, Blueprint
 
 requests_api = Blueprint('requests_api', __name__)
 
+# @Dan, if you want to double check for sanity's sake I wrote a script in the folder, 'test_api' in the file, 'test.py' 
+# Otherwise, this is just a cleaner version of the same function 
 def convert_time_format(date):
     date_parse = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
     date_converted = datetime.strftime(dateT, "%Y-%m-%d+%H%%3A%M%%3A%S")
-    print(date_converted)
     return date_converted
 
 @requests_api.route('/')
 def index():
     return('Welcome to requests!')
 
-
-# MODIFY POST request: Client will send a request in plain English to category and use conditionals to deal with it
-# water, light, take_picture
-
 # POST request
 # @POST: Create a request to affect the sensors
-@requests_api.route('/insert/<string:category>', methods=['POST'])
-def post_latest(category):
+# @category: Three valid categories: water, light, and picture
+@requests_api.route('/insert', methods=['POST'])
+def post_latest():
 
     # Grab current time in mysql datetime format
     now = time.strftime('%Y-%m-%d %H:%M:%S')
 
     plant_id = request.json['plant_id']
     timestamp = request.json['timestamp']
-    arduino = request.json['arduino']
-    pin = request.json['pin']
-    make_request = request.json['make_request']
+    category = request.json['category']
+
+    # Check `category` is valid; else return
+    if category != 'water' and category != 'light' and category != 'picture':
+        print("Incorrect category - please choose 'water', 'light', or 'picture'")
+        return
 
     # POSTMAN requirements:
     '''
@@ -56,30 +57,22 @@ def post_latest(category):
     {
         "plant_id": 5, 
         "timestamp": "",
-        "arduino": "16",
-        "pin": "8", 
-        "make_request":1,
+        "category": ""
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO requests(plant_id, arduino, pin, make_request, timestamp) VALUES (%s, %s, %s, %s, %s)"
-    recordTuple = (plant_id, arduino, pin, make_request, now)
-    # DL: recordTuple = ('agentsmith@aol.com', 'perry the platypus', 'snake-tree', 'http://sample.com/', 3, now)
+    sqlQuery = "INSERT INTO make_requests(plant_id, category, timestamp) VALUES (%s, %s, %s)"
+    recordTuple = (plant_id, category, now)
 
     data = {"plant_id": plant_id,
             "timestamp": now,
-            "arduino": arduino,
-            "pin": pin,
-            "make_request": make_request,
+            "category": category
             }
 
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
-
-        # Insert request into `requests` table
-        # Pass sqlQuery and recordTuple as arguments
         cursor.execute(sqlQuery, recordTuple)
 
         # Commit record to database so new record persists
@@ -87,7 +80,7 @@ def post_latest(category):
         return jsonify(data)
     except:
         print('Could not POST a new request')
-        return('Request failed: ensure that the plant exists and the plant_id matches with the `plants` table')
+        return('Request failed: ensure that the plant exists and the plant_id matches with the `plants` table or category is valid')
     finally:
         connection.close()
         cursor.close()
