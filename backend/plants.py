@@ -29,6 +29,7 @@ plants_api = Blueprint('plants_api', __name__)
 def plant_index():
     return ('Welcome to plants!')
 
+# MODIFY: Add column: Serial_Port(string) ex: "/dev/ttyACM0", Position(int) ex: 1 or 2
 # POST request
 # @POST: Create a plant with id autoincremented in the database
 @plants_api.route('/insert', methods=['POST'])

@@ -16,15 +16,18 @@ from flask import jsonify, Flask, request, Blueprint
 
 requests_api = Blueprint('requests_api', __name__)
 
-request
 @requests_api.route('/')
 def index():
     return('Welcome to requests!')
 
+
+# MODIFY POST request: Client will send a request in plain English to category and use conditionals to deal with it
+# water, light, take_picture
+
 # POST request
 # @POST: Create a request to affect the sensors
-@requests_api.route('/insert', methods=['POST'])
-def post_latest():
+@requests_api.route('/insert/<string:category>', methods=['POST'])
+def post_latest(category):
 
     # Grab current time in mysql datetime format
     now = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -109,18 +112,20 @@ def get_latest(id):
 
 # GET request 
 # @GET: Fetch all records from a user after a sent timestamp
-@requests_api.route('/all/<int:id>', methods=['GET'])
-def get_all_latest(id):
+@requests_api.route('/all/<int:id>/<string:time>', methods=['GET'])
+def get_latest_time(id, time):
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM requests WHERE plant_id = %s AND timestamp >= %s", (id, time))
+        rows = cursor.fetchall()
+        response = jsonify(rows)
+        return response
     except:
-        print('Could not FETCH request id')
-    finally:
+        print('Could not FETCH request id or timestamp')
+    finally: 
         connection.close()
         cursor.close()
-
-
 
 # HTTP response with 404 error
 @requests_api.errorhandler(404)
@@ -137,3 +142,21 @@ if __name__ == "__main__":
     app.run(debug=True)
 else:
     print("Execute `flask run` instead")
+
+
+# # GET request 
+# # @GET: Fetch all records from a user after a sent timestamp
+# @requests_api.route('/all/<int:id>', methods=['GET'])
+# def get_latest_time(id):
+#     try:
+#         connection = mysql.connect()
+#         cursor = connection.cursor(pymysql.cursors.DictCursor)
+#         cursor.execute("SELECT * FROM requests WHERE plant_id = %s", id)
+#         rows = cursor.fetchall()
+#         response = jsonify(rows)
+#         return response
+#     except:
+#         print('Could not FETCH request id or timestamp')
+#     finally: 
+#         connection.close()
+#         cursor.close()

@@ -114,7 +114,7 @@ Format:<br/>
 `url_prefix`: `/logs`
 <br/>
 `GET`       | `/all`: Fetch all logs<br/>
-`GET`       | `<int:id>`: Fetch a single plant's log via their ID number<br/>
+`GET`       | `/<int:id>`: Fetch a single plant's log via their ID number<br/>
 `POST`      | `/insert`: Add a log entry to the database<br/>
 <br/>
 
