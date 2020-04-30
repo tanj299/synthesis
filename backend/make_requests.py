@@ -114,8 +114,8 @@ def get_all_latest(id):
     try:
         connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
-        
     except:
+        print('Could not FETCH request id')
     finally:
         connection.close()
         cursor.close()
