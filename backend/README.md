@@ -84,19 +84,18 @@ the purpose of running an automated garden with a web interface.
     `localhost:5000` (or `http://127.0.0.1:5000/`) and you will be greeted with `Welcome to the backend!`
 
 ### Notes
-
-GET Request: The `time` argument must be converted from a string to a formatted time string to be queried
-Datetime object format: '2020-04-30 04:10:38'
-Formatted to: '2020-04-30+04%3A10%3A38'
-For all colons (:) in string, it must be replaced with: %3A 
-For all whitespace in string, it must be replaced with: +
-Above is a custom Python function, def convert_time_format(date), which takes in a datetime object 
-And returns an appropriate string for querying; however, this must be done on client-side
-        
+GET Request: The `time` argument must be converted from a string to a formatted time string to be queried<br/>
+Datetime object format: `2020-04-30 04:10:38`<br/>
+Formatted to: `2020-04-30+04%3A10%3A38`<br/>
+For all colons (:) in string, it must be replaced with: `%3A`<br/>
+For all whitespace in string, it must be replaced with: `+`<br/
+Above is a custom Python function, def convert_time_format(date), which takes in a datetime object <br/>
+And returns an appropriate string for querying; however, this must be done on client-side<br/>
 
 ### Routes Supported
 Routes are modularized using Flask's Blueprint object<br/> 
-You can find the registered blueprint objects in `main.py` for the `url_prefix`, but they are also listed here for your convenience. <br/>
+You can find the registered blueprint objects in `main.py` for the `url_prefix`<br/>
+They are also listed here for your convenience. <br/>
 Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 
 **Example route using `plants` prefix, `/plants`, to fetch all plants:**

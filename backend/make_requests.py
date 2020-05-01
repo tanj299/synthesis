@@ -57,7 +57,7 @@ def post_latest():
     {
         "plant_id": 5, 
         "timestamp": "",
-        "category": ""
+        "category": "water"
     }
     '''
 
@@ -85,6 +85,7 @@ def post_latest():
         connection.close()
         cursor.close()
 
+
 # GET request
 # @GET: Fetch latest request submitted from a user
 @requests_api.route('/<int:id>', methods=['GET'])
@@ -107,6 +108,7 @@ def get_latest(id):
     finally: 
         connection.close()
         cursor.close()
+
 
 # GET request 
 # @GET: Fetch all records from a user after a sent timestamp
