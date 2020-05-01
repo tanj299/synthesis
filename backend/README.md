@@ -88,7 +88,7 @@ GET Request: The `time` argument must be converted from a string to a formatted 
 Datetime object format: `2020-04-30 04:10:38`<br/>
 Formatted to: `2020-04-30+04%3A10%3A38`<br/>
 For all colons (:) in string, it must be replaced with: `%3A`<br/>
-For all whitespace in string, it must be replaced with: `+`<br/
+For all whitespace in string, it must be replaced with: `+`<br/>
 Above is a custom Python function, def convert_time_format(date), which takes in a datetime object <br/>
 And returns an appropriate string for querying; however, this must be done on client-side<br/>
 
