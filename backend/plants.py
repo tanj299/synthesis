@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/20/2020
+# Last Updated: 04/30/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for CRUD operations on `plants` table
@@ -43,6 +43,13 @@ def add_plant():
     species = request.json['species']
     uri = request.json['uri']
     currPhoto = request.json['curr_photo']
+    serial_port = request.json['serial_port']
+    position = request.json['position']
+
+    # Validate position is only 1 or 2
+    if position != 1 and position !=2: 
+        print("Invalid position - must be 1 or 2")
+        return
 
     # POSTMAN requirements:
     '''
@@ -57,13 +64,15 @@ def add_plant():
         "plant_name": "bobby",
         "species": "orchid",
         "uri": "http://sampleokay.com",
-        "curr_photo": 99
+        "curr_photo": 99,
+        "serial_port": "/dev/ttyACM0",
+        "position": 1
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, date_created) VALUES (%s, %s, %s, %s, %s, %s)"
-    recordTuple = (user_email, plant_name, species, uri, currPhoto, now)
+    sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, serial_port, position, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    recordTuple = (user_email, plant_name, species, uri, currPhoto, serial_port, position, now)
 
     # To properly return the JSON data, we put the data into a Python dictionary
     # Then, jsonify() will work properly
@@ -73,6 +82,8 @@ def add_plant():
             "species": species,
             "uri": uri,
             "currPhoto": currPhoto,
+            "serial_port": serial_port,
+            "position": position,
             "date_created": now
             }    
     try:
@@ -90,7 +101,7 @@ def add_plant():
 
     except:
         print('Could not add a plant')
-        return jsonify("Not OK")
+        return('Not OK')
     finally:
         connection.close()
         cursor.close()
@@ -198,21 +209,27 @@ def update_plant(id):
         species = request.json['species']
         uri = request.json['uri']
         curr_photo = request.json['curr_photo']
+        serial_port = request.json['serial_port']
+        position = request.json['position']
+
+        if position != 1 and position != 2:
+            print("Invalid position - must be 1 or 2")
+            return
 
         data = {"user_email": user_email,
                 "plant_name": plant_name,
                 "species": species,
                 "uri": uri,
                 "curr_photo": curr_photo,
+                "serial_port": serial_port,
+                "position": position,
                 "date_created": date_created
                 }
 
         
-        recordTuple = (user_email, plant_name, species, uri, curr_photo, id)
-        sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s WHERE plant_id=%s"
-        # DL: dummy = ('bloop@yahoo.com', 'caroline', 'sunflower', 'http://notasample.com', 8, id)
-        # DL: sqlQuery = "UPDATE plants SET user_email='johnsmith@yahoo.com', plant_name='mira', species='rose', uri='http://totallyasample.com', curr_photo=16 WHERE plant_id=%s"
-
+        recordTuple = (user_email, plant_name, species, uri, curr_photo, serial_port, position, id)
+        sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s, serial_port=%s, position=%s WHERE plant_id=%s"
+      
         cursor.execute(sqlQuery, recordTuple)
         connection.commit()
         response = jsonify('Plant updated succesfully!', data)
