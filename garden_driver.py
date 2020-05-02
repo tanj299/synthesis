@@ -77,8 +77,10 @@ def greet_and_login():
 	email = input('Enter your account email: ')
 	password = input('Enter your account password: ')
 
-	# Authorize 
+	# Authorize - EXPAND TO CHECKING LOOP WHEN AUTHORIZATION SET UP
 	token = ''
+
+	print("Press q to quit the program.")
 
 	return token
 
