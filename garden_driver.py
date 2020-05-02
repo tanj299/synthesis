@@ -85,6 +85,16 @@ def greet_and_login():
 def parse_configuration():
 	pass
 
+# Function to cleanly exit the program
+def cleanup():
+	print("Stopping...")
+
+	# Close all Serial connections
+	for arduino in arduinos:
+		arduino.close()
+
+	print("Please reset and unplug your arduinos!")
+
 def main():
 	global run_program
 
@@ -135,7 +145,7 @@ def main():
 
 		time.sleep(10)
 
-	print("Stopped")
+	cleanup()
 
 if __name__ == '__main__':
 	main()
