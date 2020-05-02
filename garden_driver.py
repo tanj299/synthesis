@@ -50,13 +50,13 @@ class Plant():
 # Keyboard listener callback
 # If the user presses q, change run_program to False
 def on_press(key):
-    global run_program
+	global run_program
 
-    if(hasattr(key,'char') and key.char == 'q'):
-        run_program = False
-        return False # Stop listener
+	if(hasattr(key,'char') and key.char == 'q'):
+		run_program = False
+		return False # Stop listener
 
-    return True # Do not stop listener
+	return True # Do not stop listener
 
 
 # Function to print greeting screen, request login information and authorize 
