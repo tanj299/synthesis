@@ -33,7 +33,8 @@ def index():
 def login():
     msg = 'Oops, cannot login' 
 
-    # Check if 'username' and 'password' POST requehttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encrypthttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encryptsts exist in the client-side form
+    # Check if 'username' and 'password' POST request exist in the client-side form
+    # https://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encrypthttps://dev.mysql.com/doc/refman/8.0/en/encryption-functions.html#function_aes-encryptsts 
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         new_user.id = request.form['id']
         new_user.username = request.form['username']
@@ -74,27 +75,28 @@ def login():
         account = cursor.fetchone()
         response = jsonify(account)
 
-        # DL
-        print("Account: ", account)
+        # # DL
+        # print("Account: ", account)
 
-        if account: 
-            return("Account found!")
-        else:
-            return("Account not found")
-            
-        # # If account exists in our `users` table in our database 
         # if account: 
-        #     # Create session for the user so user can access other routes
-        #     session['loggedin'] = True 
-        #     session['id'] = account['id']
-        #     session['username'] = account['username']
+        #     return("Account found!")
+        # else:
+        #     return("Account not found")
+            
+        # If account exists in our `users` table in our database 
+        if account: 
+            # Create session for the user so user can access other routes
+            session['is_logged_in'] = True 
+            session['id'] = account['id']
+            session['username'] = account['username']
 
-        #     # If successful, set new_user.is_logged_in to True
+            # If successful, set new_user.is_logged_in to True
 
-        #     return 'Logged in successfully!'
-        # else: 
-        #     # Account doesn't exist or username/password incorrect
-        #     msg = 'Incorrect username/password!'
+            return 'Logged in successfully!'
+        else: 
+            # Account doesn't exist or username/password incorrect
+            msg = 'Incorrect username/password!'
+            return msg
 
     # return redirect(url_for('/'))
 
