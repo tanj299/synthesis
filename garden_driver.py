@@ -82,10 +82,28 @@ def greet_and_login():
 
 	print("Press q to quit the program.")
 
-	return token
+	return email, token
 
-def parse_configuration():
-	pass
+# Check user configuration and update script accordingly
+# Returns true/false to enable different behavior in response to failed
+# communication.
+def configure(email):
+	r = requests.get("http://127.0.0.1:5000/plants/")
+
+	if(r.status_code != 200):
+		print("Could not retrieve user configuration.")
+		return False
+	else:
+		for entry in r.json():
+			id = entry["plant_id"]
+			if(id not in plants):
+				name = entry["plant_name"]
+				port = entry["serial_port"]
+				position = str(entry["position"])
+				plants[id] = Plant(name, id, port, position)
+				print("Added plant: " + name)
+
+	return True
 
 # Function to cleanly exit the program
 def cleanup():
@@ -100,9 +118,16 @@ def cleanup():
 def main():
 	global run_program
 
+	# Greet
+	email, token = greet_and_login()
+
 	# Set up listener for quit command
 	listener = keyboard.Listener(on_press=on_press)
 	listener.start()
+
+	# Read in user configuration - loop while not successful
+	while(not configure(email)):
+		time.sleep(5)
 
 	# TEST ADD SINGLE PLANT
 	plants[1] = Plant("Bob", 1, "/dev/ttyACM0", '1')
