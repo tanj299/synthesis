@@ -11,6 +11,12 @@
 import sys, time
 import serial
 import requests
+from pynput import keyboard
+
+# GLOBALS
+run_program=True
+plants = {}     # Addresses Plant instances by plant ID (integer)
+arduinos = {}   # Address arduinos (Serial objects) by port name (string)
 
 class Plant():
 	def __init__(self, name, id, arduino, position):
@@ -41,10 +47,17 @@ class Plant():
 		data = self.arduino.readline()
 		return data
 
+# Keyboard listener callback
+# If the user presses q, change run_program to False
+def on_press(key):
+    global run_program
 
-# Key Global Structures 
-plants = {}		# Addresses Plant instances by plant ID (integer)
-arduinos = {}	# Address arduinos (Serial objects) by port name (string)
+    if(hasattr(key,'char') and key.char == 'q'):
+        run_program = False
+        return False # Stop listener
+
+    return True # Do not stop listener
+
 
 # Function to print greeting screen, request login information and authorize 
 # (acquire API access token)
@@ -73,16 +86,20 @@ def parse_configuration():
 	pass
 
 def main():
-	# Define universal flags
-	connection_error = False
+	global run_program
+
+	# Set up listener for quit command
+	listener = keyboard.Listener(on_press=on_press)
+	listener.start()
 
 	# TEST ADD SINGLE PLANT
 	plants[1] = Plant("Bob", 1, "/dev/ttyACM0", '1')
 	
 	minute_tracker = time.time()
 	hour_tracker = time.time()
+
 	# Primary Loop:
-	while(True):
+	while(run_program):
 		# 1. Read the database control table
 		# 		If error in read, set errorDatabase, and e-mail user
 		# 		Else set command flags (Raspberry Pi)
@@ -92,11 +109,12 @@ def main():
 		# 		Etc. (Including checks that these were met - lightNow yields 
 		# 			actual light on and such)
 
+		print("test")
 		# TEST READ SINGLE INSTRUCTION
 		for plant in plants:
 			r = requests.get("http://127.0.0.1:5000/requests/" + str(plant))
 			
-			if(r.json()['make_request'] == 1):
+			if(r.json()['make_request'] == 0):
 				plants[plant].water()
 
 
@@ -116,6 +134,8 @@ def main():
 		# 		etc.
 
 		time.sleep(10)
+
+	print("Stopped")
 
 if __name__ == '__main__':
 	main()
