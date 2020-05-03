@@ -125,6 +125,37 @@ def fetch_all_plants():
         connection.close()
         cursor.close()
 
+# GET request
+# @GET: Fetch all plants from 'plants' table associated with email
+# Requires a backslash at the end to query with an email
+# Ex: janesmith@gmail.com OR janesmith%40gmail.com
+@plants_api.route('/all/<string:user_email>/', methods=['GET'])
+def fetch_all_plants_email(user_email):
+    try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+        # fetch config match user_email
+        cursor.execute(
+            "SELECT * FROM plants WHERE user_email = %s", user_email)
+
+        user = cursor.fetchall()
+        response = jsonify(user)
+        print(response)
+
+        # if user_name not found
+        if user == None:
+            print('Could not find username', user)
+            response.status_code = 404
+        else:
+            response.status_code = 200
+
+        return response
+    except:
+        print('Could not fetch user', user)
+    finally:
+        connection.close()
+        cursor.close()
 
 # GET, DELETE requests
 # A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
