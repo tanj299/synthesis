@@ -9,7 +9,8 @@ const distFolder = path.join(__dirname, '..', '..', 'dist')
 app.use(express.static(staticFolder))
 app.use(express.static(distFolder))
 
-app.use('/api', require('./api'));
+app.use('/api/plants', require('./routes/plants'));
+app.use('/api/requests', require('./routes/requests'));
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(staticFolder, 'index.html'))
