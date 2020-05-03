@@ -7,8 +7,9 @@ const BackButton = ({ history, time }) => {
         <FontAwesomeIcon icon={ faArrowCircleLeft } size='6x' 
             onClick={ () => {
                 setTimeout( () => {
-                    if(history.location.pathname.slice(1) === 'login' || history.location.pathname.slice(1) === 'register') history.push('/')
-                    else history.goBack()
+                    // if(history.location.pathname.slice(1) === 'login' || history.location.pathname.slice(1) === 'register') history.push('/')
+                    // else history.goBack()
+                    history.push('/');
                 }, time);
             }} 
             className='back'
