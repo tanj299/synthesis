@@ -88,7 +88,7 @@ def greet_and_login():
 # Returns true/false to enable different behavior in response to failed
 # communication.
 def configure(email):
-	r = requests.get("http://127.0.0.1:5000/plants/")
+	r = requests.get("http://127.0.0.1:5000/plants/all/" + email + "/")
 
 	if(r.status_code != 200):
 		print("Could not retrieve user configuration.")
@@ -111,7 +111,7 @@ def cleanup():
 
 	# Close all Serial connections
 	for arduino in arduinos:
-		arduino.close()
+		arduinos[arduino].close()
 
 	print("Please reset and unplug your arduinos!")
 
@@ -144,14 +144,13 @@ def main():
 		# 		Etc. (Including checks that these were met - lightNow yields 
 		# 			actual light on and such)
 
-		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 		for plant in plants:	
-			r = requests.get("http://127.0.0.1:5000/requests/" + str(plant) 
+			r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant) 
 				+ "/" + query_time)
 			
 			watered = False
 			for req in r.json(): 
-				if(req['make_request'] == "water" and watered == False):
+				if(req['category'] == "water" and watered == False):
 					plants[plant].water()
 					watered = True
 
