@@ -54,25 +54,19 @@ class Plant {
 class PlantRequest {
   final String plantId;
   final String timestamp;
-  final String arduino;
-  final String pin;
-  final String makeRequest;
+  final String category;
 
   PlantRequest({
     this.plantId,
     this.timestamp,
-    this.arduino,
-    this.pin,
-    this.makeRequest,
+    this.category,
   });
 
   factory PlantRequest.fromJson(Map<String, dynamic> json) {
     return PlantRequest(
       plantId: json['plant_id'],
       timestamp: json['timestamp'],
-      arduino: json['arduino'],
-      pin: json['pin'],
-      makeRequest: json['make_request'],
+      category: json['category'],
     );
   }
 }
@@ -95,8 +89,8 @@ Future<Plant> fetchPlantInfo(id) async {
 // end fetchPlantInfo
 
 // makeRequest - makes request to http://localhost:5000/requests/insert
-Future<PlantRequest> makeRequest(String plantId, String timestamp,
-    String arduino, String pin, String makeRequest) async {
+Future<PlantRequest> makeRequest(
+    String plantId, String timestamp, String category) async {
   final http.Response response = await http.post(
     'http://localhost:5000/requests/insert',
     headers: <String, String>{
@@ -105,9 +99,7 @@ Future<PlantRequest> makeRequest(String plantId, String timestamp,
     body: jsonEncode(<String, String>{
       "plant_id": plantId,
       "timestamp": timestamp,
-      "arduino": arduino,
-      "pin": pin,
-      "make_request": makeRequest
+      "category": category,
     }),
   );
   if (response.statusCode == 200) {
@@ -126,6 +118,8 @@ class _OverViewPageState extends State<OverViewPage>
     with SingleTickerProviderStateMixin {
   TabController tabController;
   Future<Plant> futurePlant;
+  Future<PlantRequest> grabPicture;
+  Future<PlantRequest> toggleLight;
   Future<PlantRequest> waterPlant;
 
   @override
@@ -185,25 +179,79 @@ class _OverViewPageState extends State<OverViewPage>
                         SizedBox(height: 20),
                         BoldText("Date created: " + snapshot.data.dateCreated,
                             20, kblack),
-                        SizedBox(height: 300),
+                        SizedBox(height: 160),
+                        (grabPicture == null)
+                            ? WideButtonBlue("Get Live Picture", () {
+                                setState(() {
+                                  grabPicture = makeRequest(
+                                      widget.plantId.toString(), "", "picture");
+                                });
+                              })
+                            : FutureBuilder<PlantRequest>(
+                                future: grabPicture,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                        "Successfully captured picture!",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.blue,
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
+                                  } else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.red,
+                                            fontSize: 30));
+                                  }
+                                  return CircularProgressIndicator();
+                                },
+                              ),
+                        SizedBox(height: 20),
+                        (toggleLight == null)
+                            ? WideButtonYellow("Turn On Light", () {
+                                setState(() {
+                                  toggleLight = makeRequest(
+                                      widget.plantId.toString(), "", "light");
+                                });
+                              })
+                            : FutureBuilder<PlantRequest>(
+                                future: toggleLight,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text("Successfully turned on light!",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.orange,
+                                            fontSize: 30));
+                                  } else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.red,
+                                            fontSize: 30));
+                                  }
+                                  return CircularProgressIndicator();
+                                },
+                              ),
+                        SizedBox(height: 20),
                         (waterPlant == null)
-                            ? WideButton("Water Plant", () {
+                            ? WideButtonGreen("Water Plant", () {
                                 setState(() {
                                   waterPlant = makeRequest(
-                                      widget.plantId.toString(),
-                                      "",
-                                      "16",
-                                      "8",
-                                      "5");
+                                      widget.plantId.toString(), "", "water");
                                 });
                               })
                             : FutureBuilder<PlantRequest>(
                                 future: waterPlant,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    return Text("Plant successfully watered!", style: TextStyle(backgroundColor: Colors.green, fontSize: 30));
+                                    return Text("Successfully watered plant!",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.green,
+                                            fontSize: 30));
                                   } else if (snapshot.hasError) {
-                                    return Text("${snapshot.error}", style: TextStyle(backgroundColor: Colors.red, fontSize: 30));
+                                    return Text("${snapshot.error}",
+                                        style: TextStyle(
+                                            backgroundColor: Colors.red,
+                                            fontSize: 30));
                                   }
                                   return CircularProgressIndicator();
                                 },
@@ -215,7 +263,9 @@ class _OverViewPageState extends State<OverViewPage>
                   }
                   // error
                   else if (snapshot.hasError) {
-                    return Text("${snapshot.error}", style: TextStyle(backgroundColor: Colors.red, fontSize: 30));
+                    return Text("${snapshot.error}",
+                        style: TextStyle(
+                            backgroundColor: Colors.red, fontSize: 30));
                   }
                   // By default, show a loading spinner.
                   return CircularProgressIndicator();

@@ -5,12 +5,12 @@ import 'TextStyles.dart';
 import 'consts.dart';
 import 'package:flutter/foundation.dart';
 
-class WideButton extends StatelessWidget {
+class WideButtonGreen extends StatelessWidget {
   final String text;
   bool isBold=false;
   final GestureTapCallback onPressed;
-  WideButton(this.text, this.onPressed);
-  WideButton.bold(this.text, this.onPressed,this.isBold);
+  WideButtonGreen(this.text, this.onPressed);
+  WideButtonGreen.bold(this.text, this.onPressed,this.isBold);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,51 @@ class WideButton extends StatelessWidget {
     ));
   }
 }
+
+class WideButtonYellow extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  WideButtonYellow(this.text, this.onPressed);
+  WideButtonYellow.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 350.0,
+      height: 50.0,
+      child: RaisedButton(
+          color: Colors.orange[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class WideButtonBlue extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  WideButtonBlue(this.text, this.onPressed);
+  WideButtonBlue.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 350.0,
+      height: 50.0,
+      child: RaisedButton(
+          color: Colors.blue[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
 class SquaredIcon extends StatelessWidget {
   final IconData icon;
   final String text;

@@ -58,7 +58,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(
                     height: 30,
                   ),
-                  WideButton.bold("Register", () {
+                  WideButtonGreen.bold("Register", () {
                     Navigator.of(context, rootNavigator: true)
                         .push(CupertinoPageRoute<bool>(
                       fullscreenDialog: true,

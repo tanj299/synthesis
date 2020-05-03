@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 speed: Duration(milliseconds: 150),
               ),
               SizedBox(height: 25),
-              WideButton.bold("Sign in", () {
+              WideButtonGreen.bold("Sign in", () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return SignInPage();
                 }));
