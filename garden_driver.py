@@ -129,11 +129,9 @@ def main():
 	while(not configure(email)):
 		time.sleep(5)
 
-	# TEST ADD SINGLE PLANT
-	plants[1] = Plant("Bob", 1, "/dev/ttyACM0", '1')
-	
 	minute_tracker = time.time()
 	hour_tracker = time.time()
+	query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 	# Primary Loop:
 	while(run_program):
@@ -146,14 +144,18 @@ def main():
 		# 		Etc. (Including checks that these were met - lightNow yields 
 		# 			actual light on and such)
 
-		print("test")
-		# TEST READ SINGLE INSTRUCTION
-		for plant in plants:
-			r = requests.get("http://127.0.0.1:5000/requests/" + str(plant))
+		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+		for plant in plants:	
+			r = requests.get("http://127.0.0.1:5000/requests/" + str(plant) 
+				+ "/" + query_time)
 			
-			if(r.json()['make_request'] == 0):
-				plants[plant].water()
+			watered = False
+			for req in r.json(): 
+				if(req['make_request'] == "water" and watered == False):
+					plants[plant].water()
+					watered = True
 
+		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 		# 3. Data logging:
 		# 		If greater than 60 seconds - collect value (may want to poll 
