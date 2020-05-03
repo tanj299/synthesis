@@ -201,7 +201,8 @@ class _OverViewPageState extends State<OverViewPage>
                                     return Text("${snapshot.error}",
                                         style: TextStyle(
                                             backgroundColor: Colors.red,
-                                            fontSize: 30));
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
                                   }
                                   return CircularProgressIndicator();
                                 },
@@ -221,12 +222,14 @@ class _OverViewPageState extends State<OverViewPage>
                                     return Text("Successfully turned on light!",
                                         style: TextStyle(
                                             backgroundColor: Colors.orange,
-                                            fontSize: 30));
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
                                   } else if (snapshot.hasError) {
                                     return Text("${snapshot.error}",
                                         style: TextStyle(
                                             backgroundColor: Colors.red,
-                                            fontSize: 30));
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
                                   }
                                   return CircularProgressIndicator();
                                 },
@@ -246,12 +249,14 @@ class _OverViewPageState extends State<OverViewPage>
                                     return Text("Successfully watered plant!",
                                         style: TextStyle(
                                             backgroundColor: Colors.green,
-                                            fontSize: 30));
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
                                   } else if (snapshot.hasError) {
                                     return Text("${snapshot.error}",
                                         style: TextStyle(
                                             backgroundColor: Colors.red,
-                                            fontSize: 30));
+                                            fontSize: 30),
+                                        textAlign: TextAlign.center);
                                   }
                                   return CircularProgressIndicator();
                                 },
