@@ -151,6 +151,7 @@ Format:<br/>
 ### DEPLOYMENT
 **05/04/2020 - Deployed using AWS Elastic Beanstalk**<br/>
 **URL: http://backend-dev222222.us-east-1.elasticbeanstalk.com/**
+- [Ref]https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80)
 
 - Deployed using the following resources (Note: configure beforehand):
     - AWS Elastic Beanstalk
