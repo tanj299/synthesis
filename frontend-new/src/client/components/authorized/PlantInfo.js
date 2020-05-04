@@ -7,6 +7,9 @@ class PlantInfo extends Component {
         this.state = {
             plant: {}
         };
+        this.waterPlant = this.waterPlant.bind(this);
+        this.toggleLight = this.toggleLight.bind(this);
+        this.showCamera = this.showCamera.bind(this);
     }
 
     async componentDidMount() {
@@ -15,8 +18,28 @@ class PlantInfo extends Component {
         this.setState({ plant: plant });
     }
 
+    async waterPlant(ev) {
+        ev.preventDefault();
+        await axios.post('/api/requests', { });
+        this.props.close();
+    };
+
+    async toggleLight(ev) {
+        ev.preventDefault();
+        await axios.post('/api/requests', { });
+        this.props.close();
+    };
+
+    async showCamera(ev) {
+        ev.preventDefault();
+        await axios.post('/api/requests', { });
+        this.props.close();
+    };
+
     render() {
         const { plant } = this.state;
+        const { close, remove } = this.props;
+        const { waterPlant, toggleLight, showCamera } = this;
         return (
             <div id='more-information'>
                 <div id='plant-left'>
@@ -26,18 +49,22 @@ class PlantInfo extends Component {
                     </div>
                 </div>
                 <div id='remove'>
-                    <button>Delete Plant</button>
+                    <button onClick={ () => {
+                            remove(plant);
+                            close();
+                        }
+                    }>Delete Plant</button>
                 </div>
                 <div id='plant-controls'>
-                    <button>Water</button>
-                    <br/>
-                    <button>Fan</button>
-                    <br/>
-                    <button>Camera</button>
-                    <br/>
-                    <button>Water threshold</button><input type='number' />
-                    <br/>
-                    <button>Light threshold</button><input type='number' />
+                    <form onSubmit={ toggleLight }>
+                        <button>Light</button>
+                    </form>
+                    <form onSubmit={ showCamera }>
+                        <button>Camera</button>
+                    </form>
+                    <form onSubmit={ waterPlant }>
+                        <input type='number' placeholder='Water threshold' /><button>Water</button>
+                    </form>
                 </div>
             </div>
         );
