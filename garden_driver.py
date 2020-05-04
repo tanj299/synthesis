@@ -26,10 +26,20 @@ class Plant():
 		if(arduino in arduinos):
 			self.arduino = arduinos[arduino]
 		else:
-			arduinos[arduino] = serial.Serial(arduino, timeout=10)
+			arduinos[arduino] = serial.Serial(arduino, timeout=5)
 			self.arduino = arduinos[arduino]
 
 		self.position = position
+
+		# Data
+		# Lists are used for averaging values taken over the previous hour
+		self.light_level = []
+		self.temperature = []
+		self.humidity = []
+		self.soil_temperature = []
+		self.soil_moisture = []
+		self.water_level = True # True = sufficient water
+		self.light_on = False
 
 		# Initialize soil temp sensor
 		if(self.position == '1'):
@@ -43,9 +53,25 @@ class Plant():
 		self.arduino.write(b'9')
 
 	def get_info(self):
+		# Send position (1 or 2) to request information for respective position
 		self.arduino.write(self.position.encode(encoding="ascii"))
+
+		# Read and decode response
 		data = self.arduino.readline()
-		return data
+		data = data.decode("ascii")
+
+		# If data received, update attributes and return True, else return False
+		data = data.rstrip('\r\n').split(',')
+		if(len(data) == 5):
+			self.temperature.append(data[0])
+			self.humidity.append(data[1])
+			self.light_level.append(data[2])
+			self.soil_moisture.append(data[3])
+			self.soil_temperature.append(data[4]
+			return True
+
+		return False
+
 
 # Keyboard listener callback
 # If the user presses q, change run_program to False
@@ -157,12 +183,17 @@ def main():
 		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 		# 3. Data logging:
-		# 		If greater than 60 seconds - collect value (may want to poll 
-		# 			now, get value on next loop)
-		# 		If greater than 60 minutes - write average to database
+		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
+			for plant in plants:
+				if(not plant.get_info()):
+					if(not plant.get_info()):
+						print("Could not retrieve information for plant: ",
+							plant.name) 
+
 			minute_tracker = time.time()
 
+		# If greater than 60 minutes - write average to database
 		if(time.time() - hour_tracker >= 3600):
 			hour_tracker = time.time()
 		
