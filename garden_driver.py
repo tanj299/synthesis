@@ -33,11 +33,8 @@ class Plant():
 
 		# Data
 		# Lists are used for averaging values taken over the previous hour
-		self.light_level = []
-		self.temperature = []
-		self.humidity = []
-		self.soil_temperature = []
-		self.soil_moisture = []
+		self.data_dict = {'temperature': [], 'humidity': [], 'light': [],
+			'soil_moisture': [], 'soil_temperature': []}
 		self.water_level = True # True = sufficient water
 		self.light_on = False
 
@@ -63,15 +60,23 @@ class Plant():
 		# If data received, update attributes and return True, else return False
 		data = data.rstrip('\r\n').split(',')
 		if(len(data) == 5):
-			self.temperature.append(data[0])
-			self.humidity.append(data[1])
-			self.light_level.append(data[2])
-			self.soil_moisture.append(data[3])
-			self.soil_temperature.append(data[4]
+			self.data_dict['temperature'].append(data[0])
+			self.data_dict['humidity'].append(data[1])
+			self.data_dict['light_level'].append(data[2])
+			self.data_dict['soil_moisture'].append(data[3])
+			self.data_dict['soil_temperature'].append(data[4])
 			return True
 
 		return False
 
+	# Function to average out existing data and empty data lists
+	# Returns a dictionary mapping each data category to an integer value
+	def get_averages(self):
+		averages = {}
+		for key in self.data_dict:
+			averages[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
+			self.data_dict[key].clear()
+		return averages
 
 # Keyboard listener callback
 # If the user presses q, change run_program to False
@@ -93,7 +98,7 @@ def greet_and_login():
 	blank = ' ' * 30
 	print(line, line, '\n', blank, 'Welcome to SYNTHESIS', blank, '\n\n', line,
 		line, 'Created by Leo Au-Yeung, Stanley Lim, Daniel Mallia and Jayson',
-			'Tan\nHunter College, Spring 2020\n\n', sep ='')
+			' Tan\nHunter College, Spring 2020\n\n', sep ='')
 
 	# Check library versions:
 	print("Python version: ", sys.version)
@@ -195,6 +200,9 @@ def main():
 
 		# If greater than 60 minutes - write average to database
 		if(time.time() - hour_tracker >= 3600):
+			for plant in plants:
+				data = plant.get_averages()
+
 			hour_tracker = time.time()
 		
 		# 4. Process automated aspects:
