@@ -20,7 +20,7 @@ requests_api = Blueprint('requests_api', __name__)
 # Otherwise, this is just a cleaner version of the same function 
 def convert_time_format(date):
     date_parse = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
-    date_converted = datetime.strftime(dateT, "%Y-%m-%d+%H%%3A%M%%3A%S")
+    date_converted = datetime.strftime(date_parse, "%Y-%m-%d+%H%%3A%M%%3A%S")
     return date_converted
 
 @requests_api.route('/')
