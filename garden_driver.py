@@ -33,8 +33,8 @@ class Plant():
 
 		# Data
 		# Lists are used for averaging values taken over the previous hour
-		self.data_dict = {'temperature': [], 'humidity': [], 'light': [],
-			'soil_moisture': [], 'soil_temperature': []}
+		self.data_dict = {'temp': [], 'humidity': [], 'light': [],
+			'soil_moisture': [], 'soil_temp': []}
 		self.water_level = True # True = sufficient water
 		self.light_on = False
 
@@ -60,23 +60,29 @@ class Plant():
 		# If data received, update attributes and return True, else return False
 		data = data.rstrip('\r\n').split(',')
 		if(len(data) == 5):
-			self.data_dict['temperature'].append(data[0])
+			self.data_dict['temp'].append(data[0])
 			self.data_dict['humidity'].append(data[1])
-			self.data_dict['light_level'].append(data[2])
+			self.data_dict['light'].append(data[2])
 			self.data_dict['soil_moisture'].append(data[3])
-			self.data_dict['soil_temperature'].append(data[4])
+			self.data_dict['soil_temp'].append(data[4])
 			return True
 
 		return False
 
-	# Function to average out existing data and empty data lists
-	# Returns a dictionary mapping each data category to an integer value
-	def get_averages(self):
-		averages = {}
+	# Function to average out existing data, empty data lists, and prepare a report
+	# Returns a dictionary ready for posting as a log
+	def get_report(self):
+		data = {
+			'plant_id': self.id,
+			'timestamp': "",
+			'water_level': self.water_level,
+			'light_status': self.light_on
+		}
+
 		for key in self.data_dict:
-			averages[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
+			data[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
 			self.data_dict[key].clear()
-		return averages
+		return data
 
 # Keyboard listener callback
 # If the user presses q, change run_program to False
@@ -201,7 +207,8 @@ def main():
 		# If greater than 60 minutes - write average to database
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
-				data = plant.get_averages()
+				data = plant.get_report()
+				r = requests.post("http://127.0.0.1:5000/logs/insert", json=data)
 
 			hour_tracker = time.time()
 		
