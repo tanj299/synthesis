@@ -28,14 +28,15 @@ class Plant():
 		else:
 			arduinos[arduino] = serial.Serial(arduino, timeout=5)
 			self.arduino = arduinos[arduino]
+			time.sleep(10)
 
 		self.position = position
 
 		# Data
 		# Lists are used for averaging values taken over the previous hour
-		self.data_dict = {'temperature': [], 'humidity': [], 'light': [],
-			'soil_moisture': [], 'soil_temperature': []}
-		self.water_level = True # True = sufficient water
+		self.data_dict = {'temp': [], 'humidity': [], 'light': [],
+			'soil_moisture': [], 'soil_temp': []}
+		self.water_level = False # True = sufficient water
 		self.light_on = False
 
 		# Initialize soil temp sensor
@@ -44,10 +45,28 @@ class Plant():
 		else:
 			self.arduino.write(b'5')
 
+		response = self.arduino.readline()
+		response = response.decode("ascii").rstrip('\r\n')
+		if(response == "" or response == "1"):
+			print("Could not set up soil temperature sensor for plant: ",
+				self.name)
+
+		# Check water level
+		self.check_water_level()
+
 	def water(self):
 		self.arduino.write(b'8')
 		time.sleep(5)
 		self.arduino.write(b'9')
+
+	def check_water_level(self):
+		self.arduino.write(b'3')
+		response = self.arduino.readline()
+		response = response.decode("ascii").rstrip('\r\n')
+		if(response == "" or response == "1"):
+			self.water_level = False
+		elif(response == "0"):
+			self.water_level = True
 
 	def get_info(self):
 		# Send position (1 or 2) to request information for respective position
@@ -60,23 +79,31 @@ class Plant():
 		# If data received, update attributes and return True, else return False
 		data = data.rstrip('\r\n').split(',')
 		if(len(data) == 5):
-			self.data_dict['temperature'].append(data[0])
-			self.data_dict['humidity'].append(data[1])
-			self.data_dict['light_level'].append(data[2])
-			self.data_dict['soil_moisture'].append(data[3])
-			self.data_dict['soil_temperature'].append(data[4])
+			self.data_dict['temp'].append(int(data[0]))
+			self.data_dict['humidity'].append(int(data[1]))
+			self.data_dict['light'].append(int(data[2]))
+			self.data_dict['soil_moisture'].append(int(data[3]))
+			self.data_dict['soil_temp'].append(int(data[4]))
 			return True
 
 		return False
 
-	# Function to average out existing data and empty data lists
-	# Returns a dictionary mapping each data category to an integer value
-	def get_averages(self):
-		averages = {}
+	# Function to average out existing data, empty data lists, and prepare a report
+	# Returns a dictionary ready for posting as a log
+	def get_report(self):
+		self.check_water_level()
+
+		data = {
+			'plant_id': self.id,
+			'timestamp': "",
+			'water_level': self.water_level,
+			'light_status': self.light_on
+		}
+
 		for key in self.data_dict:
-			averages[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
+			data[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
 			self.data_dict[key].clear()
-		return averages
+		return data
 
 # Keyboard listener callback
 # If the user presses q, change run_program to False
@@ -162,55 +189,65 @@ def main():
 
 	minute_tracker = time.time()
 	hour_tracker = time.time()
+	query_tracker = time.time()
 	query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 	# Primary Loop:
 	while(run_program):
-		# 1. Read the database control table
-		# 		If error in read, set errorDatabase, and e-mail user
-		# 		Else set command flags (Raspberry Pi)
-		# 2. Process command flags
-		# 		If dataNow - write average of existing saved values to table
-		# 		If lightNow - turn on light
-		# 		Etc. (Including checks that these were met - lightNow yields 
-		# 			actual light on and such)
+		# 1. Commands:
+		# If greater than 120 seconds (2 minutes) - check for commands
+		if(time.time() - query_tracker >= 120):
+			for plant in plants:
+				r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant)
+					+ "/" + query_time)
 
-		for plant in plants:	
-			r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant) 
-				+ "/" + query_time)
-			
-			watered = False
-			for req in r.json(): 
-				if(req['category'] == "water" and watered == False):
-					plants[plant].water()
-					watered = True
+				if(r.status_code != 200):
+					print("Could not retrieve requests for plant: ", plants[plant].name)
+				else:
+					watered = False
+					for req in r.json():
+						if(req['category'] == "water" and watered == False):
+							plants[plant].check_water_level()
 
-		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+							if(plants[plant].water_level):
+								plants[plant].water()
+							else:
+								print("Could not water plant: ", plants[plant].name)
+								# Email user
 
-		# 3. Data logging:
+							watered = True
+
+			query_tracker = time.time()
+			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+
+		# 2. Data logging:
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
-				if(not plant.get_info()):
-					if(not plant.get_info()):
+				if(not plants[plant].get_info()):
+					if(not plants[plant].get_info()):
 						print("Could not retrieve information for plant: ",
-							plant.name) 
+							plants[plant].name)
 
 			minute_tracker = time.time()
 
 		# If greater than 60 minutes - write average to database
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
-				data = plant.get_averages()
+				data = plants[plant].get_report()
+				r = requests.post("http://127.0.0.1:5000/logs/insert", json=data)
+
+				if(r.status_code != 200):
+					print("Could not log data for plant: ", plants[plant].name)
 
 			hour_tracker = time.time()
 		
-		# 4. Process automated aspects:
+		# 3. Process automated aspects:
 		# 		Water if low moisture
 		# 		Light if low light (and not night time)
 		# 		etc.
 
-		time.sleep(10)
+		#time.sleep(10)
 
 	cleanup()
 
