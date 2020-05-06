@@ -3,7 +3,7 @@
 # Authors: Daniel Mallia and Jayson Tan
 # Date Begun: 3/14/2020
 
-self.water_level# This is the Python script intended to run on a Raspberry Pi and serve as
+# This is the Python script intended to run on a Raspberry Pi and serve as
 # the guiding "brain" of a synthesis garden's operation. It is called 
 # garden_driver for this reason as well as because it acts as a software 
 # driver, communicating with the actual hardware components.
@@ -28,7 +28,7 @@ class Plant():
 		else:
 			arduinos[arduino] = serial.Serial(arduino, timeout=5)
 			self.arduino = arduinos[arduino]
-			time.sleep(0.1)
+			time.sleep(10)
 
 		self.position = position
 
@@ -44,6 +44,12 @@ class Plant():
 			self.arduino.write(b'4')
 		else:
 			self.arduino.write(b'5')
+
+		response = self.arduino.readline()
+		response = response.decode("ascii").rstrip('\r\n')
+		if(response == "" or response == "1"):
+			print("Could not set up soil temperature sensor for plant: ",
+				self.name)
 
 		# Check water level
 		self.check_water_level()
@@ -73,11 +79,11 @@ class Plant():
 		# If data received, update attributes and return True, else return False
 		data = data.rstrip('\r\n').split(',')
 		if(len(data) == 5):
-			self.data_dict['temp'].append(data[0])
-			self.data_dict['humidity'].append(data[1])
-			self.data_dict['light'].append(data[2])
-			self.data_dict['soil_moisture'].append(data[3])
-			self.data_dict['soil_temp'].append(data[4])
+			self.data_dict['temp'].append(int(data[0]))
+			self.data_dict['humidity'].append(int(data[1]))
+			self.data_dict['light'].append(int(data[2]))
+			self.data_dict['soil_moisture'].append(int(data[3]))
+			self.data_dict['soil_temp'].append(int(data[4]))
 			return True
 
 		return False
@@ -194,38 +200,45 @@ def main():
 			for plant in plants:
 				r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant)
 					+ "/" + query_time)
-			
-				watered = False
-				for req in r.json():
-					if(req['category'] == "water" and watered == False):
-						plants[plant].check_water_level()
 
-						if(plants[plant].water_level):
-							plants[plant].water()
-						else:
-							print("Could not water plant: " plant.id)
-							# Email user
+				if(r.status_code != 200):
+					print("Could not retrieve requests for plant: ", plants[plant].name)
+				else:
+					watered = False
+					for req in r.json():
+						if(req['category'] == "water" and watered == False):
+							plants[plant].check_water_level()
 
-						watered = True
+							if(plants[plant].water_level):
+								plants[plant].water()
+							else:
+								print("Could not water plant: ", plants[plant].name)
+								# Email user
 
-		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+							watered = True
+
+			query_tracker = time.time()
+			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 		# 2. Data logging:
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
-				if(not plant.get_info()):
-					if(not plant.get_info()):
+				if(not plants[plant].get_info()):
+					if(not plants[plant].get_info()):
 						print("Could not retrieve information for plant: ",
-							plant.name) 
+							plants[plant].name)
 
 			minute_tracker = time.time()
 
 		# If greater than 60 minutes - write average to database
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
-				data = plant.get_report()
+				data = plants[plant].get_report()
 				r = requests.post("http://127.0.0.1:5000/logs/insert", json=data)
+
+				if(r.status_code != 200):
+					print("Could not log data for plant: ", plants[plant].name)
 
 			hour_tracker = time.time()
 		
