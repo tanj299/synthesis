@@ -3,7 +3,7 @@
 # Authors: Daniel Mallia and Jayson Tan
 # Date Begun: 3/14/2020
 
-# This is the Python script intended to run on a Raspberry Pi and serve as
+self.water_level# This is the Python script intended to run on a Raspberry Pi and serve as
 # the guiding "brain" of a synthesis garden's operation. It is called 
 # garden_driver for this reason as well as because it acts as a software 
 # driver, communicating with the actual hardware components.
@@ -28,6 +28,7 @@ class Plant():
 		else:
 			arduinos[arduino] = serial.Serial(arduino, timeout=5)
 			self.arduino = arduinos[arduino]
+			time.sleep(0.1)
 
 		self.position = position
 
@@ -35,7 +36,7 @@ class Plant():
 		# Lists are used for averaging values taken over the previous hour
 		self.data_dict = {'temp': [], 'humidity': [], 'light': [],
 			'soil_moisture': [], 'soil_temp': []}
-		self.water_level = True # True = sufficient water
+		self.water_level = False # True = sufficient water
 		self.light_on = False
 
 		# Initialize soil temp sensor
@@ -44,10 +45,22 @@ class Plant():
 		else:
 			self.arduino.write(b'5')
 
+		# Check water level
+		self.check_water_level()
+
 	def water(self):
 		self.arduino.write(b'8')
 		time.sleep(5)
 		self.arduino.write(b'9')
+
+	def check_water_level(self):
+		self.arduino.write(b'3')
+		response = self.arduino.readline()
+		response = response.decode("ascii").rstrip('\r\n')
+		if(response == "" or response == "1"):
+			self.water_level = False
+		elif(response == "0"):
+			self.water_level = True
 
 	def get_info(self):
 		# Send position (1 or 2) to request information for respective position
@@ -72,6 +85,8 @@ class Plant():
 	# Function to average out existing data, empty data lists, and prepare a report
 	# Returns a dictionary ready for posting as a log
 	def get_report(self):
+		self.check_water_level()
+
 		data = {
 			'plant_id': self.id,
 			'timestamp': "",
@@ -183,7 +198,14 @@ def main():
 				watered = False
 				for req in r.json():
 					if(req['category'] == "water" and watered == False):
-						plants[plant].water()
+						plants[plant].check_water_level()
+
+						if(plants[plant].water_level):
+							plants[plant].water()
+						else:
+							print("Could not water plant: " plant.id)
+							# Email user
+
 						watered = True
 
 		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
