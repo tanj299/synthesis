@@ -85,28 +85,38 @@ def post_latest():
         connection.close()
         cursor.close()
 
+
 # GET request
-# @GET: Fetch latest request submitted from a user
-@requests_api.route('/<int:id>', methods=['GET'])
-def get_latest(id):
-    try: 
-        connection = mysql.connect() 
+# @GET: Fetch all records from a user after a sent timestamp
+@requests_api.route('/all/<int:id>/<string:time>', methods=['GET'])
+def get_latest_time(id, time):
+    try:
+
+        # POSTMAN requirements:
+        '''
+        GET Request: The `time` argument must be converted from a string to a formatted time string to be queried
+        Datetime object format: '2020-04-30 04:10:38'
+        Formatted to: '2020-04-30+04%3A10%3A38'
+        For all colons (:) in string, it must be replaced with: %3A 
+        For all whitespace in string, it must be replaced with: +
+        Above is a custom Python function, def convert_time_format(date), which takes in a datetime object 
+        And returns an appropriate string for querying; however, this must be done on client-side
+        '''
+
+        connection = mysql.connect()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
 
-        # Query reads as follows:
-        # Select all columns from requests where we alias the table as t1, such that (the WHERE clause) the t1's timestamp is equal to
-        #   the max timestamp from requests aliased by table, t2, having plant_id matching the queried id 
-        cursor.execute("SELECT t1.* FROM make_requests AS t1 WHERE t1.timestamp = (SELECT MAX(t2.timestamp) FROM make_requests AS t2 WHERE t2.plant_id = t1.plant_id) HAVING plant_id = %s", id)
-        single_request = cursor.fetchone()
-        response = jsonify(single_request)
-        response.status_code = 200
-        return response 
+        cursor.execute(
+            "SELECT * FROM make_requests WHERE plant_id = %s AND timestamp >= %s", (id, time))
+        rows = cursor.fetchall()
+        response = jsonify(rows)
+        return response
     except:
-        print('Could not FETCH request id')
-        return('Could not FETCH request id')
-    finally: 
+        print('Could not FETCH request id or timestamp')
+    finally:
         connection.close()
         cursor.close()
+
 
 # HTTP response with 404 error
 @requests_api.errorhandler(404)

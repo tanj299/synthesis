@@ -160,7 +160,7 @@ Format:<br/>
 
 - For Flask app, we are using Elastic Beanstalk for deployment
 - Set up an IAM user and grant it AdministratorAccess
-- In your Flask app root director (`/backend` for us), source your Python environment
+- In your Flask app root directory (`/backend` for us), source your Python environment
 - Install AWS EB using: `pip install awscli`
 - Initiate your application to verify credentials using: `eb init`
 - Configure settings and step through instructions
