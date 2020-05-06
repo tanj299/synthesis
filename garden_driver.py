@@ -168,32 +168,27 @@ def main():
 
 	minute_tracker = time.time()
 	hour_tracker = time.time()
+	query_tracker = time.time()
 	query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
 	# Primary Loop:
 	while(run_program):
-		# 1. Read the database control table
-		# 		If error in read, set errorDatabase, and e-mail user
-		# 		Else set command flags (Raspberry Pi)
-		# 2. Process command flags
-		# 		If dataNow - write average of existing saved values to table
-		# 		If lightNow - turn on light
-		# 		Etc. (Including checks that these were met - lightNow yields 
-		# 			actual light on and such)
-
-		for plant in plants:	
-			r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant) 
-				+ "/" + query_time)
+		# 1. Commands:
+		# If greater than 120 seconds (2 minutes) - check for commands
+		if(time.time() - query_tracker >= 120):
+			for plant in plants:
+				r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant)
+					+ "/" + query_time)
 			
-			watered = False
-			for req in r.json(): 
-				if(req['category'] == "water" and watered == False):
-					plants[plant].water()
-					watered = True
+				watered = False
+				for req in r.json():
+					if(req['category'] == "water" and watered == False):
+						plants[plant].water()
+						watered = True
 
 		query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
-		# 3. Data logging:
+		# 2. Data logging:
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
@@ -212,12 +207,12 @@ def main():
 
 			hour_tracker = time.time()
 		
-		# 4. Process automated aspects:
+		# 3. Process automated aspects:
 		# 		Water if low moisture
 		# 		Light if low light (and not night time)
 		# 		etc.
 
-		time.sleep(10)
+		#time.sleep(10)
 
 	cleanup()
 
