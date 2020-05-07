@@ -26,7 +26,13 @@ class Plant():
 		if(arduino in arduinos):
 			self.arduino = arduinos[arduino]
 		else:
-			arduinos[arduino] = serial.Serial(arduino, timeout=5)
+			try:
+				arduinos[arduino] = serial.Serial(arduino, timeout=5)
+			except serial.SerialException:
+				print("Could not establish connection on port: ", arduino)
+				print("Please check that the port name is correct and the ",
+					"port is otherwise not in use.")
+				sys.exit()
 			self.arduino = arduinos[arduino]
 			time.sleep(10)
 
