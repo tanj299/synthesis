@@ -21,6 +21,13 @@ from flask import jsonify, Flask, request, Blueprint, json
 
 plants_api = Blueprint('plants_api', __name__)
 
+# Split useremail at the '@' symbol 
+# Ex: janesmith@gmail.com -> janesmith
+def email_to_uri(email):
+    name = email.split("@")[0]
+    uri = 'https://elasticbeanstalk-us-east-1-813224974598.s3.amazonaws.com/photos/' + name +'.png'
+    return uri
+
 # Index route for 'plants'
 # route() is a decorator which takes the function plant_index() as an argument
 # For instance, this function translates to:
@@ -40,13 +47,15 @@ def add_plant():
     user_email = request.json['user_email']
     plant_name = request.json['plant_name']
     species = request.json['species']
-    uri = request.json['uri']
     curr_photo = request.json['curr_photo']
     serial_port = request.json['serial_port']
     position = request.json['position']
     water_threshold = request.json['water_threshold']
     light_threshold = request.json['light_threshold']
 
+    # Reformat the user email to the photo uri
+    uri = email_to_uri(user_email)
+    
     # POSTMAN requirements:
     '''
     HEADERS: Key: Content-Type, Value: application/json
@@ -59,7 +68,7 @@ def add_plant():
         "user_email": "bobbylee@gmail.com",
         "plant_name": "bobby",
         "species": "orchid",
-        "uri": "http://sampleokay.com",
+        "uri": "https://elasticbeanstalk-us-east-1-813224974598.s3.amazonaws.com/photos/janesmith.png"
         "curr_photo": 99, 
         "water_threshold": 50, 
         "light_threshold": 50
@@ -236,12 +245,13 @@ def update_plant(id):
         user_email = request.json['user_email']
         plant_name = request.json['plant_name']
         species = request.json['species']
-        uri = request.json['uri']
         curr_photo = request.json['curr_photo']
         serial_port = request.json['serial_port']
         position = request.json['position']
         water_threshold = request.json['water_threshold']
         light_threshold = request.json['light_threshold']
+
+        uri = email_to_uri(user_email)
 
         data = {"user_email": user_email,
                 "plant_name": plant_name,
