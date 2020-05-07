@@ -47,7 +47,7 @@ class Plants extends Component {
                 <div id='all-plants'>
                     <div className='backbuttons'>
                         <BackButton history={history} />
-                        {/* <Popup modal trigger={
+                        <Popup modal trigger={
                                 <button className='add'>Add new plant</button>
                             }>
                             {close => {
@@ -67,7 +67,7 @@ class Plants extends Component {
                                 </form> 
                             </div>
                             }}
-                        </Popup> */}
+                        </Popup>
                     </div>
                     <div>
                     {
