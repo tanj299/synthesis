@@ -12,12 +12,16 @@ import sys, time
 import serial
 import requests
 from pynput import keyboard
+from picamera import PiCamera
+from io import BytesIO
+from PIL import Image
 
 # GLOBALS
 run_program=True
 plants = {}     # Addresses Plant instances by plant ID (integer)
 arduinos = {}   # Address arduinos (Serial objects) by port name (string)
 HOST = "http://127.0.0.1:5000/"
+camera = PiCamera()
 
 class Plant():
 	def __init__(self, name, id, arduino, position):
@@ -33,7 +37,7 @@ class Plant():
 				print("Could not establish connection on port: ", arduino)
 				print("Please check that the port name is correct and the ",
 					"port is otherwise not in use.")
-				sys.exit()
+				cleanup()
 			self.arduino = arduinos[arduino]
 			time.sleep(10)
 
@@ -191,7 +195,11 @@ def cleanup():
 	for arduino in arduinos:
 		arduinos[arduino].close()
 
+	# Camera
+	camera.close()
+
 	print("Please reset and unplug your arduinos!")
+	sys.exit()
 
 def main():
 	global run_program
@@ -230,7 +238,7 @@ def main():
 					# Only water once per batch of commands.
 					watered = False
 					for req in r.json():
-						if(req['category'] == "water" and watered == False):
+						if(req['category'] == "water" and watered == False): # WATER
 							plants[plant].check_water_level()
 
 							if(plants[plant].water_level):
@@ -240,9 +248,14 @@ def main():
 								# Email user
 
 							watered = True
-
-						elif(req['category'] == "light"):
+						elif(req['category'] == "light"): # LIGHT
 							plants[plant].toggle_light()
+						elif(req['category'] == "picture"): # PICTURE
+							stream = BytesIO()
+							camera.capture(stream, format="png")
+							stream.seek(0)
+							image = Image.open(stream)
+							# TRANSMIT PHOTO
 
 			query_tracker = time.time()
 			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
