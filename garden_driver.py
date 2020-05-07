@@ -17,6 +17,7 @@ from pynput import keyboard
 run_program=True
 plants = {}     # Addresses Plant instances by plant ID (integer)
 arduinos = {}   # Address arduinos (Serial objects) by port name (string)
+HOST = "http://127.0.0.1:5000/"
 
 class Plant():
 	def __init__(self, name, id, arduino, position):
@@ -165,7 +166,7 @@ def greet_and_login():
 # Returns true/false to enable different behavior in response to failed
 # communication.
 def configure(email):
-	r = requests.get("http://127.0.0.1:5000/plants/all/" + email + "/")
+	r = requests.get(HOST + "plants/all/" + email + "/")
 
 	if(r.status_code != 200):
 		print("Could not retrieve user configuration.")
@@ -219,7 +220,7 @@ def main():
 			# For every plant...
 			for plant in plants:
 				# Check commands...
-				r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant)
+				r = requests.get(HOST + "requests/all/" + str(plant)
 					+ "/" + query_time)
 
 				if(r.status_code != 200):
@@ -261,7 +262,7 @@ def main():
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
 				data = plants[plant].get_report()
-				r = requests.post("http://127.0.0.1:5000/logs/insert", json=data)
+				r = requests.post(HOST + "logs/insert", json=data)
 
 				if(r.status_code != 200):
 					print("Could not log data for plant: ", plants[plant].name)
