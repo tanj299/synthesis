@@ -18,7 +18,7 @@ class Nav_ extends Component {
                     <div className="buttons">
                         <div>
                             <a onClick={ () => {
-                                    this.setState({clicked: true });
+                                    // this.setState({clicked: true });
                                 }} 
                                 className={clicked ? 'text-blur-out home' : 'home'} to='/'>
                                 <span>HOMEPAGE</span>
