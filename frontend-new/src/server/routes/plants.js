@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 
 
-const API = 'http://127.0.0.1:5000/plants';
+const API = 'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants';
 
 
 // mounted on /api/plants
