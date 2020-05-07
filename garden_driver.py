@@ -14,14 +14,14 @@ import requests
 from pynput import keyboard
 from picamera import PiCamera
 from io import BytesIO
-from PIL import Image
+import boto3
 
 # GLOBALS
 run_program=True
 plants = {}     # Addresses Plant instances by plant ID (integer)
 arduinos = {}   # Address arduinos (Serial objects) by port name (string)
 HOST = "http://127.0.0.1:5000/"
-camera = PiCamera()
+BUCKET = "elasticbeanstalk-us-east-1-813224974598"
 
 class Plant():
 	def __init__(self, name, id, arduino, position):
@@ -195,9 +195,6 @@ def cleanup():
 	for arduino in arduinos:
 		arduinos[arduino].close()
 
-	# Camera
-	camera.close()
-
 	print("Please reset and unplug your arduinos!")
 	sys.exit()
 
@@ -206,6 +203,10 @@ def main():
 
 	# Greet
 	email, token = greet_and_login()
+
+	# S3
+	s3 = boto3.resource('s3')
+	filename = "photos/" + email.split('@')[0] + ".png"
 
 	# Set up listener for quit command
 	listener = keyboard.Listener(on_press=on_press)
@@ -251,11 +252,11 @@ def main():
 						elif(req['category'] == "light"): # LIGHT
 							plants[plant].toggle_light()
 						elif(req['category'] == "picture"): # PICTURE
-							stream = BytesIO()
-							camera.capture(stream, format="png")
-							stream.seek(0)
-							image = Image.open(stream)
-							# TRANSMIT PHOTO
+							with PiCamera() as camera:
+								stream = BytesIO()
+								camera.capture(stream, format="png")
+								stream.seek(0)
+								s3.Bucket(BUCKET).put_object(Key=filename, Body=stream)
 
 			query_tracker = time.time()
 			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
