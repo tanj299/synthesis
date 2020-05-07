@@ -20,18 +20,21 @@ class PlantInfo extends Component {
 
     async waterPlant(ev) {
         ev.preventDefault();
-        await axios.post('/api/requests', { });
+        const { plant_id } = this.state.plant;
+        await axios.post(`/api/requests/insert`, { plant_id, category: "water", timestamp: "" });
         this.props.close();
     };
 
     async toggleLight(ev) {
         ev.preventDefault();
+        const { plant_id } = this.state.plant;
         await axios.post('/api/requests', { });
         this.props.close();
     };
 
     async showCamera(ev) {
         ev.preventDefault();
+        const { plant_id } = this.state.plant;
         await axios.post('/api/requests', { });
         this.props.close();
     };

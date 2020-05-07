@@ -16,9 +16,11 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.post('/insert/category', async (req, res, next) => {
+router.post('/insert', async (req, res, next) => {
+    const { plant_id, category } = req.body;
     try {
-        console.log(req.body);
+        const plant = (await axios.post(`${API}/insert`, { plant_id, category, timestamp: "" })).data;
+        res.send(plant);
     } catch(err) {
         console.log(err);
     }
