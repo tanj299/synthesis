@@ -74,6 +74,19 @@ class Plant():
 		elif(response == "0"):
 			self.water_level = True
 
+	def toggle_light(self):
+		if(self.light_on): # Turn off light
+			self.arduino.write(b'7')
+			self.light_on = False
+		else: # Turn on light
+			self.arduino.write(b'6')
+			self.light_on = True
+
+		# Update neighbor plant (same arduino) status
+		for plant in plants:
+			if(plants[plant].arduino == self.arduino):
+				plants[plant].light_on = self.light_on
+
 	def get_info(self):
 		# Send position (1 or 2) to request information for respective position
 		self.arduino.write(self.position.encode(encoding="ascii"))
@@ -203,13 +216,17 @@ def main():
 		# 1. Commands:
 		# If greater than 120 seconds (2 minutes) - check for commands
 		if(time.time() - query_tracker >= 120):
+			# For every plant...
 			for plant in plants:
+				# Check commands...
 				r = requests.get("http://127.0.0.1:5000/requests/all/" + str(plant)
 					+ "/" + query_time)
 
 				if(r.status_code != 200):
 					print("Could not retrieve requests for plant: ", plants[plant].name)
 				else:
+					# And process each command.
+					# Only water once per batch of commands.
 					watered = False
 					for req in r.json():
 						if(req['category'] == "water" and watered == False):
@@ -222,6 +239,9 @@ def main():
 								# Email user
 
 							watered = True
+
+						elif(req['category'] == "light"):
+							plants[plant].toggle_light()
 
 			query_tracker = time.time()
 			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -237,7 +257,7 @@ def main():
 
 			minute_tracker = time.time()
 
-		# If greater than 60 minutes - write average to database
+		# If greater than 60 minutes - write log to database
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
 				data = plants[plant].get_report()
