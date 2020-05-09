@@ -248,24 +248,25 @@ def main():
 		if(time.time() - query_tracker >= 120):
 			# For every plant...
 			for plant in plants:
+				curr_plant = plants[plant]
 				# Check commands...
 				r = requests.get(HOST + "requests/all/" + str(plant)
 					+ "/" + query_time)
 
 				if(r.status_code != 200):
-					print("Could not retrieve requests for plant: ", plants[plant].name)
+					print("Could not retrieve requests for plant: ", curr_plant.name)
 				else:
 					# And process each command.
 					# Only water once per batch of commands.
 					watered = False
 					for req in r.json():
 						if(req['category'] == "water" and watered == False): # WATER
-							plants[plant].water()
+							curr_plant.water()
 							# Email user if water() returns False
 
 							watered = True
 						elif(req['category'] == "light"): # LIGHT
-							plants[plant].toggle_light()
+							curr_plant.toggle_light()
 						elif(req['category'] == "picture"): # PICTURE
 							with PiCamera() as camera:
 								stream = BytesIO()
@@ -280,10 +281,11 @@ def main():
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
-				if(not plants[plant].get_info()):
-					if(not plants[plant].get_info()):
+				curr_plant = plants[plant]
+				if(not curr_plant.get_info()):
+					if(not curr_plant.get_info()):
 						print("Could not retrieve information for plant: ",
-							plants[plant].name)
+							curr_plant.name)
 
 			minute_tracker = time.time()
 
@@ -294,37 +296,38 @@ def main():
 		#    plant names / thresholds
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
-				data = plants[plant].get_report()
+				curr_plant = plants[plant]
+				data = curr_plant.get_report()
 				r = requests.post(HOST + "logs/insert", json=data)
 
 				if(r.status_code != 200):
-					print("Could not log data for plant: ", plants[plant].name)
+					print("Could not log data for plant: ", curr_plant.name)
 
 				t = time.localtime()
 				# Provide light between 9AM and 3PM (local time) if not
 				# meeting threshold
 				if((t.tm_hour >= 9 and t.tm_hour <= 15) and
-					(not plants[plant].light_on) and
-					(data['light'] < plants[plant].light_threshold)):
-					plants[plant].toggle_light()
+					(not curr_plant.light_on) and
+					(data['light'] < curr_plant.light_threshold)):
+					curr_plant.toggle_light()
 
 				# Turn off light thereafter
 				if((t.tm_hour == 16 or t.tm_hour == 17) and
-					(plants[plant].light_on)):
-					plants[plant].toggle_light()
+					(curr_plant.light_on)):
+					curr_plant.toggle_light()
 
 				# Check water level
 				if((t.tm_hour == 7 or t.tm_hour == 8) and
-					(not plants[plant].watered_today) and
-					(data['soil_moisture'] < plants[plant].water_threshold)):
-					plants[plant].water()
+					(not curr_plant.watered_today) and
+					(data['soil_moisture'] < curr_plant.water_threshold)):
+					curr_plant.water()
 					# Email user if water() returns False
-					plants[plant].watered_today = True
+					curr_plant.watered_today = True
 
 				# Reset watered flag
 				if((t.tm_hour == 10 or t.tm_hour == 11) and
-					(plants[plant].watered_today)):
-					plants[plant].watered_today = False
+					(curr_plant.watered_today)):
+					curr_plant.watered_today = False
 
 			hour_tracker = time.time()
 
