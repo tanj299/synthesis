@@ -181,7 +181,7 @@ def configure(email):
 	else:
 		for entry in r.json():
 			id = entry["plant_id"]
-			if(id not in plants):
+			if(id not in plants): # Add plant
 				name = entry["plant_name"]
 				port = entry["serial_port"]
 				position = str(entry["position"])
@@ -190,6 +190,10 @@ def configure(email):
 				plants[id] = Plant(name, id, port, position, water_threshold,
 					light_threshold)
 				print("Added plant: " + name)
+			else: # Update plant
+				plants[id].name = entry["plant_name"]
+				plants[id].water_threshold = entry["water_threshold"]
+				plants[id].light_threshold = entry["light_threshold"]
 
 	return True
 
@@ -268,7 +272,7 @@ def main():
 			query_tracker = time.time()
 			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
-		# 2. Data logging:
+		# 2. Data logging and configuration check:
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
@@ -280,6 +284,8 @@ def main():
 			minute_tracker = time.time()
 
 		# If greater than 60 minutes - write log to database
+		# Also check user configuration for plant additions or updates to
+		# plant names / thresholds
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
 				data = plants[plant].get_report()
@@ -289,7 +295,9 @@ def main():
 					print("Could not log data for plant: ", plants[plant].name)
 
 			hour_tracker = time.time()
-		
+
+			configure(email)
+
 		# 3. Process automated aspects:
 		# 		Water if low moisture
 		# 		Light if low light (and not night time)
