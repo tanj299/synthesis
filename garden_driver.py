@@ -272,7 +272,7 @@ def main():
 			query_tracker = time.time()
 			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
 
-		# 2. Data logging and configuration check:
+		# 2. Data logging, configuration check and automated behavior:
 		# If greater than 60 seconds - try twice to collect values for all plants 
 		if(time.time() - minute_tracker >= 60):
 			for plant in plants:
@@ -283,9 +283,11 @@ def main():
 
 			minute_tracker = time.time()
 
-		# If greater than 60 minutes - write log to database
-		# Also check user configuration for plant additions or updates to
-		# plant names / thresholds
+		# If greater than 60 minutes:
+		# 1) write log to database
+		# 2) Water or turn on light as needed
+		# 3) Check user configuration for plant additions or updates to
+		#    plant names / thresholds
 		if(time.time() - hour_tracker >= 3600):
 			for plant in plants:
 				data = plants[plant].get_report()
@@ -294,14 +296,22 @@ def main():
 				if(r.status_code != 200):
 					print("Could not log data for plant: ", plants[plant].name)
 
+				t = time.localtime()
+				# Provide light between 9AM and 3PM (local time) if not
+				# meeting threshold
+				if((t.tm_hour >= 9 and t.tm_hour <= 15) and
+					(not plants[plant].light_on) and
+					(data['light'] < plants[plant].light_threshold)):
+					plants[plant].toggle_light()
+
+				# Turn off light thereafter
+				if((t.tm_hour == 16 or t.tm_hour == 17) and
+					(plants[plant].light_on)):
+					plants[plant].toggle_light()
+
 			hour_tracker = time.time()
 
 			configure(email)
-
-		# 3. Process automated aspects:
-		# 		Water if low moisture
-		# 		Light if low light (and not night time)
-		# 		etc.
 
 		#time.sleep(10)
 
