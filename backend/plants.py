@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: plants.py
 # Date Begun: 03/25/2020
-# Last Updated: 04/30/2020
+# Last Updated: 04/20/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for CRUD operations on `plants` table
@@ -21,6 +21,13 @@ from flask import jsonify, Flask, request, Blueprint, json
 
 plants_api = Blueprint('plants_api', __name__)
 
+# Split useremail at the '@' symbol 
+# Ex: janesmith@gmail.com -> janesmith
+def email_to_uri(email):
+    name = email.split("@")[0]
+    uri = 'https://elasticbeanstalk-us-east-1-813224974598.s3.amazonaws.com/photos/' + name +'.png'
+    return uri
+
 # Index route for 'plants'
 # route() is a decorator which takes the function plant_index() as an argument
 # For instance, this function translates to:
@@ -29,7 +36,6 @@ plants_api = Blueprint('plants_api', __name__)
 def plant_index():
     return ('Welcome to plants!')
 
-# MODIFY: Add column: Serial_Port(string) ex: "/dev/ttyACM0", Position(int) ex: 1 or 2
 # POST request
 # @POST: Create a plant with id autoincremented in the database
 @plants_api.route('/insert', methods=['POST'])
@@ -41,16 +47,15 @@ def add_plant():
     user_email = request.json['user_email']
     plant_name = request.json['plant_name']
     species = request.json['species']
-    uri = request.json['uri']
-    currPhoto = request.json['curr_photo']
+    curr_photo = request.json['curr_photo']
     serial_port = request.json['serial_port']
     position = request.json['position']
+    water_threshold = request.json['water_threshold']
+    light_threshold = request.json['light_threshold']
 
-    # Validate position is only 1 or 2
-    if position != 1 and position !=2: 
-        print("Invalid position - must be 1 or 2")
-        return
-
+    # Reformat the user email to the photo uri
+    uri = email_to_uri(user_email)
+    
     # POSTMAN requirements:
     '''
     HEADERS: Key: Content-Type, Value: application/json
@@ -63,16 +68,16 @@ def add_plant():
         "user_email": "bobbylee@gmail.com",
         "plant_name": "bobby",
         "species": "orchid",
-        "uri": "http://sampleokay.com",
-        "curr_photo": 99,
-        "serial_port": "/dev/ttyACM0",
-        "position": 1
+        "uri": "https://elasticbeanstalk-us-east-1-813224974598.s3.amazonaws.com/photos/janesmith.png"
+        "curr_photo": 99, 
+        "water_threshold": 50, 
+        "light_threshold": 50
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, serial_port, position, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-    recordTuple = (user_email, plant_name, species, uri, currPhoto, serial_port, position, now)
+    sqlQuery = "INSERT INTO plants(user_email, plant_name, species, uri, curr_photo, serial_port, position, water_threshold, light_threshold, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    recordTuple = (user_email, plant_name, species, uri, curr_photo, serial_port, position, water_threshold, light_threshold, now)
 
     # To properly return the JSON data, we put the data into a Python dictionary
     # Then, jsonify() will work properly
@@ -81,9 +86,11 @@ def add_plant():
             "plant_name": plant_name, 
             "species": species,
             "uri": uri,
-            "currPhoto": currPhoto,
+            "curr_photo": curr_photo,
             "serial_port": serial_port,
-            "position": position,
+            "position": position, 
+            "water_threshold": water_threshold,
+            "light_threshold": light_threshold,
             "date_created": now
             }    
     try:
@@ -101,7 +108,7 @@ def add_plant():
 
     except:
         print('Could not add a plant')
-        return('Not OK')
+        return jsonify("Not OK")
     finally:
         connection.close()
         cursor.close()
@@ -137,6 +144,37 @@ def fetch_all_plants():
         connection.close()
         cursor.close()
 
+# GET request
+# @GET: Fetch all plants from 'plants' table associated with email
+# Requires a backslash at the end to query with an email
+# Ex: janesmith@gmail.com OR janesmith%40gmail.com
+@plants_api.route('/all/<string:user_email>/', methods=['GET'])
+def fetch_all_plants_email(user_email):
+    try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+        # fetch config match user_email
+        cursor.execute(
+            "SELECT * FROM plants WHERE user_email = %s", user_email)
+
+        user = cursor.fetchall()
+        response = jsonify(user)
+        print(response)
+
+        # if user_name not found
+        if user == None:
+            print('Could not find username', user)
+            response.status_code = 404
+        else:
+            response.status_code = 200
+
+        return response
+    except:
+        print('Could not fetch user', user)
+    finally:
+        connection.close()
+        cursor.close()
 
 # GET, DELETE requests
 # A plant is identified by 'id' using Flask's converter to specify argument type, <CONVERTER:VARIABLE_NAME>
@@ -207,14 +245,13 @@ def update_plant(id):
         user_email = request.json['user_email']
         plant_name = request.json['plant_name']
         species = request.json['species']
-        uri = request.json['uri']
         curr_photo = request.json['curr_photo']
         serial_port = request.json['serial_port']
         position = request.json['position']
+        water_threshold = request.json['water_threshold']
+        light_threshold = request.json['light_threshold']
 
-        if position != 1 and position != 2:
-            print("Invalid position - must be 1 or 2")
-            return
+        uri = email_to_uri(user_email)
 
         data = {"user_email": user_email,
                 "plant_name": plant_name,
@@ -222,13 +259,15 @@ def update_plant(id):
                 "uri": uri,
                 "curr_photo": curr_photo,
                 "serial_port": serial_port,
-                "position": position,
+                "position": position, 
+                "water_threshold": water_threshold,
+                "light_threshold": light_threshold,
                 "date_created": date_created
                 }
 
         
-        recordTuple = (user_email, plant_name, species, uri, curr_photo, serial_port, position, id)
-        sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s, serial_port=%s, position=%s WHERE plant_id=%s"
+        recordTuple = (user_email, plant_name, species, uri, curr_photo, serial_port, position, water_threshold, light_threshold, id)
+        sqlQuery = "UPDATE plants SET user_email=%s, plant_name=%s, species=%s, uri=%s, curr_photo=%s, serial_port=%s, position=%s, water_threshold=%s, light_threshold=%s WHERE plant_id=%s"
       
         cursor.execute(sqlQuery, recordTuple)
         connection.commit()

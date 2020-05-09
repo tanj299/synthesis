@@ -79,6 +79,7 @@ def post_latest():
     soil_temp = request.json['soil_temp']
     soil_moisture = request.json['soil_moisture']
     water_level = request.json['water_level']
+    light_status = request.json['light_status']
 
     # POSTMAN requirements: 
     '''
@@ -97,14 +98,15 @@ def post_latest():
         "humidity": 80,
         "soil_temp": 70,
         "soil_moisture": 60,
-        "water_level": 50
+        "water_level": 50,
+        "light_status": 1
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO logs(plant_id, timestamp, light, temp, humidity, soil_temp, soil_moisture, water_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    sqlQuery = "INSERT INTO logs(plant_id, timestamp, light, temp, humidity, soil_temp, soil_moisture, water_level, light_status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     recordTuple = (plant_id, now, light, temp, humidity,
-                   soil_temp, soil_moisture, water_level)
+                   soil_temp, soil_moisture, water_level, light_status)
 
     data = {"plant_id": plant_id,
             "timestamp": now,
@@ -113,7 +115,8 @@ def post_latest():
             "humidity": humidity,
             "soil_temp": soil_temp,
             "soil_moisture": soil_moisture,
-            "water_level": water_level
+            "water_level": water_level,
+            "light_status": light_status
             }
 
     try:

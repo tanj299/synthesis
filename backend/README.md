@@ -1,6 +1,6 @@
 # Synthesis
 ## RESTful API 
-## Last Updated: 04/04/2020
+## Last Updated: 05/04/2020
 ### Synthesis - The Automatic Garden
 ### Authors: Leo Au-Yeung, Stanley Lim, Daniel Mallia, Jayson Tan
 
@@ -83,6 +83,9 @@ the purpose of running an automated garden with a web interface.
     Congratulations, your Flask backend is now running! Go to your favorite browser and go to 
     `localhost:5000` (or `http://127.0.0.1:5000/`) and you will be greeted with `Welcome to the backend!`
 
+    **05/04/2020: Flask application deployed <br/>
+    See "Deployment" section for details**
+
 ### Notes
 GET Request: The `time` argument must be converted from a string to a formatted time string to be queried<br/>
 Datetime object format: `2020-04-30 04:10:38`<br/>
@@ -96,6 +99,7 @@ And returns an appropriate string for querying; however, this must be done on cl
 Routes are modularized using Flask's Blueprint object<br/> 
 You can find the registered blueprint objects in `main.py` for the `url_prefix`<br/>
 They are also listed here for your convenience. <br/>
+
 Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 
 **Example route using `plants` prefix, `/plants`, to fetch all plants:**
@@ -107,6 +111,7 @@ Route format: `localhost:5000/<REGISTERED_BLUEPRINT>/<ROUTE_DECORATOR>`<br/>
 Format:<br/>
 `REQUEST_METHOD` | `ROUTE_DECORATOR`: Description
 <br/><br/>
+
 
 **Plants | `plants.py`**<br/>
 `url_prefix`: `/plants`
@@ -122,7 +127,9 @@ Format:<br/>
 `url_prefix`: `/logs`
 <br/>
 `GET`       | `/all`: Fetch all logs<br/>
+
 `GET`       | `/<int:id>`: Fetch a single plant's log via their ID number<br/>
+
 `POST`      | `/insert`: Add a log entry to the database<br/>
 <br/>
 
@@ -136,10 +143,31 @@ Format:<br/>
 **Requests | `make_requests.py`**<br/>
 `url_prefix`: `/requests`
 <br/>
+
 `POST`      | `/insert`: Add a request to the database with a valid category, including 'water', 'light', or 'picture'<br/>
 `GET`       | `/<int:id>`: Fetch the latest request made by a user with plant_id<br/>
 `GET`       | `/all/<int:id>/<string:time>`: Fetch the latest requests made by a user with plant_id after given timestamp; PLEASE SEE ABOVE FOR FORMATTING DATE TIME IN **NOTES**<br/>
 
+### DEPLOYMENT
+**05/04/2020 - Deployed using AWS Elastic Beanstalk**<br/>
+**URL: http://backend-dev222222.us-east-1.elasticbeanstalk.com/**
+- [Ref](https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80)
 
+- Deployed using the following resources (Note: configure beforehand):
+    - AWS Elastic Beanstalk
+    - AWS RDS MySQL
+    - AWS IAM User Policies
 
-    
+- For Flask app, we are using Elastic Beanstalk for deployment
+- Set up an IAM user and grant it AdministratorAccess
+- In your Flask app root directory (`/backend` for us), source your Python environment
+- Install AWS EB using: `pip install awscli`
+- Initiate your application to verify credentials using: `eb init`
+- Configure settings and step through instructions
+- Initiate your application for deployment using: `eb create`
+    - NOTE: Abiding by Elastic Beanstalk's requirements, your Flask app MUST BE named `application` INSTEAD of `app`
+    - Ex: `app = Flask(__name__)` should be `application = Flask(__name__)`
+    - Rename your file to `application.py` if possible as well
+    - You can always configure this by typing into the terminal, `eb config` and look for `WSGIPath` 
+    - Resolves "Your WSGIPath refers to a file that does not exist"
+- Update your code using `eb deploy`
