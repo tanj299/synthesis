@@ -24,7 +24,8 @@ HOST = "http://backend-dev222222.us-east-1.elasticbeanstalk.com/"
 BUCKET = "elasticbeanstalk-us-east-1-813224974598"
 
 class Plant():
-	def __init__(self, name, id, arduino, position):
+	def __init__(self, name, id, arduino, position, water_threshold,
+		light_threshold):
 		self.name = name
 		self.id = id
 		
@@ -42,6 +43,8 @@ class Plant():
 			time.sleep(10)
 
 		self.position = position
+		self.water_threshold = water_threshold
+		self.light_threshold = light_threshold
 
 		# Data
 		# Lists are used for averaging values taken over the previous hour
@@ -182,7 +185,10 @@ def configure(email):
 				name = entry["plant_name"]
 				port = entry["serial_port"]
 				position = str(entry["position"])
-				plants[id] = Plant(name, id, port, position)
+				water_threshold = entry["water_threshold"]
+				light_threshold = entry["light_threshold"]
+				plants[id] = Plant(name, id, port, position, water_threshold,
+					light_threshold)
 				print("Added plant: " + name)
 
 	return True
