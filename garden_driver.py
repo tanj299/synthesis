@@ -20,7 +20,7 @@ import boto3
 run_program=True
 plants = {}     # Addresses Plant instances by plant ID (integer)
 arduinos = {}   # Address arduinos (Serial objects) by port name (string)
-HOST = "http://127.0.0.1:5000/"
+HOST = "http://backend-dev222222.us-east-1.elasticbeanstalk.com/"
 BUCKET = "elasticbeanstalk-us-east-1-813224974598"
 
 class Plant():
@@ -191,8 +191,9 @@ def configure(email):
 def cleanup():
 	print("Stopping...")
 
-	# Close all Serial connections
+	# Turn off lights and close all Serial connections
 	for arduino in arduinos:
+		arduinos[arduino].write(b'7')
 		arduinos[arduino].close()
 
 	print("Please reset and unplug your arduinos!")
