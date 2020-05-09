@@ -62,7 +62,7 @@ body {
 
 #more-information {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 #plant-left > h1{
@@ -79,18 +79,27 @@ body {
 	justify-content: center;
 	align-items: center;
 	border: 1px solid black;
-	height: 200px;
-	width: 200px;
+	height: 300px;
+	width: 300px;
 }
 
 #plant-controls {
 	margin-top: 20%;
-	margin-left: 10%;
 }
 
 #remove {
-	margin-top: 50%;
-	margin-left: 10%;
+  margin-top: 10%;
+  display: flex;
+  justify-content: center;
+}
+
+.history {
+  overflow-y: auto;
+  height: 50vh;
+}
+
+.history > li {
+  margin: 1.5rem;
 }
 
 .back:hover {

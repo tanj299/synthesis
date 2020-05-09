@@ -7,9 +7,10 @@ const API = 'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants';
 
 
 // mounted on /api/plants
-router.get('/', async (req, res, next) => {
+router.get('/all/:email', async (req, res, next) => {
+    console.log(req.params.email);
     try {
-        const data = (await axios.get(`${API}/all`)).data;
+        const data = (await axios.get(`${API}/all/${req.params.email}`)).data;
         res.status(201).json(data);
     } catch(err) {
         console.log(err);

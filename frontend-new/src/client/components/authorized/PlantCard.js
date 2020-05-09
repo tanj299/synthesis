@@ -3,13 +3,13 @@ import Popup from "reactjs-popup";
 import PlantInfo from './PlantInfo';
 
 const PlantCard = props => {
-    const { plant, remove } = props;
+    const { plant, remove, email } = props;
     return (
         <div id='plant-card'>
             <Popup modal trigger={
                 <h1 id={`${plant.species}-image`}>{`${plant.plant_name[0].toUpperCase()}${plant.plant_name.substring(1, plant.plant_name.length)}`}</h1>
             }>
-                { close => <PlantInfo plant={ plant } close={ close } remove={ remove }/> }
+                { close => <PlantInfo plant={ plant } close={ close } remove={ remove } email={ email } /> }
             </Popup>
 
             <div id='plant-info'>

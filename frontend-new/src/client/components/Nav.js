@@ -16,14 +16,14 @@ class Nav extends Component {
             <div className='homepagediv'>
                 <nav className='text-focus-in'>
                     <div className="buttons">
-                        <div>
+                        {/* <div>
                             <a onClick={ () => {
                                     // this.setState({clicked: true });
                                 }} 
                                 className={clicked ? 'text-blur-out home' : 'home'}>
                                 <span>HOMEPAGE</span>
                             </a>
-                        </div>
+                        </div> */}
 
                         <div>
                             <a onClick={ () => {

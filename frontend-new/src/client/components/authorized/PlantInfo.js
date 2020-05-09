@@ -5,7 +5,8 @@ class PlantInfo extends Component {
     constructor() {
         super();
         this.state = {
-            plant: {}
+            plant: {},
+            requestsHistory: []
         };
         this.waterPlant = this.waterPlant.bind(this);
         this.toggleLight = this.toggleLight.bind(this);
@@ -15,7 +16,8 @@ class PlantInfo extends Component {
     async componentDidMount() {
         const id = this.props.plant.plant_id;
         const plant = (await axios.get(`/api/plants/${id}`)).data;
-        this.setState({ plant: plant });
+        const requestsHistory = (await axios.get(`/api/requests/${plant.plant_id}`)).data.reverse();
+        this.setState({ plant: plant, requestsHistory });
     }
 
     async waterPlant(ev) {
@@ -28,19 +30,19 @@ class PlantInfo extends Component {
     async toggleLight(ev) {
         ev.preventDefault();
         const { plant_id } = this.state.plant;
-        await axios.post('/api/requests', { });
+        await axios.post('/api/requests/insert', { plant_id, category: "light", timestamp: "" });
         this.props.close();
     };
 
     async showCamera(ev) {
         ev.preventDefault();
-        const { plant_id } = this.state.plant;
-        await axios.post('/api/requests', { });
-        this.props.close();
+        const id = this.props.plant.plant_id;
+        const plant = (await axios.get(`/api/plants/${id}`)).data;
+        this.setState({ plant: plant });
     };
 
     render() {
-        const { plant } = this.state;
+        const { plant, requestsHistory } = this.state;
         const { close, remove } = this.props;
         const { waterPlant, toggleLight, showCamera } = this;
         return (
@@ -48,22 +50,31 @@ class PlantInfo extends Component {
                 <div id='plant-left'>
                     <h1>{plant.plant_name}</h1>
                     <div id='plant-img'>
-                        <p>No image yet</p>
+                        <img id='plant-img' src={plant.uri} />
                     </div>
                 </div>
-                <div id='remove'>
-                    <button onClick={ () => {
-                            remove(plant);
-                            close();
+                <div>
+                    <ul className='history'>
+                        {
+                            requestsHistory.map((history, index) => <li key={ index }>
+                                                                        <span>{ history.category } - </span><span>{ history.timestamp }</span>
+                                                                    </li>)
                         }
-                    }>Delete Plant</button>
+                    </ul>
+                    <div id='remove'>
+                        <button onClick={ () => {
+                                remove(plant);
+                                close();
+                            }
+                        }>Delete Plant</button>
+                    </div>
                 </div>
                 <div id='plant-controls'>
                     <form onSubmit={ toggleLight }>
                         <button>Light</button>
                     </form>
                     <form onSubmit={ showCamera }>
-                        <button>Camera</button>
+                        <button>Get Most Recent Picture</button>
                     </form>
                     <form onSubmit={ waterPlant }>
                         <input type='number' placeholder='Water threshold' /><button>Water</button>

@@ -21,7 +21,7 @@ class Plants extends Component {
     }
 
     async componentDidMount() {
-        const data = (await axios.get('/api/plants')).data;
+        const data = (await axios.get(`/api/plants/all/${this.props.email}`)).data;
         this.setState({ plants: data });
     }
 
@@ -40,7 +40,7 @@ class Plants extends Component {
 
     render() {
         const { plants, plant_name, species, user_email, uri, curr_photo } = this.state;
-        const { history } = this.props;
+        const { history, email } = this.props;
         const { addPlant, remove } = this;
         return (
             <div className='plants-page'>
@@ -71,7 +71,7 @@ class Plants extends Component {
                     </div>
                     <div>
                     {
-                        plants.map(plant => <PlantCard key={ plant.plant_id } plant={ plant } remove={ remove } /> )
+                        plants.map(plant => <PlantCard key={ plant.plant_id } plant={ plant } remove={ remove } email={ email }/> )
                     }   
                     </div>
                 </div>

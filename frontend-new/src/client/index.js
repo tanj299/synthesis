@@ -17,17 +17,18 @@ class App extends Component{
 	constructor(){
 		super();
 		this.state = {
-			authorized: false
+			authorized: false,
+			email: ''
 		};
 	}
 
 	render(){
-		const { authorized } = this.state;
-		const login = () => {
-			this.setState({ authorized: true });
+		const { authorized, email } = this.state;
+		const login = email => {
+			this.setState({ authorized: true, email: email });
         };
         const logout = () => {
-            this.setState({ authorized: false });
+            this.setState({ authorized: false, email: '' });
         };
 		return (
 		<HashRouter>
@@ -38,7 +39,7 @@ class App extends Component{
             <Route render={ () => authorized ?
                                                 ( <main>
                                                     <Redirect to='/user/plants' />
-													<Route exact path='/user/plants' render={ props => <Plants {...props} /> } />
+													<Route exact path='/user/plants' render={ props => <Plants {...props} email={email} /> } />
                                                   </main>
                                                 )
                                                 : ''
