@@ -45,6 +45,7 @@ class Plant():
 		self.position = position
 		self.water_threshold = water_threshold
 		self.light_threshold = light_threshold
+		self.watered_today = False
 
 		# Data
 		# Lists are used for averaging values taken over the previous hour
@@ -68,10 +69,18 @@ class Plant():
 		# Check water level
 		self.check_water_level()
 
+	# Returns True if watering was successful, else False
 	def water(self):
-		self.arduino.write(b'8')
-		time.sleep(5)
-		self.arduino.write(b'9')
+		self.check_water_level()
+
+		if(self.water_level):
+			self.arduino.write(b'8')
+			time.sleep(5)
+			self.arduino.write(b'9')
+			return True
+		else:
+			print("Could not water plant: ", self.name)
+			return False
 
 	def check_water_level(self):
 		self.arduino.write(b'3')
@@ -251,13 +260,8 @@ def main():
 					watered = False
 					for req in r.json():
 						if(req['category'] == "water" and watered == False): # WATER
-							plants[plant].check_water_level()
-
-							if(plants[plant].water_level):
-								plants[plant].water()
-							else:
-								print("Could not water plant: ", plants[plant].name)
-								# Email user
+							plants[plant].water()
+							# Email user if water() returns False
 
 							watered = True
 						elif(req['category'] == "light"): # LIGHT
@@ -308,6 +312,19 @@ def main():
 				if((t.tm_hour == 16 or t.tm_hour == 17) and
 					(plants[plant].light_on)):
 					plants[plant].toggle_light()
+
+				# Check water level
+				if((t.tm_hour == 7 or t.tm_hour == 8) and
+					(not plants[plant].watered_today) and
+					(data['soil_moisture'] < plants[plant].water_threshold)):
+					plants[plant].water()
+					# Email user if water() returns False
+					plants[plant].watered_today = True
+
+				# Reset watered flag
+				if((t.tm_hour == 10 or t.tm_hour == 11) and
+					(plants[plant].watered_today)):
+					plants[plant].watered_today = False
 
 			hour_tracker = time.time()
 
