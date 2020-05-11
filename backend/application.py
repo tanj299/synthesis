@@ -23,6 +23,7 @@ from configuration import config_api
 from login import login_api
 from make_requests import requests_api
 from logs import logs_api
+from alert import alert_api
 
 # Flask application
 # DL: secret key
@@ -43,6 +44,7 @@ application.register_blueprint(config_api, url_prefix = "/config")
 application.register_blueprint(login_api, url_prefix = "/login")
 application.register_blueprint(requests_api, url_prefix = "/requests")
 application.register_blueprint(logs_api, url_prefix = "/logs")
+application.register_blueprint(alert_api, url_prefix = "/alert")
 
 # Initialize Flask-Login immediately after application
 login = LoginManager(application)
