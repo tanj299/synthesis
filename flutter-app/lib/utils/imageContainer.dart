@@ -37,7 +37,7 @@ class ImageContainer extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 60.0, left: 20, right: 20),
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: NormalForm(Icons.search, "Where do you want to go"),
+              child: NormalForm(Icons.search, "", "Where do you want to go"),
             ),
           )
         ],

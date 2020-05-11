@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lets_head_out/Screens/UpdatePlantPage.dart';
 import 'package:lets_head_out/utils/Buttons.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
@@ -18,13 +20,17 @@ class OverViewPage extends StatefulWidget {
 // Plant - parses individual json of plant map (dict)
 class Plant {
   // setting variables
-  final int currPhoto;
-  final String dateCreated;
   final int plantId;
+  final String dateCreated;
   final String plantName;
   final String species;
   final String uri;
   final String userEmail;
+  final String serialPort;
+  final int position;
+  final int currPhoto;
+  final int waterThreshold;
+  final int lightThreshold;
 
   // constructor
   Plant(
@@ -34,7 +40,11 @@ class Plant {
       this.plantName,
       this.species,
       this.uri,
-      this.userEmail});
+      this.userEmail,
+      this.serialPort,
+      this.position,
+      this.waterThreshold,
+      this.lightThreshold});
 
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
@@ -45,6 +55,10 @@ class Plant {
       species: json['species'],
       uri: json['uri'],
       userEmail: json['user_email'],
+      serialPort: json['serial_port'],
+      position: json['position'],
+      waterThreshold: json['water_threshold'],
+      lightThreshold: json['light_threshold'],
     );
   }
 }
@@ -138,7 +152,6 @@ class _OverViewPageState extends State<OverViewPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // backgroundColor: kwhite,
         body: Stack(children: <Widget>[
       Container(
         decoration: BoxDecoration(
@@ -179,7 +192,39 @@ class _OverViewPageState extends State<OverViewPage>
                         SizedBox(height: 20),
                         BoldText("Date created: " + snapshot.data.dateCreated,
                             20, kblack),
-                        SizedBox(height: 160),
+                        SizedBox(height: 20),
+                        Text(
+                            "Water threshold: " + snapshot.data.waterThreshold.toString(),
+                            style: TextStyle(
+                                backgroundColor: Colors.blue,
+                                fontSize: 20),
+                            textAlign: TextAlign.center),
+                        SizedBox(height: 20),
+                        Text(
+                            "Light threshold: " + snapshot.data.lightThreshold.toString(),
+                            style: TextStyle(
+                                backgroundColor: Colors.orange,
+                                fontSize: 20,),
+                            textAlign: TextAlign.center),
+                        SizedBox(height: 20),
+                        // SquaredIcon(FontAwesomeIcons.edit, "Edit"),
+                        SmallButtonGrey.bold("EDIT", () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) {
+                            return UpdatePlantPage(
+                              plantId: widget.plantId,
+                              plantName: snapshot.data.plantName,
+                              species: snapshot.data.species,
+                              userEmail: snapshot.data.userEmail,
+                              uri: snapshot.data.uri,
+                              serialPort: snapshot.data.serialPort,
+                              position: snapshot.data.position,
+                              currPhoto: snapshot.data.currPhoto,
+                              waterThreshold: snapshot.data.waterThreshold,
+                              lightThreshold: snapshot.data.lightThreshold,
+                              );
+                          }));
+                        }, true),
+                        SizedBox(height: 20),
                         (grabPicture == null)
                             ? WideButtonBlue("Get Live Picture", () {
                                 setState(() {

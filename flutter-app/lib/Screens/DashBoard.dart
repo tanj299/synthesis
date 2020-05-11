@@ -71,7 +71,8 @@ class Plant {
 
 // fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
 Future<PlantsList> fetchPlantsList() async {
-  final response = await http.get('http://localhost:5000/plants/all');
+  final String email = 'janesmith@gmail.com/';
+  final response = await http.get('http://localhost:5000/plants/all/' + email);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -119,18 +120,22 @@ class _DashboardState extends State<Dashboard> {
                       int numPlants = snapshot.data.plants.length; // returns length of plants array
                       List<Widget> plantsRender = new List<Widget>(); // creates new List<Widget> to add plants to for render
                       for (var i = 0; i < numPlants; i++) {
-                        // print(i);
                         plantsRender.add(buildContainer(
                             snapshot.data.plants[i].plantId,
                             snapshot.data.plants[i].plantName,
                             snapshot.data.plants[i].species,
                             snapshot.data.plants[i].userEmail,
-                            snapshot.data.plants[i].dateCreated)
+                            snapshot.data.plants[i].dateCreated,
+                            snapshot.data.plants[i].uri),
                         );
                         plantsRender.add(SizedBox(
                           height: 20.0,
                         ));
                       }
+                      // Adding extra spacing at the end so that scrolling works properly
+                      plantsRender.add(SizedBox(
+                        height: 200.0,
+                      ));
                       // render
                       return Container(
                         width: MediaQuery.of(context).size.width,
@@ -165,7 +170,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Widget buildContainer(id, name, species, email, date) {
+  Widget buildContainer(id, name, species, email, date, uri) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -193,9 +198,8 @@ class _DashboardState extends State<Dashboard> {
                     borderRadius: new BorderRadius.only(
                         topLeft: Radius.circular(15),
                         bottomLeft: Radius.circular(15)),
-                    child: Image.asset(
-                      "assets/orchid.jpg",
-                      // height: 120.0,
+                    child: Image.network(
+                      uri,
                       fit: BoxFit.cover,
                     ),
                   ),
