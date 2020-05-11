@@ -1,9 +1,11 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import PlantInfo from './PlantInfo';
+import moment from 'moment';
 
 const PlantCard = props => {
     const { plant, remove, email } = props;
+    const date = moment(plant.date_created).format('MM-DD-YYYY');
     return (
         <div id='plant-card'>
             <Popup modal trigger={
@@ -16,7 +18,7 @@ const PlantCard = props => {
                 <h1>Plant Information</h1>
                 <h2>Species: { plant.species }</h2>
                 <h2>User email: { plant.user_email }</h2>
-                <h2>Date created: { plant.date_created } </h2>
+                <h2>Date created: { date } </h2>
             </div>
         </div>
     );  

@@ -25,7 +25,7 @@ class Nav extends Component {
                             </a>
                         </div> */}
 
-                        <div>
+                        {/* <div>
                             <a onClick={ () => {
                                     this.setState({clicked: true });
                                     setTimeout(() => history.push('/about'), 700);
@@ -33,7 +33,7 @@ class Nav extends Component {
                                 className={clicked ? 'text-blur-out about' : 'about'}>
                                 <span>ABOUT</span>
                             </a>
-                        </div>
+                        </div> */}
 
                         <div>
                             <a onClick={ () => {
