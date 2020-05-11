@@ -13,6 +13,8 @@ import Plants from './components/authorized/Plants';
 import PlantInfo from './components/authorized/PlantInfo';
 import Nav_ from './components/authorized/Nav_';
 
+/* git subtree push --prefix frontend-new heroku master */
+
 class App extends Component{
 	constructor(){
 		super();
