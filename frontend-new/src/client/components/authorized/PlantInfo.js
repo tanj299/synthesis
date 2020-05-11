@@ -54,13 +54,13 @@ class PlantInfo extends Component {
                     </div>
                 </div>
                 <div>
-                    {/* <ul className='history'>
+                    <ul className='history'>
                         {
                             requestsHistory.map((history, index) => <li key={ index }>
                                                                         <span>{ history.category } - </span><span>{ history.timestamp }</span>
                                                                     </li>)
                         }
-                    </ul> */}
+                    </ul>
                     <div id='remove'>
                         <button onClick={ () => {
                                 remove(plant);

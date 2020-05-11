@@ -89,7 +89,7 @@ body {
 }
 
 #plant-controls > form > * {
-  margin: 1rem;
+  margin: 0.5rem 0;
 }
 
 #remove {
