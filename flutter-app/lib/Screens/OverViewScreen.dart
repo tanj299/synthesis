@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lets_head_out/Screens/PopUp.dart';
 import 'package:lets_head_out/Screens/UpdatePlantPage.dart';
 import 'package:lets_head_out/utils/Buttons.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
@@ -135,12 +134,14 @@ class _OverViewPageState extends State<OverViewPage>
   Future<PlantRequest> grabPicture;
   Future<PlantRequest> toggleLight;
   Future<PlantRequest> waterPlant;
+  bool update;
 
   @override
   void initState() {
     super.initState();
     tabController = new TabController(length: 1, vsync: this);
     futurePlant = fetchPlantInfo(widget.plantId);
+    update = false;
   }
 
   @override
@@ -174,8 +175,8 @@ class _OverViewPageState extends State<OverViewPage>
                             // alignment: Alignment.centerLeft,
                             child: Column(
                       children: <Widget>[
-                        Image.asset(
-                          "assets/orchid.jpg",
+                        Image.network(
+                          snapshot.data.uri,
                           height: 200.0,
                           width: 200,
                           fit: BoxFit.fill,
@@ -193,37 +194,59 @@ class _OverViewPageState extends State<OverViewPage>
                         BoldText("Date created: " + snapshot.data.dateCreated,
                             20, kblack),
                         SizedBox(height: 20),
-                        Text(
-                            "Water threshold: " + snapshot.data.waterThreshold.toString(),
-                            style: TextStyle(
-                                backgroundColor: Colors.blue,
-                                fontSize: 20),
-                            textAlign: TextAlign.center),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                                "Water threshold: " +
+                                    snapshot.data.waterThreshold.toString(),
+                                style: TextStyle(
+                                    backgroundColor: Colors.blue, fontSize: 20),
+                                textAlign: TextAlign.center),
+                            SizedBox(width: 10),
+                            Text(
+                                "Light threshold: " +
+                                    snapshot.data.lightThreshold.toString(),
+                                style: TextStyle(
+                                  backgroundColor: Colors.orange,
+                                  fontSize: 20,
+                                ),
+                                textAlign: TextAlign.center),
+                          ],
+                        ),
                         SizedBox(height: 20),
-                        Text(
-                            "Light threshold: " + snapshot.data.lightThreshold.toString(),
-                            style: TextStyle(
-                                backgroundColor: Colors.orange,
-                                fontSize: 20,),
-                            textAlign: TextAlign.center),
-                        SizedBox(height: 20),
-                        // SquaredIcon(FontAwesomeIcons.edit, "Edit"),
-                        SmallButtonGrey.bold("EDIT", () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) {
-                            return UpdatePlantPage(
-                              plantId: widget.plantId,
-                              plantName: snapshot.data.plantName,
-                              species: snapshot.data.species,
-                              userEmail: snapshot.data.userEmail,
-                              uri: snapshot.data.uri,
-                              serialPort: snapshot.data.serialPort,
-                              position: snapshot.data.position,
-                              currPhoto: snapshot.data.currPhoto,
-                              waterThreshold: snapshot.data.waterThreshold,
-                              lightThreshold: snapshot.data.lightThreshold,
-                              );
-                          }));
+                        SmallButtonGreen.bold("View plant logs", () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => PopUp(plantId: widget.plantId),
+                          );
                         }, true),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SmallButtonGrey.bold("EDIT", () {
+                              Navigator.push(context,
+                                  new MaterialPageRoute(builder: (_) {
+                                return UpdatePlantPage(
+                                  plantId: widget.plantId,
+                                  plantName: snapshot.data.plantName,
+                                  species: snapshot.data.species,
+                                  userEmail: snapshot.data.userEmail,
+                                  uri: snapshot.data.uri,
+                                  serialPort: snapshot.data.serialPort,
+                                  position: snapshot.data.position,
+                                  currPhoto: snapshot.data.currPhoto,
+                                  waterThreshold: snapshot.data.waterThreshold,
+                                  lightThreshold: snapshot.data.lightThreshold,
+                                );
+                              }));
+                            }, true),
+                            SizedBox(width: 20),
+                            SmallButtonRed.bold("DELETE", () {
+                            }, true),
+                          ],
+                        ),
                         SizedBox(height: 20),
                         (grabPicture == null)
                             ? WideButtonBlue("Get Live Picture", () {
@@ -306,6 +329,7 @@ class _OverViewPageState extends State<OverViewPage>
                                   return CircularProgressIndicator();
                                 },
                               ),
+                        SizedBox(height: 200),
                       ],
                     ))
                         // )

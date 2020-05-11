@@ -81,13 +81,57 @@ class SmallButtonGrey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ButtonTheme(
-      minWidth: 50.0,
-      height: 50.0,
+      minWidth: 40.0,
+      height: 40.0,
       child: RaisedButton(
           color: Colors.grey[300],
           shape: new RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25)),
           child: isBold? BoldText(text,22.5,kblack):NormalText(text, kblack, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class SmallButtonRed extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  SmallButtonRed(this.text, this.onPressed);
+  SmallButtonRed.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 40.0,
+      height: 40.0,
+      child: RaisedButton(
+          color: Colors.red[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class SmallButtonGreen extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  SmallButtonGreen(this.text, this.onPressed);
+  SmallButtonGreen.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 40.0,
+      height: 40.0,
+      child: RaisedButton(
+          color: Colors.green[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
         onPressed: onPressed,
     ));
   }
@@ -106,19 +150,6 @@ class SquaredIcon extends StatelessWidget {
       child: Container(
         width: 50,
         height: 40,
-        // decoration: new BoxDecoration(
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.grey.shade500,
-        //       blurRadius: 5.0,
-        //       spreadRadius: -2.0,
-        //       offset: Offset(
-        //         3.0,
-        //         4.0,
-        //       ),
-        //     )
-        //   ],
-        // ),
         child: Container(
             width: 45,
             height: 45,

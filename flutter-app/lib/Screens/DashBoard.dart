@@ -2,14 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lets_head_out/utils/BestRatedImage.dart';
-import 'package:lets_head_out/utils/Buttons.dart';
-import 'package:lets_head_out/utils/CitiesImage.dart';
-import 'package:lets_head_out/utils/RecommendationImage.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
-import 'package:lets_head_out/utils/imageContainer.dart';
 import 'package:http/http.dart' as http;
 
 import 'OverViewScreen.dart';
@@ -256,10 +250,6 @@ class _DashboardState extends State<Dashboard> {
                         NormalText(date, kgreyDark, 11.0),
                       ],
                     ),
-                    // SizedBox(
-                    //   height: 30,
-                    // ),
-                    // SizedBox(height: 14),
                   ],
                 )
               ],

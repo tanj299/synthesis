@@ -234,8 +234,14 @@ class _UpdatePlantPageState extends State<UpdatePlantPage> {
               SizedBox(height: 20),
               Container(
                 width: 340.0,
-                child: EditForm(Icons.photo, currPhoto.toString(),
-                    "Curr photo (old)", "currPhoto", updateValue),
+                child: EditForm(FontAwesomeIcons.water, waterThreshold.toString(),
+                    "Water threshold", "waterThreshold", updateValue),
+              ),
+              SizedBox(height: 20),
+              Container(
+                width: 340.0,
+                child: EditForm(FontAwesomeIcons.lightbulb, lightThreshold.toString(),
+                    "Light threshold", "lightThreshold", updateValue),
               ),
               SizedBox(height: 20),
               SizedBox(height: 40),
