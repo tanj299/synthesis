@@ -148,6 +148,12 @@ Format:<br/>
 `GET`       | `/<int:id>`: Fetch the latest request made by a user with plant_id<br/>
 `GET`       | `/all/<int:id>/<string:time>`: Fetch the latest requests made by a user with plant_id after given timestamp; PLEASE SEE ABOVE FOR FORMATTING DATE TIME IN **NOTES**<br/>
 
+**Alert | `alert.py`**<br/>
+`url_prefix`: `/alert`
+
+`GET`       | `/<int:id>/water`: Send email notification to user that water tank level is low
+`GET`       | `/<int:id>/new`: Send email notification to user that a new plant has been added 
+
 ### DEPLOYMENT
 **05/04/2020 - Deployed using AWS Elastic Beanstalk**<br/>
 **URL: http://backend-dev222222.us-east-1.elasticbeanstalk.com/**
