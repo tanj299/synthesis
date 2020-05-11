@@ -62,7 +62,8 @@ body {
 
 #more-information {
 	display: flex;
-	justify-content: space-between;
+  justify-content: space-between;
+  background-color: whitesmoke;
 }
 
 #plant-left > h1{
@@ -84,11 +85,14 @@ body {
 }
 
 #plant-controls {
-	margin-top: 20%;
+  margin: auto 0;
+}
+
+#plant-controls > form > * {
+  margin: 1rem;
 }
 
 #remove {
-  margin-top: 10%;
   display: flex;
   justify-content: center;
 }

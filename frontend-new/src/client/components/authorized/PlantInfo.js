@@ -54,13 +54,13 @@ class PlantInfo extends Component {
                     </div>
                 </div>
                 <div>
-                    <ul className='history'>
+                    {/* <ul className='history'>
                         {
                             requestsHistory.map((history, index) => <li key={ index }>
                                                                         <span>{ history.category } - </span><span>{ history.timestamp }</span>
                                                                     </li>)
                         }
-                    </ul>
+                    </ul> */}
                     <div id='remove'>
                         <button onClick={ () => {
                                 remove(plant);
@@ -70,11 +70,11 @@ class PlantInfo extends Component {
                     </div>
                 </div>
                 <div id='plant-controls'>
-                    <form onSubmit={ toggleLight }>
-                        <button>Light</button>
-                    </form>
                     <form onSubmit={ showCamera }>
                         <button>Get Most Recent Picture</button>
+                    </form>
+                    <form onSubmit={ toggleLight }>
+                        <input type='number' placeholder='Light threshold' /><button>Light</button>
                     </form>
                     <form onSubmit={ waterPlant }>
                         <input type='number' placeholder='Water threshold' /><button>Water</button>
