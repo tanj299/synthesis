@@ -239,7 +239,7 @@ def main():
 	minute_tracker = time.time()
 	hour_tracker = time.time()
 	query_tracker = time.time()
-	query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+	query_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
 	# Primary Loop:
 	while(run_program):
@@ -275,7 +275,7 @@ def main():
 								s3.Bucket(BUCKET).put_object(Key=filename, Body=stream)
 
 			query_tracker = time.time()
-			query_time = time.strftime("%Y-%m-%d %H:%M:%S")
+			query_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
 		# 2. Data logging, configuration check and automated behavior:
 		# If greater than 60 seconds - try twice to collect values for all plants 
