@@ -96,6 +96,10 @@ ul {
   list-style-type: none;
 } 
 
+/* .edit > form > * { */
+  
+/* } */
+
 #remove {
   display: flex;
   justify-content: center;
