@@ -201,6 +201,7 @@ def configure(email):
 				plants[id] = Plant(name, id, port, position, water_threshold,
 					light_threshold)
 				print("Added plant: " + name)
+				request_email(id, "new")
 			else: # Update plant
 				plants[id].name = entry["plant_name"]
 				plants[id].water_threshold = entry["water_threshold"]
@@ -212,6 +213,13 @@ def configure(email):
 				del plants[plant]
 
 	return True
+
+# Function to request emails for plant added or empty water
+# id is the plant id, and case is either "new" or "water"
+def request_email(id, case):
+	r = requests.get(HOST + "alert/" + str(id) + "/" + case)
+	if(r.status_code != 200):
+		print("Request for email failed.")
 
 # Function to cleanly exit the program
 def cleanup():
@@ -277,9 +285,9 @@ def main():
 					watered = False
 					for req in r.json():
 						if(req['category'] == "water" and watered == False): # WATER
-							curr_plant.water()
 							# Email user if water() returns False
-
+							if(not curr_plant.water()):
+								request_email(curr_plant.id, "water")
 							watered = True
 						elif(req['category'] == "light"): # LIGHT
 							curr_plant.toggle_light()
@@ -336,8 +344,9 @@ def main():
 				if((t.tm_hour == 7 or t.tm_hour == 8) and
 					(not curr_plant.watered_today) and
 					(data['soil_moisture'] < curr_plant.water_threshold)):
-					curr_plant.water()
 					# Email user if water() returns False
+					if(not curr_plant.water()):
+						request_email(curr_plant.id, "water")
 					curr_plant.watered_today = True
 
 				# Reset watered flag
