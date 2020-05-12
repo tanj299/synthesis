@@ -44,7 +44,7 @@ class App extends Component{
 													<Route exact path='/user/plants' render={ props => <Plants {...props} email={email} /> } />
                                                   </main>
                                                 )
-                                                : <Redirect to='/login' />
+                                                : <Redirect to='/' />
                                                 } />
 			<Route exact path='/user/plants/:id' render={ props => authorized ? 
 																		  ( <main>
