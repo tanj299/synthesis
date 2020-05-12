@@ -188,8 +188,10 @@ def configure(email):
 		print("Could not retrieve user configuration.")
 		return False
 	else:
+		active_plant_ids = []
 		for entry in r.json():
 			id = entry["plant_id"]
+			active_plant_ids.append(id)
 			if(id not in plants): # Add plant
 				name = entry["plant_name"]
 				port = entry["serial_port"]
@@ -203,6 +205,11 @@ def configure(email):
 				plants[id].name = entry["plant_name"]
 				plants[id].water_threshold = entry["water_threshold"]
 				plants[id].light_threshold = entry["light_threshold"]
+
+		# Check for plant deletions
+		for plant in plants:
+			if plant not in active_plant_ids:
+				del plants[plant]
 
 	return True
 
