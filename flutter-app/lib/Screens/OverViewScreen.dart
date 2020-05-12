@@ -247,7 +247,7 @@ class _OverViewPageState extends State<OverViewPage>
                             }, true),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 60),
                         (grabPicture == null)
                             ? WideButtonBlue("Get Live Picture", () {
                                 setState(() {
@@ -329,7 +329,7 @@ class _OverViewPageState extends State<OverViewPage>
                                   return CircularProgressIndicator();
                                 },
                               ),
-                        SizedBox(height: 200),
+                        SizedBox(height: 40),
                       ],
                     ))
                         // )

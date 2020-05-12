@@ -243,8 +243,7 @@ class _UpdatePlantPageState extends State<UpdatePlantPage> {
                 child: EditForm(FontAwesomeIcons.lightbulb, lightThreshold.toString(),
                     "Light threshold", "lightThreshold", updateValue),
               ),
-              SizedBox(height: 20),
-              SizedBox(height: 40),
+              SizedBox(height: 60),
               WideButtonGreen("Confirm", () {
                 updatePlant(
                     widget.plantId.toString(),
@@ -257,7 +256,8 @@ class _UpdatePlantPageState extends State<UpdatePlantPage> {
                     waterThreshold.toString(),
                     lightThreshold.toString());
                 Navigator.pop(context);
-              })
+              }),
+              SizedBox(height: 40),
             ])))),
       )
     ]));
