@@ -62,8 +62,9 @@ body {
 
 #more-information {
 	display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: whitesmoke;
+  padding: 10%;
 }
 
 #plant-left > h1{
@@ -212,7 +213,7 @@ nav.loginregisternav {
 nav.loginregisternav > a {
 	display: flex;
 	justify-content: center;
-	border: 1px solid black;
+	border: 1px solid lightseagreen;
 	padding: 1rem;
   width: 10%;
 }
