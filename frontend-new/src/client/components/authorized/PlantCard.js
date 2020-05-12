@@ -19,6 +19,8 @@ const PlantCard = props => {
                 <h2>Species: { plant.species }</h2>
                 <h2>User email: { plant.user_email }</h2>
                 <h2>Date created: { date } </h2>
+                <h2>Water threshold: { plant.water_threshold }</h2>
+                <h2>Light threshold: { plant.light_threshold }</h2>
             </div>
         </div>
     );  

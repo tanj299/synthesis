@@ -92,6 +92,10 @@ body {
   margin: 0.5rem 0;
 }
 
+ul {
+  list-style-type: none;
+} 
+
 #remove {
   display: flex;
   justify-content: center;
