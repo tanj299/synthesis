@@ -8,7 +8,7 @@
 # garden_driver for this reason as well as because it acts as a software 
 # driver, communicating with the actual hardware components.
 
-import sys, time
+import sys, time, argparse
 import serial
 import requests
 from pynput import keyboard
@@ -219,6 +219,15 @@ def cleanup():
 	sys.exit()
 
 def main():
+	# Parse arguments:
+	parser = argparse.ArgumentParser("Run a Synthesis garden.")
+	parser.add_argument('--query_time', type=int, required=False, default=120,
+		help="Specify in seconds the time elapsed between command queries.")
+	parser.add_argument('--log_auto_time', type=int, required=False, default=3600,
+		help="Specify in seconds the time elapsed between logging and checking\
+			automated behavior")
+	args = parser.parse_args()
+
 	global run_program
 
 	# Greet
@@ -237,7 +246,7 @@ def main():
 		time.sleep(5)
 
 	minute_tracker = time.time()
-	hour_tracker = time.time()
+	log_auto_tracker = time.time()
 	query_tracker = time.time()
 	query_time = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
@@ -245,7 +254,7 @@ def main():
 	while(run_program):
 		# 1. Commands:
 		# If greater than 120 seconds (2 minutes) - check for commands
-		if(time.time() - query_tracker >= 120):
+		if(time.time() - query_tracker >= args.query_time):
 			# For every plant...
 			for plant in plants:
 				curr_plant = plants[plant]
@@ -294,7 +303,7 @@ def main():
 		# 2) Water or turn on light as needed
 		# 3) Check user configuration for plant additions or updates to
 		#    plant names / thresholds
-		if(time.time() - hour_tracker >= 3600):
+		if(time.time() - log_auto_tracker >= args.log_auto_time):
 			for plant in plants:
 				curr_plant = plants[plant]
 				data = curr_plant.get_report()
@@ -329,7 +338,7 @@ def main():
 					(curr_plant.watered_today)):
 					curr_plant.watered_today = False
 
-			hour_tracker = time.time()
+			log_auto_tracker = time.time()
 
 			configure(email)
 
