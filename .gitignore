@@ -13,6 +13,10 @@ __pycache__
 .expo/ 
 expo/
 
+# VSCode
+.vscode/
+.vscode
+
 # OS
 .DS_Store
 backend/__pycache__/

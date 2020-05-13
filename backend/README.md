@@ -175,4 +175,4 @@ Format:<br/>
     - Rename your file to `application.py` if possible as well
     - You can always configure this by typing into the terminal, `eb config` and look for `WSGIPath` 
     - Resolves "Your WSGIPath refers to a file that does not exist"
-- Update your code using `eb deploy`
+- Update your code using `eb deploy`    
