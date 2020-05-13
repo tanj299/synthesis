@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: logs.py
 # Date Begun: 04/19/2020
-# Last Updated: 04/25/2020
+# Last Updated: 05/12/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for logging information to the database from Raspberry Pi
@@ -41,7 +41,6 @@ def fetch_all_logs():
         connection.close()
         cursor.close()
 
-
 # GET request
 # @GET: Fetch latest log from user 
 @logs_api.route('/<int:id>', methods=['GET'])
@@ -59,6 +58,26 @@ def fetch_log(id):
         return response
     except:
         return('Could not FETCH logs id')
+    finally:
+        connection.close()
+        cursor.close()
+
+# GET request
+# @GET: Fetch all logs based on user id
+@logs_api.route('/all/<int:id>', methods=['GET'])
+def fetch_all_id(id):
+    try:
+        connection = mysql.connect()
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+        # Fetch all logs
+        cursor.execute("SELECT * FROM logs WHERE plant_id=%s", id)
+        rows = cursor.fetchall()
+        response = jsonify(rows)
+        response.status_code = 200
+        return response
+    except:
+        print("Could not fetch all logs from database")
     finally:
         connection.close()
         cursor.close()
