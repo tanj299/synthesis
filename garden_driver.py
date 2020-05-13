@@ -137,6 +137,9 @@ class Plant():
 		}
 
 		for key in self.data_dict:
+			if(len(self.data_dict[key]) == 0):
+				return 1
+
 			data[key] = round(sum(self.data_dict[key]) / len(self.data_dict[key]))
 			self.data_dict[key].clear()
 		return data
@@ -326,6 +329,11 @@ def main():
 			for plant in plants:
 				curr_plant = plants[plant]
 				data = curr_plant.get_report()
+				if(data == 1):
+					print("Could not retrieve report for plant: ",
+						curr_plant.name)
+					continue
+
 				r = requests.post(HOST + "logs/insert", json=data)
 
 				if(r.status_code != 200):
