@@ -88,9 +88,6 @@ class PlantRequest {
     );
   }
 }
-// end PlantRequest
-
-// updatePlant - makes request to http://localhost:5000/plants/all/update
 Future<UpdateList> updatePlant(
     String id,
     String userEmail,
