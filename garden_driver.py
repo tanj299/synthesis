@@ -329,6 +329,8 @@ def main():
 			for plant in plants:
 				curr_plant = plants[plant]
 				data = curr_plant.get_report()
+				if(args.debug):
+					print(data)
 				if(data == 1):
 					print("Could not retrieve report for plant: ",
 						curr_plant.name)
@@ -342,13 +344,13 @@ def main():
 				t = time.localtime()
 				# Provide light between 9AM and 3PM (local time) if not
 				# meeting threshold
-				if((t.tm_hour >= 9 and t.tm_hour <= 15) and
+				if((t.tm_hour >= 9 and t.tm_hour <= 16) and
 					(not curr_plant.light_on) and
 					(data['light'] < curr_plant.light_threshold)):
 					curr_plant.toggle_light()
 
 				# Turn off light thereafter
-				if((t.tm_hour == 16 or t.tm_hour == 17) and
+				if((t.tm_hour == 17 or t.tm_hour == 18) and
 					(curr_plant.light_on)):
 					curr_plant.toggle_light()
 
@@ -365,6 +367,8 @@ def main():
 				if((t.tm_hour == 10 or t.tm_hour == 11) and
 					(curr_plant.watered_today)):
 					curr_plant.watered_today = False
+
+				time.sleep(2)
 
 			log_auto_tracker = time.time()
 
