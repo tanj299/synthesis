@@ -25,9 +25,13 @@ class PlantInfo extends Component {
     async componentDidMount() {
         const id = this.props.plant.plant_id;
         const plant = (await axios.get(`/api/plants/${id}`)).data;
-        const requestsHistory = (await axios.get(`/api/requests/${plant.plant_id}`)).data;
         const logs = (await axios.get(`/api/logs/${id}`)).data.reverse();
-        this.setState({ logs, plant, requestsHistory: requestsHistory[requestsHistory.length - 1], light: plant.light_threshold, water: plant.water_threshold, name: plant.plant_name, species: plant.species, email: plant.user_email, port: plant.serial_port, position: plant.position });
+        const requestsHistory = (await axios.get(`/api/requests/${plant.plant_id}`)).data;
+        if(requestsHistory) {
+            this.setState({ logs, plant, requestsHistory: requestsHistory[requestsHistory.length - 1], light: plant.light_threshold, water: plant.water_threshold, name: plant.plant_name, species: plant.species, email: plant.user_email, port: plant.serial_port, position: plant.position });
+        } else {
+            this.setState({ logs, plant, light: plant.light_threshold, water: plant.water_threshold, name: plant.plant_name, species: plant.species, email: plant.user_email, port: plant.serial_port, position: plant.position });
+        }
     }
 
     async componentDidUpdate(prev) {
@@ -35,8 +39,11 @@ class PlantInfo extends Component {
             const id = this.props.plant.plant_id;
             const plant = (await axios.get(`/api/plants/${id}`)).data;
             const requestsHistory = (await axios.get(`/api/requests/${plant.plant_id}`)).data;
-            this.setState({ plant: plant, requestsHistory: requestsHistory[requestsHistory.length - 1] });
-            console.log(this.state.requestsHistory);
+            if(requestsHistory) {
+                this.setState({ plant: plant, requestsHistory: requestsHistory[requestsHistory.length - 1] });
+            } else {
+                this.setState({ plant });
+            }
         }
     };
 
@@ -87,12 +94,12 @@ class PlantInfo extends Component {
                     <ul className='history'>
                     <div>
                     {
-                        requestsHistory.length !== 0 ? <div><h1>Most Recent Request</h1><span>{ requestsHistory.category } - </span><span>{ requestsHistory.timestamp }</span></div>
+                        requestsHistory && requestsHistory.length !== 0 ? <div><h1>Most Recent Request</h1><span>{ requestsHistory.category } - </span><span>{ requestsHistory.timestamp }</span></div>
                                                         : <h1>No requests have been made yet</h1>
                     }
                     </div>
                     {
-                        logs.length !== 0 ? logs.map(log => {
+                        logs && logs.length !== 0 ? logs.map(log => {
                                                         return (
                                                             <li key={log.timestamp}>
                                                                 <h2>{log.timestamp}</h2>
