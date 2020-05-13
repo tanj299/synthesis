@@ -59,32 +59,11 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
   assets:
-    - assets/one.png
-    - assets/two.png
-    - assets/three.png
-    - assets/home1.jpg
-    - assets/hotel.jpg
-    - assets/ibis.jpg
-    - assets/Meridien.jpg
-    - assets/sheraton.jpg
-    - assets/alger.jpg
-    - assets/bedjaia.jpg
-    - assets/tlemcen.jpg
-    - assets/adrar.jpg
-    - assets/plazamap.png
     - assets/bgimg_dashboard.jpg
     - assets/bgimg_overview.jpg
     - assets/bgimg_splash.jpg
     - assets/lily.jpg
     - assets/orchid.jpg
-
-  fonts:
-    - family: nunito
-      fonts:
-        - asset: fonts/nunito/Nunito-Black.ttf
-        - asset: fonts/nunito/Nunito-Bold.ttf
-        - asset: fonts/nunito/Nunito-Regular.ttf
-        - asset: fonts/nunito/Nunito-Light.ttf
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

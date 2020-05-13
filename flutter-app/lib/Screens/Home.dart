@@ -4,9 +4,6 @@ import 'package:lets_head_out/Screens/DashBoard.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
 
-import 'Notifications.dart';
-import 'Orders.dart';
-import 'Profile.dart';
 import 'SignInPage.dart';
 
 class Home extends StatefulWidget {
@@ -100,10 +97,7 @@ class _HomeState extends State<Home> {
           },
           children: <Widget>[
             Dashboard(),
-            // Orders(),
-            Orders(),
-            // Notifications(),
-            // Profile(),
+            Dashboard(),
           ],
         ),
       ),
