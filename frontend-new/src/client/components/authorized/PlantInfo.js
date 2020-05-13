@@ -73,8 +73,7 @@ class PlantInfo extends Component {
         const { light, water, name, species, email, port, position } = this.state;
         const { curr_photo, date_created, uri } = this.state.plant
         const plant = (await axios.put('/api/requests/edit', { id: this.state.plant.plant_id, light, water, name, species, email, port, position, curr_photo, date_created, uri })).data[1]
-        console.log(plant);
-        this.setState({ plant: plant });
+        this.setState({ plant });
         this.props.close();
     }
         

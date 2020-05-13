@@ -17,9 +17,9 @@ router.get('/all/:email', async (req, res, next) => {
 });
 
 router.post('/', async(req, res, next) => {
-    const { plant_name, species, user_email, uri, curr_photo } = req.body;
+    const { plant_name, species, email, serial_port, position } = req.body;
     try {
-        const newPlant = (await axios.post(`${API}/insert`, { plant_name, species, user_email, uri, curr_photo, headers: {"content-type": "application/json"}})).data;
+        const newPlant = (await axios.post(`${API}/insert`, { plant_name, species, uri: '', curr_photo: '', position, user_email: email, serial_port, water_threshold: 25, light_threshold: 25, headers: {"content-type": "application/json"}})).data;
         res.status(201).json(newPlant);
     } catch(err) {
         console.log(err);
