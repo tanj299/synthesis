@@ -7,7 +7,7 @@ class Login extends Component {
     constructor() {
         super();
         this.state = {
-            username: 'test',
+            username: 'janesmith.synthesis@gmail.com',
             password: 'test',
             closed: false
         };
@@ -29,7 +29,7 @@ class Login extends Component {
                 <div className={closed ? 'form slide-out-right' : 'slide-in-right form'}>
                     <form onSubmit={ ev => {
                                 ev.preventDefault();
-                                login();
+                                login(username);
                             }
                         }
                         >

@@ -11,6 +11,7 @@ app.use(express.static(distFolder))
 
 app.use('/api/plants', require('./routes/plants'));
 app.use('/api/requests', require('./routes/requests'));
+app.use('/api/logs', require('./routes/logs'));
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(staticFolder, 'index.html'))

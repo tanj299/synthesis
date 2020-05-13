@@ -12,24 +12,23 @@ class Plants extends Component {
             plants: [],
             plant_name: '',
             species: '',
-            user_email: '',
-            uri: '',
-            curr_photo: ''
+            serial_port: ''
         };
         this.addPlant = this.addPlant.bind(this);
         this.remove = this.remove.bind(this);
     }
 
     async componentDidMount() {
-        const data = (await axios.get('/api/plants')).data;
+        const data = (await axios.get(`/api/plants/all/${this.props.email}`)).data;
         this.setState({ plants: data });
     }
 
     async addPlant(ev) {
         ev.preventDefault();
-        const { plant_name, species, user_email, uri, curr_photo } = this.state;
-        const newPlant = (await axios.post('/api/plants', { plant_name, species, user_email, uri, curr_photo })).data;
-        this.setState({ plants: [...this.state.plants, newPlant], plant_name: '', species: '', user_email: '', uri: '', curr_photo: ''});
+        const { email } = this.props;
+        const { plant_name, species, serial_port, position } = this.state;
+        const newPlant = (await axios.post('/api/plants', { plant_name, species, email, serial_port, position })).data;
+        this.setState({ plants: [...this.state.plants, newPlant], plant_name: '', species: '', serial_port: '', position: ''});
     };
 
 
@@ -39,15 +38,15 @@ class Plants extends Component {
     }
 
     render() {
-        const { plants, plant_name, species, user_email, uri, curr_photo } = this.state;
-        const { history } = this.props;
+        const { plants, plant_name, species, serial_port, position } = this.state;
+        const { history, email } = this.props;
         const { addPlant, remove } = this;
         return (
             <div className='plants-page'>
                 <div id='all-plants'>
                     <div className='backbuttons'>
                         <BackButton history={history} />
-                        {/* <Popup modal trigger={
+                        <Popup modal trigger={
                                 <button className='add'>Add new plant</button>
                             }>
                             {close => {
@@ -60,18 +59,17 @@ class Plants extends Component {
                                     }}>
                                         <div><input type='text' placeholder='Plant Name' value={ plant_name } onChange={ ev => this.setState({ plant_name: ev.target.value }) } /></div>
                                         <div><input type='text' placeholder='Species' value={ species } onChange={ ev => this.setState({ species: ev.target.value }) } /></div>
-                                        <div><input type='text' placeholder='User Email' value={ user_email } onChange={ ev => this.setState({ user_email: ev.target.value }) } /></div>
-                                        <div><input type='text' placeholder='URI' value={ uri } onChange={ ev => this.setState({ uri: ev.target.value }) } /></div>
-                                        <div><input type='text' placeholder='Photo' value={ curr_photo } onChange={ ev => this.setState({ curr_photo: ev.target.value }) } /></div>
+                                        <div><input type='text' placeholder='Serial Port' value={ serial_port } onChange={ ev => this.setState({ serial_port: ev.target.value }) } /></div>
+                                        <div><input type='text' placeholder='Position' value={ position } onChange={ ev => this.setState({ position: ev.target.value }) } /></div>
                                         <div><input type='submit' value='Add Plant' /></div>
                                 </form> 
                             </div>
                             }}
-                        </Popup> */}
+                        </Popup>
                     </div>
                     <div>
                     {
-                        plants.map(plant => <PlantCard key={ plant.plant_id } plant={ plant } remove={ remove } /> )
+                        plants.map(plant => <PlantCard key={ plant.plant_id } plant={ plant } remove={ remove } email={ email }/> )
                     }   
                     </div>
                 </div>
