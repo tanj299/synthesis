@@ -16,16 +16,16 @@ class Nav extends Component {
             <div className='homepagediv'>
                 <nav className='text-focus-in'>
                     <div className="buttons">
-                        <div>
+                        {/* <div>
                             <a onClick={ () => {
-                                    this.setState({clicked: true });
+                                    // this.setState({clicked: true });
                                 }} 
                                 className={clicked ? 'text-blur-out home' : 'home'}>
                                 <span>HOMEPAGE</span>
                             </a>
-                        </div>
+                        </div> */}
 
-                        <div>
+                        {/* <div>
                             <a onClick={ () => {
                                     this.setState({clicked: true });
                                     setTimeout(() => history.push('/about'), 700);
@@ -33,7 +33,7 @@ class Nav extends Component {
                                 className={clicked ? 'text-blur-out about' : 'about'}>
                                 <span>ABOUT</span>
                             </a>
-                        </div>
+                        </div> */}
 
                         <div>
                             <a onClick={ () => {
