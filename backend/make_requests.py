@@ -34,7 +34,7 @@ def index():
 def post_latest():
 
     # Grab current time in mysql datetime format
-    now = time.strftime('%Y-%m-%d %H:%M:%S')
+    now = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
 
     plant_id = request.json['plant_id']
     timestamp = request.json['timestamp']

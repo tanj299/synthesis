@@ -44,7 +44,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 30,
               ),
-              Container(width: 340.0, child: NormalForm(Icons.email, "Email")),
+              Container(width: 340.0, child: NormalForm(Icons.email, "janesmith.synthesis@gmail.com", "Email")),
               SizedBox(
                 height: 25,
               ),
@@ -65,7 +65,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 25,
               ),
-              WideButton.bold("Sign in", () {
+              WideButtonGreen.bold("Sign in", () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return Home();
                 }));
@@ -73,33 +73,6 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 20,
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //   children: <Widget>[
-              //     Container(
-              //       height: 2,
-              //       width: 100,
-              //       color: kdarkBlue,
-              //     ),
-              //     NormalText("Or Sign in with", kdarkBlue, 12.5),
-              //     Container(
-              //       height: 2,
-              //       width: 100,
-              //       color: kdarkBlue,
-              //     ),
-              //   ],
-              // ),
-              // SizedBox(
-              //   height: 10,
-              // ),
-              // Icon(
-              //   FontAwesomeIcons.facebookSquare,
-              //   color: Colors.blue.shade600,
-              //   size: 40.0,
-              // ),
-              // SizedBox(
-              //   height: 65,
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

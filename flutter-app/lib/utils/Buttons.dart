@@ -5,12 +5,12 @@ import 'TextStyles.dart';
 import 'consts.dart';
 import 'package:flutter/foundation.dart';
 
-class WideButton extends StatelessWidget {
+class WideButtonGreen extends StatelessWidget {
   final String text;
   bool isBold=false;
   final GestureTapCallback onPressed;
-  WideButton(this.text, this.onPressed);
-  WideButton.bold(this.text, this.onPressed,this.isBold);
+  WideButtonGreen(this.text, this.onPressed);
+  WideButtonGreen.bold(this.text, this.onPressed,this.isBold);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,117 @@ class WideButton extends StatelessWidget {
     ));
   }
 }
+
+class WideButtonYellow extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  WideButtonYellow(this.text, this.onPressed);
+  WideButtonYellow.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 350.0,
+      height: 50.0,
+      child: RaisedButton(
+          color: Colors.orange[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class WideButtonBlue extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  WideButtonBlue(this.text, this.onPressed);
+  WideButtonBlue.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 350.0,
+      height: 50.0,
+      child: RaisedButton(
+          color: Colors.blue[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class SmallButtonGrey extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  SmallButtonGrey(this.text, this.onPressed);
+  SmallButtonGrey.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 40.0,
+      height: 40.0,
+      child: RaisedButton(
+          color: Colors.grey[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kblack):NormalText(text, kblack, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class SmallButtonRed extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  SmallButtonRed(this.text, this.onPressed);
+  SmallButtonRed.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 40.0,
+      height: 40.0,
+      child: RaisedButton(
+          color: Colors.red[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
+class SmallButtonGreen extends StatelessWidget {
+  final String text;
+  bool isBold=false;
+  final GestureTapCallback onPressed;
+  SmallButtonGreen(this.text, this.onPressed);
+  SmallButtonGreen.bold(this.text, this.onPressed,this.isBold);
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 40.0,
+      height: 40.0,
+      child: RaisedButton(
+          color: Colors.green[300],
+          shape: new RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25)),
+          child: isBold? BoldText(text,22.5,kwhite):NormalText(text, kwhite, 22.5),
+        onPressed: onPressed,
+    ));
+  }
+}
+
 class SquaredIcon extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -37,25 +148,11 @@ class SquaredIcon extends StatelessWidget {
     return  GestureDetector(
       onTap: ()=>null,
       child: Container(
-        width: 100,
-        height: 80,
-        decoration: new BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade500,
-              blurRadius: 5.0,
-              spreadRadius: -2.0,
-              offset: Offset(
-                3.0,
-                4.0,
-              ),
-            )
-          ],
-
-        ),
+        width: 50,
+        height: 40,
         child: Container(
-            width: 90,
-            height: 90,
+            width: 45,
+            height: 45,
             decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(10.0)
@@ -63,15 +160,13 @@ class SquaredIcon extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(icon,size: 50,color: kgreyDark,),
+                Icon(icon,size: 25,color: kgreyDark,),
                 SizedBox(
-                  height: 5,
+                  height: 2,
                 ),
-                NormalText(text,kblack,16.0)
-
+                NormalText(text,kblack,8.0)
               ],
             )),
-
       ),
     );
   }

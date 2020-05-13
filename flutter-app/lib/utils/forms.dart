@@ -65,8 +65,11 @@ class _FormsState extends State<PasswordForm> {
 class NormalForm extends StatelessWidget {
   final IconData icon;
   final String hint;
+  final String initialValue;
+  String varName;
+  Function callback;
 
-  NormalForm(this.icon, this.hint);
+  NormalForm(this.icon, this.initialValue, this.hint);
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +85,7 @@ class NormalForm extends StatelessWidget {
             icon,
             color: Colors.grey.shade700,
           ),
-          hintText: hint,
+          labelText: hint,
           hintStyle:  TextStyle(fontFamily: "nunito",
               fontWeight: FontWeight.w500, color: kgreyDark, fontSize: 15.5),
           contentPadding:
@@ -96,8 +99,50 @@ class NormalForm extends StatelessWidget {
             borderSide: BorderSide(color: Colors.white),
             borderRadius: BorderRadius.circular(15.0),
           )),
-          initialValue: "admin",
+          initialValue: initialValue,
     );
   }
 }
 
+class EditForm extends StatelessWidget {
+  final IconData icon;
+  final String hint;
+  final String initialValue;
+  String varName;
+  Function callback;
+
+  EditForm(this.icon, this.initialValue, this.hint, this.varName, this.callback);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return TextFormField(
+      style:
+      TextStyle(fontFamily: "nunito",
+          fontWeight: FontWeight.w500, color: kgreyDark, fontSize: 15.5),
+      decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey.shade100,
+          prefixIcon: Icon(
+            icon,
+            color: Colors.grey.shade700,
+          ),
+          labelText: hint,
+          hintStyle:  TextStyle(fontFamily: "nunito",
+              fontWeight: FontWeight.w500, color: kgreyDark, fontSize: 15.5),
+          contentPadding:
+          const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
+          focusColor: Colors.grey.shade700,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(15.0),
+          )),
+          onChanged: (text) { callback(varName, text); },
+          initialValue: initialValue,
+    );
+  }
+}

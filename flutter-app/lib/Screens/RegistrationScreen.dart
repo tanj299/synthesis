@@ -43,11 +43,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           SizedBox(
             height: 20,
           ),
-          Container(width: 340.0, child: NormalForm(Icons.person, "Full name")),
+          Container(width: 340.0, child: NormalForm(Icons.person, "", "Full name")),
           SizedBox(
             height: 30,
           ),
-          Container(width: 340.0, child: NormalForm(Icons.email, "Email")),
+          Container(width: 340.0, child: NormalForm(Icons.email, "", "Email")),
           SizedBox(
             height: 30,
           ),
@@ -58,7 +58,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   SizedBox(
                     height: 30,
                   ),
-                  WideButton.bold("Register", () {
+                  WideButtonGreen.bold("Register", () {
                     Navigator.of(context, rootNavigator: true)
                         .push(CupertinoPageRoute<bool>(
                       fullscreenDialog: true,

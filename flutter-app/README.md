@@ -1,6 +1,5 @@
-# lets_head_out
-
-A flutter UI Challenge for Traveling
+# Synthesis
+## The Automatic Garden
 
 ## Installation
 

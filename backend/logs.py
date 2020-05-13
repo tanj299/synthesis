@@ -41,6 +41,10 @@ def fetch_all_logs():
         connection.close()
         cursor.close()
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 # GET request
 # @GET: Fetch latest log from user 
 @logs_api.route('/<int:id>', methods=['GET'])
