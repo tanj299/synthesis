@@ -3,7 +3,7 @@
 # Authors: Jayson Tan
 # File: logs.py
 # Date Begun: 04/19/2020
-# Last Updated: 05/12/2020
+# Last Updated: 04/25/2020
 
 # Implementation of REST API routes via Python Flask and pymysql
 # Routes for logging information to the database from Raspberry Pi
@@ -41,10 +41,7 @@ def fetch_all_logs():
         connection.close()
         cursor.close()
 
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 # GET request
 # @GET: Fetch latest log from user 
 @logs_api.route('/<int:id>', methods=['GET'])
@@ -66,26 +63,6 @@ def fetch_log(id):
         connection.close()
         cursor.close()
 
-# GET request
-# @GET: Fetch all logs based on user id
-@logs_api.route('/all/<int:id>', methods=['GET'])
-def fetch_all_id(id):
-    try:
-        connection = mysql.connect()
-        cursor = connection.cursor(pymysql.cursors.DictCursor)
-
-        # Fetch all logs
-        cursor.execute("SELECT * FROM logs WHERE plant_id=%s", id)
-        rows = cursor.fetchall()
-        response = jsonify(rows)
-        response.status_code = 200
-        return response
-    except:
-        print("Could not fetch all logs from database")
-    finally:
-        connection.close()
-        cursor.close()
-
 # POST request
 # POST a log from user
 @logs_api.route('/insert', methods=['POST'])
@@ -102,7 +79,6 @@ def post_latest():
     soil_temp = request.json['soil_temp']
     soil_moisture = request.json['soil_moisture']
     water_level = request.json['water_level']
-    light_status = request.json['light_status']
 
     # POSTMAN requirements: 
     '''
@@ -121,15 +97,14 @@ def post_latest():
         "humidity": 80,
         "soil_temp": 70,
         "soil_moisture": 60,
-        "water_level": 50,
-        "light_status": 1
+        "water_level": 50
     }
     '''
 
     # INSERT query and fields to insert
-    sqlQuery = "INSERT INTO logs(plant_id, timestamp, light, temp, humidity, soil_temp, soil_moisture, water_level, light_status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sqlQuery = "INSERT INTO logs(plant_id, timestamp, light, temp, humidity, soil_temp, soil_moisture, water_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     recordTuple = (plant_id, now, light, temp, humidity,
-                   soil_temp, soil_moisture, water_level, light_status)
+                   soil_temp, soil_moisture, water_level)
 
     data = {"plant_id": plant_id,
             "timestamp": now,
@@ -138,8 +113,7 @@ def post_latest():
             "humidity": humidity,
             "soil_temp": soil_temp,
             "soil_moisture": soil_moisture,
-            "water_level": water_level,
-            "light_status": light_status
+            "water_level": water_level
             }
 
     try:
