@@ -236,11 +236,13 @@ def cleanup():
 def main():
 	# Parse arguments:
 	parser = argparse.ArgumentParser("Run a Synthesis garden.")
-	parser.add_argument('--query_time', type=int, required=False, default=120,
+	parser.add_argument('--query_timeframe', type=int, required=False, default=120,
 		help="Specify in seconds the time elapsed between command queries.")
-	parser.add_argument('--log_auto_time', type=int, required=False, default=3600,
+	parser.add_argument('--log_auto_timeframe', type=int, required=False, default=3600,
 		help="Specify in seconds the time elapsed between logging and checking\
 			automated behavior")
+	parser.add_argument('--debug', type=int, required=False, default=0,
+		help="Specify any number that is not 0 to turn on debugging printing.")
 	args = parser.parse_args()
 
 	global run_program
@@ -269,7 +271,7 @@ def main():
 	while(run_program):
 		# 1. Commands:
 		# If greater than 120 seconds (2 minutes) - check for commands
-		if(time.time() - query_tracker >= args.query_time):
+		if(time.time() - query_tracker >= args.query_timeframe):
 			# For every plant...
 			for plant in plants:
 				curr_plant = plants[plant]
@@ -280,6 +282,8 @@ def main():
 				if(r.status_code != 200):
 					print("Could not retrieve requests for plant: ", curr_plant.name)
 				else:
+					if(args.debug):
+						print(r.text)
 					# And process each command.
 					# Only water once per batch of commands.
 					watered = False
@@ -318,7 +322,7 @@ def main():
 		# 2) Water or turn on light as needed
 		# 3) Check user configuration for plant additions or updates to
 		#    plant names / thresholds
-		if(time.time() - log_auto_tracker >= args.log_auto_time):
+		if(time.time() - log_auto_tracker >= args.log_auto_timeframe):
 			for plant in plants:
 				curr_plant = plants[plant]
 				data = curr_plant.get_report()
