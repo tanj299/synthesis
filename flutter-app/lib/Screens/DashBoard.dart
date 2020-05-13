@@ -65,8 +65,9 @@ class Plant {
 
 // fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
 Future<PlantsList> fetchPlantsList() async {
-  final String email = 'janesmith@gmail.com/';
-  final response = await http.get('http://localhost:5000/plants/all/' + email);
+  final String email = 'janesmith.synthesis@gmail.com/';
+  // final response = await http.get('http://localhost:5000/plants/all/${email}');
+  final response = await http.get('http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/all/${email}');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

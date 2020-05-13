@@ -44,7 +44,7 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(
                 height: 30,
               ),
-              Container(width: 340.0, child: NormalForm(Icons.email, "janesmith@gmail.com", "Email")),
+              Container(width: 340.0, child: NormalForm(Icons.email, "janesmith.synthesis@gmail.com", "Email")),
               SizedBox(
                 height: 25,
               ),

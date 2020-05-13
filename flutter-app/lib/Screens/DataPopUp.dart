@@ -1,99 +1,108 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
-import 'package:lets_head_out/utils/consts.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class PopUp extends StatefulWidget {
+class DataPopUp extends StatefulWidget {
   final int plantId;
-  PopUp({Key key, @required this.plantId}) : super(key: key);
+  DataPopUp({Key key, @required this.plantId}) : super(key: key);
 
   @override
-  _PopUpState createState() => _PopUpState();
+  _DataPopUpState createState() => _DataPopUpState();
 }
 
-class PlantLogList {
-  final List<PlantLog> plants;
-  PlantLogList({
+class PlantDataLogList {
+  final List<PlantDataLog> plants;
+  PlantDataLogList({
     this.plants,
   });
-  factory PlantLogList.fromJson(List<dynamic> parsedJson) {
-    List<PlantLog> plants = new List<PlantLog>();
-    plants =
-        parsedJson.map((plantJson) => PlantLog.fromJson(plantJson)).toList();
-    return new PlantLogList(plants: plants);
+  factory PlantDataLogList.fromJson(List<dynamic> parsedJson) {
+    List<PlantDataLog> plants = new List<PlantDataLog>();
+    plants = parsedJson
+        .map((plantJson) => PlantDataLog.fromJson(plantJson))
+        .toList();
+    return new PlantDataLogList(plants: plants);
   }
 }
 
-class PlantLog {
+class PlantDataLog {
   final String plantId;
+  final String humidity;
+  final String light;
+  final String lightStatus;
+  final String soilMoisture;
+  final String soilTemp;
+  final String temp;
   final String timestamp;
-  final String category;
+  final String waterLevel;
 
   // constructor
-  PlantLog({
+  PlantDataLog({
     this.plantId,
+    this.humidity,
+    this.light,
+    this.lightStatus,
+    this.soilMoisture,
+    this.soilTemp,
+    this.temp,
     this.timestamp,
-    this.category,
+    this.waterLevel,
   });
 
-  factory PlantLog.fromJson(Map<String, dynamic> json) {
-    return PlantLog(
+  factory PlantDataLog.fromJson(Map<String, dynamic> json) {
+    return PlantDataLog(
       plantId: json['plant_id'].toString(),
+      humidity: json['humidity'],
+      light: json['light'],
+      lightStatus: json['light_status'],
+      soilMoisture: json['soil_moisture'],
+      soilTemp: json['soil_temp'],
+      temp: json['temp'],
       timestamp: json['timestamp'],
-      category: json['category'],
+      waterLevel: json['water_level'],
     );
   }
 }
-// end Plant
 
-// http://localhost:5000/requests/all/1/2020-04-30%2004:10:38
-Future<PlantLogList> fetchPlantInfo(id) async {
-  // final response = await http.get('http://localhost:5000/requests/all/${id}/2020-04-30%2004:10:38');
+Future<PlantDataLogList> fetchPlantDataInfo(id) async {
   final response = await http.get(
-      'http://backend-dev222222.us-east-1.elasticbeanstalk.com/requests/all/${id}/2020-04-30%2004:10:38');
+      'http://localhost:5000/logs/all/${id}');
+  // final response = await http.get(
+  //     'http://backend-dev222222.us-east-1.elasticbeanstalk.com/logs/all/${id}');
 
   if (response.statusCode == 200) {
-    return PlantLogList.fromJson(jsonDecode(response.body));
+    return PlantDataLogList.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load plant');
   }
 }
 
-
-class _PopUpState extends State<PopUp> {
-  Future<PlantLogList> futurePlantLogList;
+class _DataPopUpState extends State<DataPopUp> {
+  Future<PlantDataLogList> futurePlantDataLogList;
   @override
   void initState() {
     super.initState();
-    futurePlantLogList = fetchPlantInfo(widget.plantId);
+    futurePlantDataLogList = fetchPlantDataInfo(widget.plantId);
   }
 
   Widget build(BuildContext context) {
     return new AlertDialog(
-      title: const Text('Latest plant logs'),
+      title: const Text('Latest plant data logs'),
       content: new Container(
           height: 300,
           width: 300,
-          child: FutureBuilder<PlantLogList>(
-            future: futurePlantLogList,
+          child: FutureBuilder<PlantDataLogList>(
+            future: futurePlantDataLogList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 int numPlants = snapshot
                     .data.plants.length; // returns length of plants array
                 List<Widget> plantsRender = new List<Widget>();
                 for (var j = 0; j < numPlants; j++) {
-                  int i = numPlants -
-                      j -
-                      1; // do in descending order to get most recent first
+                  int i = numPlants - j - 1; // do in descending order to get most recent first
                   plantsRender.add(BoldText(
-                      (j + 1).toString() +
-                          ") " +
-                          snapshot.data.plants[i].timestamp +
-                          " - " +
-                          snapshot.data.plants[i].category,
+                      (j + 1).toString() + ") " + snapshot.data.plants[i].timestamp + " - " + snapshot.data.plants[i].humidity,
                       15.0,
                       Colors.black));
                   plantsRender.add(SizedBox(

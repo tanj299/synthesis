@@ -108,7 +108,8 @@ Future<UpdateList> updatePlant(
     String waterThreshold,
     String lightThreshold) async {
   final http.Response response = await http.put(
-    'http://localhost:5000/plants/update/${id}',
+    // 'http://localhost:5000/plants/update/${id}',
+    'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/update/${id}',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

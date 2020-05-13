@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:lets_head_out/Screens/DataPopUp.dart';
 import 'package:lets_head_out/Screens/PopUp.dart';
 import 'package:lets_head_out/Screens/UpdatePlantPage.dart';
 import 'package:lets_head_out/utils/Buttons.dart';
@@ -87,7 +88,8 @@ class PlantRequest {
 
 // fetchPlantsList - fetches list of all plants from http://localhost:5000/plants/
 Future<Plant> fetchPlantInfo(id) async {
-  final response = await http.get('http://localhost:5000/plants/plant/${id}');
+  // final response = await http.get('http://localhost:5000/plants/plant/${id}');
+  final response = await http.get('http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/plant/${id}');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -215,10 +217,17 @@ class _OverViewPageState extends State<OverViewPage>
                           ],
                         ),
                         SizedBox(height: 20),
-                        SmallButtonGreen.bold("View plant logs", () {
+                        SmallButtonGrey.bold("View plant logs", () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) => PopUp(plantId: widget.plantId),
+                          );
+                        }, true),
+                        SizedBox(height: 20),
+                        SmallButtonGreen.bold("View plant data logs", () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => DataPopUp(plantId: widget.plantId),
                           );
                         }, true),
                         SizedBox(height: 15),
@@ -287,7 +296,7 @@ class _OverViewPageState extends State<OverViewPage>
                                 future: toggleLight,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    return Text("Successfully turned on light!",
+                                    return Text("Successfully toggled light!",
                                         style: TextStyle(
                                             backgroundColor: Colors.orange,
                                             fontSize: 30),
