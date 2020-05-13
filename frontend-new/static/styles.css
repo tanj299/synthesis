@@ -62,9 +62,15 @@ body {
 
 #more-information {
 	display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  width: 50vw; 
   background-color: whitesmoke;
-  padding: 10%;
+}
+
+.popup {
+  margin: 0;
+  padding: 0;
 }
 
 #plant-left > h1{
@@ -97,10 +103,6 @@ ul {
   list-style-type: none;
 } 
 
-/* .edit > form > * { */
-  
-/* } */
-
 #remove {
   display: flex;
   justify-content: center;
@@ -112,7 +114,7 @@ ul {
 }
 
 .history > li {
-  margin: 1.5rem;
+  margin: 1.5rem 0;
 }
 
 .back:hover {

@@ -8,11 +8,11 @@ const PlantCard = props => {
     const date = moment(plant.date_created).format('MM-DD-YYYY');
     return (
         <div id='plant-card'>
-            <Popup className='popup' modal trigger={
+            <Popup className='popup' modal position='left center' trigger={
                 <h1 id={`${plant.species}-image`}>{`${plant.plant_name[0].toUpperCase()}${plant.plant_name.substring(1, plant.plant_name.length)}`}</h1>
             }>
-                { close => <PlantInfo plant={ plant } close={ close } remove={ remove } email={ email } /> }
-            </Popup>
+                { close => <PlantInfo className='bigger' plant={ plant } close={ close } remove={ remove } email={ email } /> }
+                </Popup>
 
             <div id='plant-info'>
                 <h1>Plant Information</h1>
