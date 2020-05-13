@@ -98,7 +98,7 @@ class PlantInfo extends Component {
                                                                 <h2>{log.timestamp}</h2>
                                                                 <div>Light: {log.light_status === 0 ? 'off' : 'on'}</div>
                                                                 <div>Light level: {log.light}</div>
-                                                                <div>Water level: {log.water_level === 0 ? 'Good' : 'Empty'}</div>
+                                                                <div>Water level: {log.water_level === 0 ? 'Empty' : 'Good'}</div>
                                                                 <div>Soil moisture: {log.soil_moisture}</div>
                                                                 <div>Soil temperature: {log.soil_temp} ˚F</div>
                                                                 <div>Temperature: {log.temp} ˚F</div>
