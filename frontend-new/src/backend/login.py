@@ -96,7 +96,6 @@ def login():
         else: 
             # Account doesn't exist or username/password incorrect
             msg = 'Incorrect username/password!'
-            return msg
 
     # return redirect(url_for('/'))
 

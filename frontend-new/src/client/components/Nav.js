@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import '../style/home.css';
-
 class Nav extends Component {
     constructor() {
         super();
