@@ -49,12 +49,6 @@ class UpdateList {
   });
 
   factory UpdateList.fromJson(List<dynamic> parsedJson) {
-    // PlantRequest plants = new PlantRequest();
-    // // print(plants);
-    // // print(parsedJson);
-    // // print(parsedJson[1]);
-    // plants = parsedJson;
-
     return new UpdateList(plants: parsedJson);
   }
 }
@@ -124,6 +118,7 @@ Future<UpdateList> updatePlant(
       "light_threshold": lightThreshold,
     }),
   );
+
   if (response.statusCode == 200) {
     return UpdateList.fromJson(jsonDecode(response.body));
   } else {

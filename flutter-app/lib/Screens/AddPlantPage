@@ -11,28 +11,53 @@ import 'package:lets_head_out/utils/forms.dart';
 import 'package:http/http.dart' as http;
 
 class AddPlantPage extends StatefulWidget {
-  final String email;
+  final int plantId;
+  String plantName;
+  String species;
+  String userEmail;
+  String uri;
+  String serialPort;
+  int position;
+  int currPhoto;
+  int waterThreshold;
+  int lightThreshold;
 
   AddPlantPage({
     Key key,
-    @required this.email,
+    @required this.plantId,
+    @required this.plantName,
+    @required this.species,
+    @required this.userEmail,
+    @required this.uri,
+    @required this.serialPort,
+    @required this.position,
+    @required this.currPhoto,
+    @required this.waterThreshold,
+    @required this.lightThreshold,
   }) : super(key: key);
 
   @override
   _AddPlantPageState createState() => _AddPlantPageState();
 }
 
-// class AddList {
-//   List plants;
+// PlantsList - parses list of json of plant data list
+class UpdateList {
+  List plants;
 
-//   AddList({
-//     this.plants,
-//   });
+  UpdateList({
+    this.plants,
+  });
 
-//   factory AddList.fromJson(List<dynamic> parsedJson) {
-//     return new AddList(plants: parsedJson);
-//   }
-// }
+  factory UpdateList.fromJson(List<dynamic> parsedJson) {
+    // PlantRequest plants = new PlantRequest();
+    // // print(plants);
+    // // print(parsedJson);
+    // // print(parsedJson[1]);
+    // plants = parsedJson;
+
+    return new UpdateList(plants: parsedJson);
+  }
+}
 
 // PlantRequest - parses json to water plant through /requests in backend
 class PlantRequest {
@@ -40,10 +65,10 @@ class PlantRequest {
   final String plantName;
   final String species;
   final String serialPort;
-  final String position;
-  final String currPhoto;
-  final String waterThreshold;
-  final String lightThreshold;
+  final int position;
+  final int currPhoto;
+  final int waterThreshold;
+  final int lightThreshold;
 
   PlantRequest({
     this.userEmail,
@@ -69,19 +94,22 @@ class PlantRequest {
     );
   }
 }
+// end PlantRequest
 
-Future<PlantRequest> addPlant(
+// updatePlant - makes request to http://localhost:5000/plants/all/update
+Future<UpdateList> updatePlant(
+    String id,
     String userEmail,
     String plantName,
     String species,
     String serialPort,
-    int position,
-    int currPhoto,
-    int waterThreshold,
-    int lightThreshold) async {
-      final http.Response response = await http.post(
-    // 'http://localhost:5000/plants/insert',
-    'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/insert',
+    String position,
+    String currPhoto,
+    String waterThreshold,
+    String lightThreshold) async {
+  final http.Response response = await http.put(
+    // 'http://localhost:5000/plants/update/${id}',
+    'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/update/${id}',
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -90,43 +118,46 @@ Future<PlantRequest> addPlant(
       "plant_name": plantName,
       "species": species,
       "serial_port": serialPort,
-      "position": position.toString(),
-      "curr_photo": currPhoto.toString(),
-      "water_threshold": waterThreshold.toString(),
-      "light_threshold": lightThreshold.toString(),
+      "position": position,
+      "curr_photo": currPhoto,
+      "water_threshold": waterThreshold,
+      "light_threshold": lightThreshold,
     }),
   );
-  
   if (response.statusCode == 200) {
-    return PlantRequest.fromJson(jsonDecode(response.body));
+    return UpdateList.fromJson(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load plant request');
   }
 }
+// end updatePlant
 
 class _AddPlantPageState extends State<AddPlantPage> {
+  // Future<Plant> futurePlant;
+  // confirmUpdate;
   String plantName;
   String species;
   String userEmail;
   String uri;
   String serialPort;
-  String position;
-  String currPhoto;
-  String waterThreshold;
-  String lightThreshold;
+  int position;
+  int currPhoto;
+  int waterThreshold;
+  int lightThreshold;
 
   @override
   void initState() {
     super.initState();
-    plantName = "";
-    species = "";
-    userEmail = "janesmith.synthesis@gmail.com";
-    uri = "";
-    serialPort = "";
-    position = "1";
-    currPhoto = "1";
-    waterThreshold = "0";
-    lightThreshold = "0";
+    // futurePlant = fetchPlantInfo(widget.plantId);
+    plantName = widget.plantName;
+    species = widget.species;
+    userEmail = widget.userEmail;
+    uri = widget.uri;
+    serialPort = widget.serialPort;
+    position = widget.position;
+    currPhoto = widget.currPhoto;
+    waterThreshold = widget.waterThreshold;
+    lightThreshold = widget.lightThreshold;
   }
 
   void updateValue(name, value) {
@@ -169,6 +200,12 @@ class _AddPlantPageState extends State<AddPlantPage> {
                 child: Align(
                     // alignment: Alignment.centerLeft,
                     child: Column(children: <Widget>[
+              Image.network(
+                uri,
+                height: 200.0,
+                width: 200,
+                fit: BoxFit.fill,
+              ),
               SizedBox(height: 20),
               Container(
                   width: 340.0,
@@ -182,37 +219,43 @@ class _AddPlantPageState extends State<AddPlantPage> {
               SizedBox(height: 20),
               Container(
                   width: 340.0,
+                  child: EditForm(Icons.email, userEmail, "Email", "userEmail",
+                      updateValue)),
+              SizedBox(height: 20),
+              Container(
+                  width: 340.0,
                   child: EditForm(Icons.enhanced_encryption, serialPort,
                       "Serial port", "serialPort", updateValue)),
               SizedBox(height: 20),
               Container(
                 width: 340.0,
-                child: EditForm(Icons.crop_square, position,
+                child: EditForm(Icons.crop_square, position.toString(),
                     "Position", "position", updateValue),
               ),
               SizedBox(height: 20),
               Container(
                 width: 340.0,
-                child: EditForm(FontAwesomeIcons.water, waterThreshold,
+                child: EditForm(FontAwesomeIcons.water, waterThreshold.toString(),
                     "Water threshold", "waterThreshold", updateValue),
               ),
               SizedBox(height: 20),
               Container(
                 width: 340.0,
-                child: EditForm(FontAwesomeIcons.lightbulb, lightThreshold,
+                child: EditForm(FontAwesomeIcons.lightbulb, lightThreshold.toString(),
                     "Light threshold", "lightThreshold", updateValue),
               ),
               SizedBox(height: 60),
-              WideButtonGreen("Add Plant", () {
-                addPlant(
+              WideButtonGreen("Confirm", () {
+                updatePlant(
+                    widget.plantId.toString(),
                     userEmail,
                     plantName,
                     species,
                     serialPort,
-                    int.parse(position),
-                    int.parse(currPhoto),
-                    int.parse(waterThreshold),
-                    int.parse(lightThreshold));
+                    position.toString(),
+                    currPhoto.toString(),
+                    waterThreshold.toString(),
+                    lightThreshold.toString());
                 Navigator.pop(context);
               }),
               SizedBox(height: 40),

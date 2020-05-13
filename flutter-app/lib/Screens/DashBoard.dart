@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lets_head_out/Screens/AddPlantPage.dart';
+import 'package:lets_head_out/utils/Buttons.dart';
 import 'package:lets_head_out/utils/TextStyles.dart';
 import 'package:lets_head_out/utils/consts.dart';
 import 'package:http/http.dart' as http;
@@ -67,7 +69,8 @@ class Plant {
 Future<PlantsList> fetchPlantsList() async {
   final String email = 'janesmith.synthesis@gmail.com/';
   // final response = await http.get('http://localhost:5000/plants/all/${email}');
-  final response = await http.get('http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/all/${email}');
+  final response = await http.get(
+      'http://backend-dev222222.us-east-1.elasticbeanstalk.com/plants/all/${email}');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -112,21 +115,34 @@ class _DashboardState extends State<Dashboard> {
                   builder: (context, snapshot) {
                     // data good
                     if (snapshot.hasData) {
-                      int numPlants = snapshot.data.plants.length; // returns length of plants array
-                      List<Widget> plantsRender = new List<Widget>(); // creates new List<Widget> to add plants to for render
+                      int numPlants = snapshot
+                          .data.plants.length; // returns length of plants array
+                      List<Widget> plantsRender = new List<
+                          Widget>(); // creates new List<Widget> to add plants to for render
                       for (var i = 0; i < numPlants; i++) {
-                        plantsRender.add(buildContainer(
-                            snapshot.data.plants[i].plantId,
-                            snapshot.data.plants[i].plantName,
-                            snapshot.data.plants[i].species,
-                            snapshot.data.plants[i].userEmail,
-                            snapshot.data.plants[i].dateCreated,
-                            snapshot.data.plants[i].uri),
+                        plantsRender.add(
+                          buildContainer(
+                              snapshot.data.plants[i].plantId,
+                              snapshot.data.plants[i].plantName,
+                              snapshot.data.plants[i].species,
+                              snapshot.data.plants[i].userEmail,
+                              snapshot.data.plants[i].dateCreated,
+                              snapshot.data.plants[i].uri),
                         );
                         plantsRender.add(SizedBox(
                           height: 20.0,
                         ));
                       }
+                      plantsRender.add(SizedBox(
+                        height: 20.0,
+                      ));
+                      plantsRender
+                          .add(SmallButtonGrey.bold("+ Add new plant", () {
+                        Navigator.push(context,
+                            new MaterialPageRoute(builder: (_) {
+                          return AddPlantPage(email: 'janesmith.synthesis@gmail.com/');
+                        }));
+                      }, true));
                       // Adding extra spacing at the end so that scrolling works properly
                       plantsRender.add(SizedBox(
                         height: 200.0,
@@ -137,12 +153,11 @@ class _DashboardState extends State<Dashboard> {
                         height: MediaQuery.of(context).size.height,
                         decoration: BoxDecoration(
                             image: new DecorationImage(
-                              image: new AssetImage("assets/bgimg_dashboard.jpg"),
-                              fit: BoxFit.cover
-                            ),
+                                image: new AssetImage(
+                                    "assets/bgimg_dashboard.jpg"),
+                                fit: BoxFit.cover),
                             color: Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(15.0)
-                        ),
+                            borderRadius: BorderRadius.circular(15.0)),
                         child: ListView(
                           scrollDirection: Axis.vertical,
                           children: plantsRender,
@@ -179,9 +194,9 @@ class _DashboardState extends State<Dashboard> {
             width: 250,
             height: 100,
             decoration: BoxDecoration(
-                color: Colors.grey.shade50,
-                borderRadius: BorderRadius.circular(15.0),
-                border: Border.all(width: 2.0, color: Colors.black),
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(15.0),
+              border: Border.all(width: 2.0, color: Colors.black),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

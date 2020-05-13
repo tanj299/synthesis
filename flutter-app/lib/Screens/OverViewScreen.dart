@@ -286,7 +286,7 @@ class _OverViewPageState extends State<OverViewPage>
                               ),
                         SizedBox(height: 20),
                         (toggleLight == null)
-                            ? WideButtonYellow("Turn On Light", () {
+                            ? WideButtonYellow("Toggle Light", () {
                                 setState(() {
                                   toggleLight = makeRequest(
                                       widget.plantId.toString(), "", "light");

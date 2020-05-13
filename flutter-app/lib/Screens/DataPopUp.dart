@@ -53,23 +53,23 @@ class PlantDataLog {
   factory PlantDataLog.fromJson(Map<String, dynamic> json) {
     return PlantDataLog(
       plantId: json['plant_id'].toString(),
-      humidity: json['humidity'],
-      light: json['light'],
-      lightStatus: json['light_status'],
-      soilMoisture: json['soil_moisture'],
-      soilTemp: json['soil_temp'],
-      temp: json['temp'],
+      humidity: json['humidity'].toString(),
+      light: json['light'].toString(),
+      lightStatus: json['light_status'].toString(),
+      soilMoisture: json['soil_moisture'].toString(),
+      soilTemp: json['soil_temp'].toString(),
+      temp: json['temp'].toString(),
       timestamp: json['timestamp'],
-      waterLevel: json['water_level'],
+      waterLevel: json['water_level'].toString(),
     );
   }
 }
 
 Future<PlantDataLogList> fetchPlantDataInfo(id) async {
-  final response = await http.get(
-      'http://localhost:5000/logs/all/${id}');
   // final response = await http.get(
-  //     'http://backend-dev222222.us-east-1.elasticbeanstalk.com/logs/all/${id}');
+  //     'http://localhost:5000/logs/all/${id}');
+  final response = await http.get(
+      'http://backend-dev222222.us-east-1.elasticbeanstalk.com/logs/all/${id}');
 
   if (response.statusCode == 200) {
     return PlantDataLogList.fromJson(jsonDecode(response.body));
@@ -102,12 +102,32 @@ class _DataPopUpState extends State<DataPopUp> {
                 for (var j = 0; j < numPlants; j++) {
                   int i = numPlants - j - 1; // do in descending order to get most recent first
                   plantsRender.add(BoldText(
-                      (j + 1).toString() + ") " + snapshot.data.plants[i].timestamp + " - " + snapshot.data.plants[i].humidity,
-                      15.0,
-                      Colors.black));
-                  plantsRender.add(SizedBox(
-                    height: 5.0,
-                  ));
+                      (j + 1).toString() + ") " + snapshot.data.plants[i].timestamp, 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Light: " + (snapshot.data.plants[i].lightStatus == "0" ? ("Off") : ("On") ), 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Light level: " + snapshot.data.plants[i].light, 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Water: " + (snapshot.data.plants[i].waterLevel == "0" ? ("Empty") : ("Ok") ), 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Soil moisture: " + snapshot.data.plants[i].soilMoisture, 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Soil temperature: " + snapshot.data.plants[i].soilTemp + " ° F", 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Temperature: " + snapshot.data.plants[i].temp + " ° F", 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "Humidity: " + snapshot.data.plants[i].humidity, 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 5.0, ));
+                  plantsRender.add(BoldText(
+                      "____________________", 15.0, Colors.black));
+                  plantsRender.add(SizedBox( height: 15.0, ));
                 }
                 return Container(
                   child: ListView(
