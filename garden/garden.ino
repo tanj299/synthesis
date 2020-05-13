@@ -157,5 +157,5 @@ void loop() {
     }
   }
 
-  delay(5000); // Rest for 5 seconds
+  delay(2000); // Rest for 2 seconds
 }
