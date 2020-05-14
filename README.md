@@ -3,6 +3,7 @@
 ## Last Updated: 05/9/2020
 ### Synthesis - The Automatic Garden
 ### Authors: Leo Au-Yeung, Stanley Lim, Daniel Mallia, Jayson Tan
+### Deployed website: http://synthesis-garden.herokuapp.com/ ###
 
 This repository contains the code developed by the above authors in the 
 Spring 2020 CSCI Capstone course under Professor Maryash at Hunter College, for 
