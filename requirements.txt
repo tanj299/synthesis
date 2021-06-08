@@ -8,7 +8,7 @@ idna==2.9
 iso8601==0.1.12
 jmespath==0.9.5
 picamera==1.13
-Pillow==7.1.2
+Pillow==8.2.0
 pynput==1.6.8
 pyserial==3.4
 python-dateutil==2.8.1
