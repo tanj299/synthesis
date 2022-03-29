@@ -37,7 +37,7 @@ MarkupSafe==1.1.1
 marshmallow==3.5.1
 marshmallow-sqlalchemy==0.22.3
 mysql-connector-python==8.0.19
-paramiko==2.7.1
+paramiko==2.10.1
 pathspec==0.5.9
 protobuf==3.6.1
 pycparser==2.20
